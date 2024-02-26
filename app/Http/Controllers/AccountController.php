@@ -80,6 +80,8 @@ class AccountController extends Controller
     // This method will show profile page
     public function profile()
     {
+        // dd(Auth::user());
+
         $id = Auth::user()->id;
 
         $user = User::where('id', $id)->first();
@@ -127,5 +129,83 @@ class AccountController extends Controller
     {
         Auth::logout();
         return redirect()->route('account.login');
+    }
+
+    // public function updateProfilePic(Request $request){
+
+    //     $id = Auth::user()->id;
+
+    //     $validator = Validator::make($request->all(), [
+    //         'image' => 'required|image'
+    //     ]);
+
+    //     if($validator->passes()){
+
+    //         $image = $request->image;
+    //         $ext  = $image->getClientOriginalExtension();
+    //         $imageName = $id.'-'.time().'.'.$ext;
+    //         $image->move(public_path('/profile_pic/'), $imageName);
+            
+    //         User::where('id', $id)->update(['image' => $imageName]);   
+
+    //         session()->flash('success','Profile picture update successfully.');
+            
+    //         return response()->json([
+    //             'status' => true,
+    //             'errors' => []
+    //         ]);
+
+
+    //     } else {
+
+    //         return response()->json([
+    //             'status' => false,
+    //             'errors' => $validator->errors()
+    //         ]);
+
+    //     }
+    // }
+
+    public function updateProfilePic(Request $request){
+        $id = Auth::user()->id;
+    
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|image'
+        ]);
+    
+        if($validator->passes()){
+    
+           
+            $oldImage = User::where('id', $id)->first()->image;
+    
+            // Kiểm tra và xóa ảnh cũ nếu tồn tại
+            if($oldImage && file_exists(public_path('/profile_pic/').$oldImage)){
+                unlink(public_path('/profile_pic/').$oldImage);
+            }
+    
+            // Xử lý ảnh mới
+            $image = $request->image;
+            $ext  = $image->getClientOriginalExtension();
+            $imageName = $id.'-'.time().'.'.$ext;
+            $image->move(public_path('/profile_pic/'), $imageName);
+            
+            User::where('id', $id)->update(['image' => $imageName]);   
+    
+            session()->flash('success','Profile picture update successfully.');
+            
+            return response()->json([
+                'status' => true,
+                'errors' => []
+            ]);
+    
+    
+        } else {
+    
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+    
+        }
     }
 }
