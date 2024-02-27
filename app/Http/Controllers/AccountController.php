@@ -178,12 +178,12 @@ class AccountController extends Controller
            
             $oldImage = User::where('id', $id)->first()->image;
     
-            // Kiểm tra và xóa ảnh cũ nếu tồn tại
+ 
             if($oldImage && file_exists(public_path('/profile_pic/').$oldImage)){
                 unlink(public_path('/profile_pic/').$oldImage);
             }
     
-            // Xử lý ảnh mới
+
             $image = $request->image;
             $ext  = $image->getClientOriginalExtension();
             $imageName = $id.'-'.time().'.'.$ext;
