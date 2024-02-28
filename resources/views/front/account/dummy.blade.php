@@ -20,7 +20,7 @@
                 <div class="col-lg-9">
                     @include('front.message');
                     <div class="card border-0 shadow mb-4">
-               
+
                     </div>
                 </div>
             </div>
@@ -29,5 +29,4 @@
 @endsection
 
 @section('customJs')
-
 @endsection

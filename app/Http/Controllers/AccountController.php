@@ -148,11 +148,11 @@ class AccountController extends Controller
     //         $ext  = $image->getClientOriginalExtension();
     //         $imageName = $id.'-'.time().'.'.$ext;
     //         $image->move(public_path('/profile_pic/'), $imageName);
-            
+
     //         User::where('id', $id)->update(['image' => $imageName]);   
 
     //         session()->flash('success','Profile picture update successfully.');
-            
+
     //         return response()->json([
     //             'status' => true,
     //             'errors' => []
@@ -169,63 +169,62 @@ class AccountController extends Controller
     //     }
     // }
 
-    public function updateProfilePic(Request $request){
+    public function updateProfilePic(Request $request)
+    {
         $id = Auth::user()->id;
-    
+
         $validator = Validator::make($request->all(), [
             'image' => 'required|image'
         ]);
-    
-        if($validator->passes()){
-    
-           
+
+        if ($validator->passes()) {
+
+
             $oldImage = User::where('id', $id)->first()->image;
-    
- 
-            if($oldImage && file_exists(public_path('/profile_pic/').$oldImage)){
-                unlink(public_path('/profile_pic/').$oldImage);
+
+
+            if ($oldImage && file_exists(public_path('/profile_pic/') . $oldImage)) {
+                unlink(public_path('/profile_pic/') . $oldImage);
             }
-    
+
 
             $image = $request->image;
             $ext  = $image->getClientOriginalExtension();
-            $imageName = $id.'-'.time().'.'.$ext;
+            $imageName = $id . '-' . time() . '.' . $ext;
             $image->move(public_path('/profile_pic/'), $imageName);
-            
-            User::where('id', $id)->update(['image' => $imageName]);   
-    
-            session()->flash('success','Profile picture update successfully.');
-            
+
+            User::where('id', $id)->update(['image' => $imageName]);
+
+            session()->flash('success', 'Profile picture update successfully.');
+
             return response()->json([
                 'status' => true,
                 'errors' => []
             ]);
-    
-    
         } else {
-    
+
             return response()->json([
                 'status' => false,
                 'errors' => $validator->errors()
             ]);
-    
         }
     }
 
-    public function createJob() {
+    public function createJob()
+    {
 
         $categories = Category::orderBy('name', 'ASC')->where('status', 1)->get();
 
         $jobTypes = JobType::orderBy('name', 'ASC')->where('status', 1)->get();
 
-        return view('front.account.job.create',[
+        return view('front.account.job.create', [
             'categories' =>     $categories,
             'jobTypes' =>      $jobTypes,
         ]);
-
     }
 
-    public function saveJob(Request $request) {
+    public function saveJob(Request $request)
+    {
         $rules = [
             'title' => 'required|min:5|max:200',
             'category' => 'required',
@@ -238,46 +237,49 @@ class AccountController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
 
-        if ($validator->passes()){
+        if ($validator->passes()) {
 
             $job = new Job();
-            $job ->title = $request->title;
-            $job ->category_id = $request->category;
-            $job ->job_type_id = $request->jobType;
-            $job ->vacancy = $request->vacancy;
-            $job ->salary = $request->salary;
-            $job ->location = $request->location;
-            $job ->description = $request->description;
-            $job ->benefits = $request->benefits;
-            $job ->responsibility = $request->responsibility;
-            $job ->qualifications = $request->qualifications;
-            $job ->keywords = $request->keywords;
-            $job ->experience = $request->experience;
-            $job ->company_name = $request->company_name;
-            $job ->company_location = $request->company_location;
-            $job ->company_website = $request->website;
-            $job ->save();
-            
 
-            session()->flash('success','Job added successfully.');
+            $job->title = $request->title;
+            $job->category_id = $request->category;
+            $job->job_type_id = $request->jobType;
+            $job->user_id = Auth::user()->id;
+            $job->vacancy = $request->vacancy;
+            $job->salary = $request->salary;
+            $job->location = $request->location;
+            $job->description = $request->description;
+            $job->benefits = $request->benefits;
+            $job->responsibility = $request->responsibility;
+            $job->qualifications = $request->qualifications;
+            $job->keywords = $request->keywords;
+            $job->experience = $request->experience;
+            $job->company_name = $request->company_name;
+            $job->company_location = $request->company_location;
+            $job->company_website = $request->website;
+            $job->save();
+
+
+            session()->flash('success', 'Job added successfully.');
 
             return response()->json([
                 'status' => true,
-            'errors' => []
+                'errors' => []
             ]);
-
         } else {
             return response()->json([
                 'status' => false,
-            'errors' => $validator->errors()
+                'errors' => $validator->errors()
             ]);
         }
     }
 
-    public function myJobs(){
-        return view('front.account.job.my-jobs');
+    public function myJobs()
+    {
+        $jobs = Job::where('user_id', Auth::user()->id)->with('jobType')->paginate(10);
+        return view('front.account.job.my-jobs',[
+            'jobs' => $jobs
+        ]);
+
     }
-
-
-
 }
