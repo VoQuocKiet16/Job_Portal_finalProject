@@ -47,7 +47,8 @@
                                                 <tr class="active">
                                                     <td>
                                                         <div class="job-name fw-500">{{ $job->title }}</div>
-                                                        <div class="info1">{{$job->jobType->name}}/{{ $job->location }}</div>
+                                                        <div class="info1">{{ $job->jobType->name }}/{{ $job->location }}
+                                                        </div>
                                                     </td>
                                                     <td>{{ \Carbon\Carbon::parse($job->create_at)->format(' d My, Y') }}
                                                     </td>
@@ -61,15 +62,16 @@
                                                     </td>
                                                     <td>
                                                         <div class="action-dots float-end">
-                                                            <a href="#" class="" data-bs-toggle="dropdown"
+                                                            <button href="#" class="btn" data-bs-toggle="dropdown"
                                                                 aria-expanded="false">
                                                                 <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                                                            </a>
+                                                            </button>
                                                             <ul class="dropdown-menu dropdown-menu-end">
                                                                 <li><a class="dropdown-item" href="job-detail.html"> <i
                                                                             class="fa fa-eye" aria-hidden="true"></i>
                                                                         View</a></li>
-                                                                <li><a class="dropdown-item" href="#"><i
+                                                                <li><a class="dropdown-item"
+                                                                        href="{{ route('account.editJob', $job->id) }}"><i
                                                                             class="fa fa-edit" aria-hidden="true"></i>
                                                                         Edit</a></li>
                                                                 <li><a class="dropdown-item" href="#"><i
