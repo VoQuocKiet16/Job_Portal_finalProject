@@ -81,7 +81,7 @@
 
 @section('customJs')
     <script type="text/javascript">
-        const updateProfileRoute = "{{ route('account.profile') }}";
+        // const updateProfileRoute = "{{ route('account.profile') }}";
         $("#userForm").submit(function(e) {
             e.preventDefault();
 
@@ -104,7 +104,8 @@
                             .addClass('invalid-feadback')
                             .html('')
 
-                        window.location.href = updateProfileRoute;
+                        // window.location.href = updateProfileRoute;
+                        window.location.href = '{{ route("account.profile") }}';
 
                     } else {
                         var errors = response.errors;
