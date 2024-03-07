@@ -111,10 +111,8 @@
                                 <th>Email</th>
                                 <th>Mobile</th>
                                 <th>Applied Date</th>
-                            </tr>
-                            
+                            </tr> 
                         </table>
-                        
                     </div>
                 </div>
                 @endif 
