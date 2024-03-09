@@ -18,30 +18,35 @@
     <section class="section-1 py-5 ">
         <div class="container">
             <div class="card border-0 shadow p-5">
-                <div class="row">
-                    <div class="col-md-3 mb-3 mb-sm-3 mb-lg-0">
-                        <input type="text" class="form-control" name="search" id="search" placeholder="Keywords">
-                    </div>
-                    <div class="col-md-3 mb-3 mb-sm-3 mb-lg-0">
-                        <input type="text" class="form-control" name="search" id="search" placeholder="Location">
-                    </div>
-                    <div class="col-md-3 mb-3 mb-sm-3 mb-lg-0">
-                        <select name="category" id="category" class="form-control">
-                            <option value="">Select a Category</option>
-                            <option value="">Engineering</option>
-                            <option value="">Accountant</option>
-                            <option value="">Information Technology</option>
-                            <option value="">Fashion designing</option>
-                        </select>
-                    </div>
-
-                    <div class=" col-md-3 mb-xs-3 mb-sm-3 mb-lg-0">
-                        <div class="d-grid gap-2">
-                            <a href="jobs.html" class="btn btn-primary btn-block">Search</a>
+                <form action="{{ route("jobs") }}" method="GET">
+                    <div class="row">
+                        <div class="col-md-3 mb-3 mb-sm-3 mb-lg-0">
+                            <input type="text" class="form-control" name="keyword" id="keyword" placeholder="Keywords">
+                        </div>
+                        <div class="col-md-3 mb-3 mb-sm-3 mb-lg-0">
+                            <input type="text" class="form-control" name="location" id="location"
+                                placeholder="Location">
+                        </div>
+                        <div class="col-md-3 mb-3 mb-sm-3 mb-lg-0">
+                            <select name="category" id="category" class="form-control">
+                                <option value="">Select a category</option>
+                                @if ($newCategories->isNotEmpty())
+                                    @foreach ($newCategories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
                         </div>
 
+                        <div class=" col-md-3 mb-xs-3 mb-sm-3 mb-lg-0">
+                            <div class="d-grid gap-2">
+                                {{-- <a href="jobs.html" class="btn btn-primary btn-block">Search</a> --}}
+                                <button class="btn btn-primary btn-block" type="submit">Search</button>
+                            </div>
+
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </section>
@@ -55,7 +60,7 @@
                         <div class="col-lg-4 col-xl-3 col-md-6">
 
                             <div class="single_catagory">
-                                <a href="jobs.html">
+                                <a href="{{ route('jobs').'?category='.$category->id }}">
                                     <h4 class="pb-2">{{ $category->name }}</h4>
                                 </a>
                                 <p class="mb-0"> <span>0</span> Availabel Position</p>
@@ -91,20 +96,21 @@
                                                         <span class="fw-bolder"><i class="fa fa-clock-o"></i></span>
                                                         <span class="ps-1">{{ $featuredJob->jobType->name }}</span>
                                                     </p>
-                                                    @if(!is_null($featuredJob->salary))   
-                                                    <p class="mb-0">
-                                                        <span class="fw-bolder"><i class="fa fa-usd"></i></span>
-                                                        <span class="ps-1">{{ $featuredJob->salary }}</span>
-                                                    </p>
-                                                    @endif                                                   
+                                                    @if (!is_null($featuredJob->salary))
+                                                        <p class="mb-0">
+                                                            <span class="fw-bolder"><i class="fa fa-usd"></i></span>
+                                                            <span class="ps-1">{{ $featuredJob->salary }}</span>
+                                                        </p>
+                                                    @endif
                                                 </div>
                                                 <div class="d-grid mt-3">
-                                                    <a href="{{ route('jobDetail', $featuredJob->id) }}" class="btn btn-primary btn-lg">Details</a>
+                                                    <a href="{{ route('jobDetail', $featuredJob->id) }}"
+                                                        class="btn btn-primary btn-lg">Details</a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                @endforeach 
+                                @endforeach
                             @endif
                         </div>
                     </div>
@@ -121,37 +127,37 @@
                     <div class="job_lists">
                         <div class="row">
                             @if ($latestJobs->isNotEmpty())
-                            @foreach ($latestJobs as $latestJob)
-                                <div class="col-md-4">
-                                    <div class="card border-0 p-3 shadow mb-4">
-                                        <div class="card-body">
-                                            <h3 class="border-0 fs-5 pb-2 mb-0">{{ $latestJob->title }}</h3>
-                                            <p>{{ Str::words($latestJob->description, 5) }}</p>
-                                            <div class="bg-light p-3 border">
-                                                <p class="mb-0">
-                                                    <span class="fw-bolder"><i class="fa fa-map-marker"></i></span>
-                                                    <span class="ps-1">{{ $latestJob->location }}</span>
-                                                </p>
-                                                <p class="mb-0">
-                                                    <span class="fw-bolder"><i class="fa fa-clock-o"></i></span>
-                                                    <span class="ps-1">{{ $latestJob->jobType->name }}</span>
-                                                </p>
-                                                @if(!is_null($latestJob->salary))   
-                                                <p class="mb-0">
-                                                    <span class="fw-bolder"><i class="fa fa-usd"></i></span>
-                                                    <span class="ps-1">{{ $latestJob->salary }}</span>
-                                                </p>
-                                                @endif                                                   
-                                            </div>
-                                            <div class="d-grid mt-3">
-                                                <a href="{{ route('jobDetail', $latestJob->id) }}"  class="btn btn-primary btn-lg">Details</a>
+                                @foreach ($latestJobs as $latestJob)
+                                    <div class="col-md-4">
+                                        <div class="card border-0 p-3 shadow mb-4">
+                                            <div class="card-body">
+                                                <h3 class="border-0 fs-5 pb-2 mb-0">{{ $latestJob->title }}</h3>
+                                                <p>{{ Str::words($latestJob->description, 5) }}</p>
+                                                <div class="bg-light p-3 border">
+                                                    <p class="mb-0">
+                                                        <span class="fw-bolder"><i class="fa fa-map-marker"></i></span>
+                                                        <span class="ps-1">{{ $latestJob->location }}</span>
+                                                    </p>
+                                                    <p class="mb-0">
+                                                        <span class="fw-bolder"><i class="fa fa-clock-o"></i></span>
+                                                        <span class="ps-1">{{ $latestJob->jobType->name }}</span>
+                                                    </p>
+                                                    @if (!is_null($latestJob->salary))
+                                                        <p class="mb-0">
+                                                            <span class="fw-bolder"><i class="fa fa-usd"></i></span>
+                                                            <span class="ps-1">{{ $latestJob->salary }}</span>
+                                                        </p>
+                                                    @endif
+                                                </div>
+                                                <div class="d-grid mt-3">
+                                                    <a href="{{ route('jobDetail', $latestJob->id) }}"
+                                                        class="btn btn-primary btn-lg">Details</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endforeach 
-                        @endif
-
+                                @endforeach
+                            @endif
                         </div>
                     </div>
                 </div>
