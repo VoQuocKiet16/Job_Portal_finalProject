@@ -38,7 +38,10 @@
                             </div>
                             <div class="jobs_right">
                                 <div class="">
-                                    <a class="heart_mark " href=""> <i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                                    {{-- <a class="heart_mark" href="javascript:void(0);" onclick="saveJob({{ $job->id }})"> <i class="fa fa-heart-o" aria-hidden="true"></i></a> --}}
+                                    <a class="heart_mark {{ $count ? 'green' : '' }}" href="javascript:void(0);" onclick="saveJob({{ $job->id }})">
+                                        <i class="fa {{ $count ? 'fa-heart' : 'fa-heart-o' }}" aria-hidden="true"></i>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -179,6 +182,22 @@ function applyJob(id){
             dataType: 'json',
             success: function(response) {
                 window.location.href = "{{ url()->current() }}";
+            } 
+        });
+    }
+}
+
+function saveJob(id){
+    if (confirm("Are you sure you want to apply on this job?")) {
+        $.ajax({
+            url : '{{ route("saveJob") }}',
+            type: 'post',
+            data: {id:id},
+            dataType: 'json',
+            success: function(response) {
+                $('.heart_mark').toggleClass('green');
+                window.location.href = "{{ url()->current() }}";
+     
             } 
         });
     }

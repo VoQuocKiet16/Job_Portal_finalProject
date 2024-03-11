@@ -10020,3 +10020,7 @@ footer .nav-link {
   content: '';
 }
 /* '' */
+
+.heart_mark.green i {
+  color: #00D363; /* Or any green color you'd like */
+}
