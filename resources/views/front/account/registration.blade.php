@@ -53,7 +53,6 @@
 
             $.ajax({
                 url: "{{ route('account.processRegistration') }}",
-
                 type: 'post',
                 data: $("#registrationForm").serializeArray(),
                 dataType: 'json',

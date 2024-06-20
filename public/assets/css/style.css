@@ -10024,3 +10024,10 @@ footer .nav-link {
 .heart_mark.green i {
   color: #00D363; /* Or any green color you'd like */
 }
+
+.dashboard{
+  height: 400px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
