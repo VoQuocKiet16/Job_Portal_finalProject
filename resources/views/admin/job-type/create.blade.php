@@ -8,8 +8,8 @@
                 <nav aria-label="breadcrumb" class="rounded-3 p-3 mb-4">
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item"><a href="{{ route("admin.dashboard") }}">Home</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route("admin.categories") }}">Category</a></li>
-                        <li class="breadcrumb-item active">Create Category</li>
+                        <li class="breadcrumb-item"><a href="{{ route("admin.jobtypes") }}">Job Type</a></li>
+                        <li class="breadcrumb-item active">Create Job Type</li>
                     </ol>
                 </nav>
             </div>
@@ -22,11 +22,11 @@
                 @include('front.message')
                 <div class="card border-0 shadow mb-4">
                     <div class="card-body card-form">
-                        <h3 class="fs-4 mb-3">Create Category</h3>
-                        <form action="{{ route('admin.categories.save') }}" method="POST">
+                        <h3 class="fs-4 mb-3">Create Job Type</h3>
+                        <form action="{{ route('admin.jobtypes.save') }}" method="POST">
                             @csrf
                             <div class="mb-3">
-                                <label for="name" class="form-label">Category Name</label>
+                                <label for="name" class="form-label">Job Type Name</label>
                                 <input type="text" class="form-control" id="name" name="name" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Create</button>

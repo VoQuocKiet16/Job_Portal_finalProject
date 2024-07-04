@@ -3,42 +3,43 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
+use App\Models\JobType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class CategoryController extends Controller
+class JobTypeController extends Controller
 {
+
     public function index() {
-        $categories = Category::orderBy('created_at','DESC')->paginate(10);
-        return view('admin.category.list',[
-            'categories' => $categories
-        ]);
-    }
+    $jobtypes = JobType::orderBy('created_at','DESC')->paginate(10);
+    return view('admin.job-type.list',[
+        'jobtypes' => $jobtypes
+    ]);
+    }   
 
     public function create()
     {
-        return view('admin.category.create');
+        return view('admin.job-type.create');
     }
 
-    public function saveCategroy(Request $request)
+    public function saveJobType(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
 
-        $category = new Category;
-        $category->name = $request->name;
-        $category->save();
+        $jobtype = new JobType;
+        $jobtype->name = $request->name;
+        $jobtype->save();
 
-        return redirect()->route('admin.categories')->with('success', 'Category created successfully.');
+        return redirect()->route('admin.jobtypes')->with('success', 'Job Type created successfully.');
     }
 
     public function edit($id){
-        $category = Category::findOrFail($id);
+        $jobtype = JobType::findOrFail($id);
         
-        return view('admin.category.edit',[
-            'category' => $category
+        return view('admin.job-type.edit',[
+            'jobtype' => $jobtype
         ]);
     }
 
@@ -51,11 +52,11 @@ class CategoryController extends Controller
 
         if ($validator->passes()) {
 
-            $category = Category::find($id);
-            $category->name = $request->name;
-            $category->save();
+            $jobtype = JobType::find($id);
+            $jobtype->name = $request->name;
+            $jobtype->save();
 
-            session()->flash('success','Category information updated successfully.');
+            session()->flash('success','Job Type information updated successfully.');
 
             return response()->json([
                 'status' => true,
@@ -73,21 +74,23 @@ class CategoryController extends Controller
     public function delete(Request $request) {
         $id = $request->id;
 
-        $category = Category::find($id);
+        $jobtype = JobType::find($id);
 
-        if($category == null){
-            session()->flash('error', 'Category not found');
+        if($jobtype == null){
+            session()->flash('error', 'Job Type not found');
             return response()->json([
                 'status' => false,
                 
             ]);
         }
 
-        $category->delete();
-        session()->flash('success', 'Category deleted successfully');
+        $jobtype->delete();
+        session()->flash('success', 'Job Type deleted successfully');
         return response()->json([
             'status' => true,
 
         ]);
     }
+
+
 }

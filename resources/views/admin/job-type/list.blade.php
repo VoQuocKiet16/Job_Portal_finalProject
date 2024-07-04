@@ -23,23 +23,23 @@
                 <div class="card border-0 shadow mb-4">
                     <div class="card-body card-form">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h3 class="fs-4 mb-0">Category</h3>
-                            <a href="{{ route("admin.categories.create") }}" class="btn btn-primary">Create Category</a>
+                            <h3 class="fs-4 mb-0">Job Type</h3>
+                            <a href="{{ route("admin.jobtypes.create") }}" class="btn btn-primary">Create Job Type</a>
                         </div>
                         <div class="table-responsive">
                             <table class="table">
                                 <thead class="bg-light">
                                     <tr>
-                                        <th scope="col">Name Category</th>
+                                        <th scope="col">Name Job Type</th>
                                         <th scope="col">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody class="border-0">
-                                    @if ($categories->isNotEmpty())
-                                        @foreach ($categories as $category)
+                                    @if ($jobtypes->isNotEmpty())
+                                        @foreach ($jobtypes as $jobtype)
                                         <tr>
                                             <td>
-                                            <p>{{ $category->name }}</p>
+                                            <p>{{ $jobtype->name }}</p>
                                             </td>
                                             <td>
                                                 <div class="action-dots">
@@ -47,8 +47,8 @@
                                                         <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                                                     </button>
                                                     <ul class="dropdown-menu dropdown-menu-end">
-                                                        <li><a class="dropdown-item" href="{{ route("admin.categories.edit",$category->id) }}"><i class="fa fa-edit" aria-hidden="true"></i> Edit</a></li>
-                                                        <li><a class="dropdown-item" onclick="deleteCategory({{ $category->id }})" href="javascript:void(0);"  ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a></li>
+                                                        <li><a class="dropdown-item" href="{{ route("admin.jobtypes.edit",$jobtype->id) }}"><i class="fa fa-edit" aria-hidden="true"></i> Edit</a></li>
+                                                        <li><a class="dropdown-item" onclick="deleteJobType({{ $jobtype->id }})" href="javascript:void(0);"  ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a></li>
                                                     </ul>
                                                 </div>
                                             </td>
@@ -56,14 +56,14 @@
                                         @endforeach
                                     @else
                                         <tr>
-                                            <td colspan="2" class="text-center">No categories found.</td>
+                                            <td colspan="2" class="text-center">No job types found.</td>
                                         </tr>
                                     @endif
                                 </tbody>                                
                             </table>
                         </div>
                         <div>
-                            {{ $categories->links() }}
+                            {{ $jobtypes->links() }}
                         </div>
                     </div>
                 </div>                          
@@ -75,15 +75,15 @@
 
 @section('customJs')
 <script type="text/javascript">
-    function deleteCategory(id) {
+    function deleteJobType(id) {
         if (confirm("Are you sure you want to delete?")) {
             $.ajax({
-                url: '{{ route("admin.categories.delete") }}',
+                url: '{{ route("admin.jobtypes.delete") }}',
                 type: 'delete',
                 data: { id: id},
                 dataType: 'json',
                 success: function(response) {
-                    window.location.href = "{{ route('admin.categories') }}";
+                    window.location.href = "{{ route('admin.jobtypes') }}";
                 }
             });
         }

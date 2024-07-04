@@ -5,10 +5,12 @@ use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\JobApplicationController;
 use App\Http\Controllers\admin\JobController;
+use App\Http\Controllers\admin\JobTypeController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobsController;
 use App\Models\Category;
+use App\Models\JobType;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,9 +58,18 @@ Route::group(['prefix' => 'admin', 'middleware' => 'checkRole'], function(){
     Route::delete('/job-applications',[JobApplicationController::class,'delete'])->name('admin.jobApplication.delete');
 
     Route::get('/categories',[CategoryController::class,'index'])->name('admin.categories');
-    Route::get('admin/category/create', [CategoryController::class, 'create'])->name('admin.category.create');
-    Route::post('admin/category/save', [CategoryController::class, 'saveCategroy'])->name('admin.category.save');
-    Route::delete('/categories',[CategoryController::class,'delete'])->name('admin.category.delete');
+    Route::get('admin/categories/create', [CategoryController::class, 'create'])->name('admin.categories.create');
+    Route::post('admin/categories/save', [CategoryController::class, 'saveCategroy'])->name('admin.categories.save');
+    Route::get('/categories/{id}',[CategoryController::class,'edit'])->name('admin.categories.edit');
+    Route::put('/categories/{id}',[CategoryController::class,'update'])->name('admin.categories.update');
+    Route::delete('/categories',[CategoryController::class,'delete'])->name('admin.categories.delete');
+
+    Route::get('/jobtypes',[JobTypeController::class,'index'])->name('admin.jobtypes');
+    Route::get('admin/jobtypes/create', [JobTypeController::class, 'create'])->name('admin.jobtypes.create');
+    Route::post('admin/jobtypes/save', [JobTypeController::class, 'saveJobType'])->name('admin.jobtypes.save');
+    Route::get('/jobtypes/{id}',[JobTypeController::class,'edit'])->name('admin.jobtypes.edit');
+    Route::put('/jobtypes/{id}',[JobTypeController::class,'update'])->name('admin.jobtypes.update');
+    Route::delete('/jobtypes',[JobTypeController::class,'delete'])->name('admin.jobtypes.delete');
 });
 
 Route::group(['prefix' => 'account'], function(){
