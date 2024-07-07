@@ -24,4 +24,12 @@ class Job extends Model
     public function user() {
         return $this->belongsTo(User::class);
     }
+
+    public function relatedJobs() {
+        return Job::where('status', 1)
+                  ->where('id', '!=', $this->id)
+                  ->where('category_id', $this->category_id)
+                  ->limit(5)
+                  ->get();
+    }
 }

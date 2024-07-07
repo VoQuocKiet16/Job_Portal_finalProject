@@ -79,22 +79,32 @@ class JobsController extends Controller
 
     public function detail($id)
     {
-
         $job = Job::where([
             'id' => $id,
             'status' => 1
         ])->with(['jobType', 'category'])->first();
-
+    
         if ($job == null) {
             abort(404);
         }
+    
+        $count = 0;
+    
+        if (Auth::check()) {
+            $count = SavedJobs::where([
+                'user_id' => Auth::user()->id,
+                'job_id' => $id
+            ])->count();
+        }
 
-        $count = SavedJobs::where([
-            'user_id' => Auth::user()->id,
-            'job_id' => $id
-        ])->count();
+        $relatedJobs = $job->relatedJobs();
 
-        return view('front.jobDetail', ['job' => $job, 'count' => $count] );
+        return view('front.jobDetail', [
+            'job' => $job, 
+            'count' => $count, 
+            'relatedJobs' => $relatedJobs
+        ]);
+    
     }
 
     public function applyJob(Request $request) {
@@ -208,5 +218,8 @@ class JobsController extends Controller
         ]);
 
     }
+    
+
+    
 
 }

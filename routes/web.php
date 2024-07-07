@@ -32,7 +32,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/jobs', [JobsController::class, 'index'])->name('jobs');
-Route::get('/jobs/detail/{id}', [JobsController::class, 'detail'])->name('jobDetail')->middleware('auth');
+Route::get('/jobs/detail/{id}', [JobsController::class, 'detail'])->name('jobDetail');
 Route::post('/apply-job', [JobsController::class, 'applyJob'])->name('applyJob')->middleware('auth');
 Route::post('/save-job', [JobsController::class, 'saveJob'])->name('saveJob')->middleware('auth');
 
