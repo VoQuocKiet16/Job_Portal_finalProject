@@ -7,7 +7,8 @@
                 <div class="col">
                     <nav aria-label="breadcrumb" class="rounded-3 p-3">
                         <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item"><a href="{{ route('jobs') }}"><i class="fa fa-arrow-left" aria-hidden="true"></i> &nbsp;Back to Jobs</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('jobs') }}"><i class="fa fa-arrow-left"
+                                        aria-hidden="true"></i> &nbsp;Back to Jobs</a></li>
                         </ol>
                     </nav>
                 </div>
@@ -37,7 +38,8 @@
                                 </div>
                                 <div class="jobs_right">
                                     <div class="">
-                                        <a class="heart_mark {{ $count ? 'green' : '' }}" href="javascript:void(0);" onclick="saveJob({{ $job->id }})">
+                                        <a class="heart_mark {{ $count ? 'green' : '' }}" href="javascript:void(0);"
+                                            onclick="saveJob({{ $job->id }})">
                                             <i class="fa {{ $count ? 'fa-heart' : 'fa-heart-o' }}" aria-hidden="true"></i>
                                         </a>
                                     </div>
@@ -70,19 +72,20 @@
                             <div class="border-bottom"></div>
                             <div class="pt-3 text-end">
                                 @if (Auth::check())
-                                    <a href="#" onclick="saveJob({{ $job->id }});" class="btn btn-secondary">Save</a>
+                                    <a href="#" onclick="saveJob({{ $job->id }});"
+                                        class="btn btn-primary">Save</a>
                                 @else
-                                    <a href="{{ route('account.login') }}" class="btn btn-secondary">Login to Save</a>
+                                    <a href="{{ route('account.login') }}" class="btn btn-primary">Login to Save</a>
                                 @endif
                                 @if (Auth::check())
-                                    <a href="#" onclick="applyJob({{ $job->id }})" class="btn btn-primary">Apply</a>
+                                    <a href="#" onclick="applyJob({{ $job->id }})"
+                                        class="btn btn-primary">Apply</a>
                                 @else
                                     <a href="{{ route('account.login') }}" class="btn btn-primary">Login to Apply</a>
                                 @endif
                             </div>
                         </div>
                     </div>
-
                     @if (Auth::user() && Auth::user()->id == $job->user_id)
                         <div class="card shadow border-0 mt-4">
                             <div class="job_details_header">
@@ -116,16 +119,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="carousel-control-prev" type="button" data-bs-target="#relatedJobsCarousel" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#relatedJobsCarousel" data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </button>
                         </div>
-                        <div class="descript_wrap white-bg">
+                        <div class="descript_wrap white-bg position-relative">
                             @if ($relatedJobs->isNotEmpty())
                                 <div id="relatedJobsCarousel" class="carousel slide" data-bs-ride="carousel">
                                     <div class="carousel-inner">
@@ -138,10 +133,14 @@
                                                                 <div class="card-body">
                                                                     <h5 class="card-title">{{ $relatedJob->title }}</h5>
                                                                     <p class="card-text">
-                                                                        <i class="fa fa-map-marker"></i> {{ $relatedJob->location }}<br>
-                                                                        <i class="fa fa-clock-o"></i> {{ $relatedJob->jobType->name }}
+                                                                        <i class="fa fa-map-marker"></i>
+                                                                        {{ $relatedJob->location }}<br>
+                                                                        <i class="fa fa-clock-o"></i>
+                                                                        {{ $relatedJob->jobType->name }}
                                                                     </p>
-                                                                    <a href="{{ route('jobDetail', $relatedJob->id) }}" class="btn btn-primary d-flex justify-content-center">View Job</a>
+                                                                    <a href="{{ route('jobDetail', $relatedJob->id) }}"
+                                                                        class="btn btn-primary d-flex justify-content-center">View
+                                                                        Job</a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -151,6 +150,16 @@
                                         @endforeach
                                     </div>
                                 </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#relatedJobsCarousel"
+                                    data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#relatedJobsCarousel"
+                                    data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
                             @else
                                 <p>No related jobs found.</p>
                             @endif
@@ -166,7 +175,9 @@
                             </div>
                             <div class="job_content pt-3">
                                 <ul>
-                                    <li>Published on: <span>{{ \Carbon\Carbon::parse($job->created_at)->format('d M, Y') }}</span></li>
+                                    <li>Published on:
+                                        <span>{{ \Carbon\Carbon::parse($job->created_at)->format('d M, Y') }}</span>
+                                    </li>
                                     <li>Vacancy: <span>{{ $job->vacancy }}</span></li>
                                     @if (!empty($job->salary))
                                         <li>Salary: <span>{{ $job->salary }}</span></li>
@@ -189,7 +200,9 @@
                                         <li>Location: <span>{{ $job->company_location }}</span></li>
                                     @endif
                                     @if (!empty($job->company_website))
-                                        <li>Website: <span><a href="{{ $job->company_website }}">{{ $job->company_website }}</a></span></li>
+                                        <li>Website: <span><a
+                                                    href="{{ $job->company_website }}">{{ $job->company_website }}</a></span>
+                                        </li>
                                     @endif
                                 </ul>
                             </div>

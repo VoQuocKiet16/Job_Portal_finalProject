@@ -66,7 +66,7 @@ class JobsController extends Controller
         }
 
 
-        $jobs = $jobs->paginate(2);
+        $jobs = $jobs->paginate(6);
 
 
         return view('front.jobs', [

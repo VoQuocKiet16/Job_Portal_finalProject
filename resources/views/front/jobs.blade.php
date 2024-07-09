@@ -76,7 +76,7 @@
                         </div> 
                         
                         <button type="submit" class="btn btn-primary">Search</button>
-                        <a href="{{ route("jobs") }}" class="btn btn-secondary mt-3">Reset</a>
+                        <a href="{{ route("jobs") }}" class="btn btn-primary mt-3">Reset</a>
                     </div>
                 </form>
             </div>
