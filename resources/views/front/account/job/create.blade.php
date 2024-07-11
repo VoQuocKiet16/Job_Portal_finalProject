@@ -21,7 +21,7 @@
                     @include('front.message');
 
 
-                    <form action="" method="post" id="createJobForm" name="createJobForm">
+                    <form action="" method="post" id="createJobForm" name="createJobForm" enctype="multipart/form-data">
                         <div class="card border-0 shadow mb-4 ">
                             <div class="card-body card-form p-4">
                                 <h3 class="fs-4 mb-1">Job Details</h3>
@@ -150,6 +150,10 @@
                                     <input type="text" placeholder="Website" id="website" name="website"
                                         class="form-control">
                                 </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="">Upload Image</label>
+                                    <input type="file" name="image" class="form control">
+                                </div>
                             </div>
                             <div class="card-footer  p-4">
                                 <button type="submit" class="btn btn-primary">Save Job</button>
@@ -163,149 +167,80 @@
 @endsection
 
 @section('customJs')
-    <script type="text/javascript">
-        const myJobsRoute = "{{ route('account.myJobs') }}";
-        $("#createJobForm").submit(function(e) {
-            e.preventDefault();
-            $("button[type='submit']").prop('disabled', true);
+<script type="text/javascript">
+    const myJobsRoute = "{{ route('account.myJobs') }}";
+    $("#createJobForm").submit(function(e) {
+        e.preventDefault();
+        $("button[type='submit']").prop('disabled', true);
 
-            $.ajax({
-                url: "{{ route('account.saveJob') }}",
-                type: 'POST',
-                dataType: 'json',
-                data: $("#createJobForm").serializeArray(),
-                success: function(response) {
-                    $("button[type='submit']").prop('disabled', false);
-                    if (response.status == true) {
+        var formData = new FormData(this);
 
-                        $("#title").removeClass('is-invalid')
-                            .siblings('p')
-                            .addClass('invalid-feadback')
-                            .html('')
+        $.ajax({
+            url: "{{ route('account.saveJob') }}",
+            type: 'POST',
+            dataType: 'json',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                $("button[type='submit']").prop('disabled', false);
+                if (response.status == true) {
+                    $("#title").removeClass('is-invalid').siblings('p').addClass('invalid-feadback').html('')
+                    $("#category").removeClass('is-invalid').siblings('p').addClass('invalid-feadback').html('')
+                    $("#jobType").removeClass('is-invalid').siblings('p').addClass('invalid-feadback').html('')
+                    $("#vacancy").removeClass('is-invalid').siblings('p').addClass('invalid-feadback').html('')
+                    $("#location").removeClass('is-invalid').siblings('p').addClass('invalid-feadback').html('')
+                    $("#description").removeClass('is-invalid').siblings('p').addClass('invalid-feadback').html('')
+                    $("#company_name").removeClass('is-invalid').siblings('p').addClass('invalid-feadback').html('')
 
-                        $("#category").removeClass('is-invalid')
-                            .siblings('p')
-                            .addClass('invalid-feadback')
-                            .html('')
+                    window.location.href = myJobsRoute;
+                } else {
+                    var errors = response.errors;
 
-                        $("#jobType").removeClass('is-invalid')
-                            .siblings('p')
-                            .addClass('invalid-feadback')
-                            .html('')
-
-                        $("#vacancy").removeClass('is-invalid')
-                            .siblings('p')
-                            .addClass('invalid-feadback')
-                            .html('')
-
-                        $("#location").removeClass('is-invalid')
-                            .siblings('p')
-                            .addClass('invalid-feadback')
-                            .html('')
-
-                        $("#description").removeClass('is-invalid')
-                            .siblings('p')
-                            .addClass('invalid-feadback')
-                            .html('')
-
-                        $("#company_name").removeClass('is-invalid')
-                            .siblings('p')
-                            .addClass('invalid-feadback')
-                            .html('')
-
-                        window.location.href = myJobsRoute;
+                    if (errors.title) {
+                        $("#title").addClass('is-invalid').siblings('p').addClass('invalid-feadback').html(errors.title)
                     } else {
-                        var errors = response.errors;
-
-                        if (errors.title) {
-                            $("#title")
-                                .addClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feadback')
-                                .html(errors.title)
-                        } else {
-                            $("#title").removeClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feadback')
-                                .html('')
-                        }
-
-                        if (errors.category) {
-                            $("#category").addClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feadback')
-                                .html(errors.category)
-                        } else {
-                            $("#category").removeClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feadback')
-                                .html('')
-                        }
-
-                        if (errors.jobType) {
-                            $("#jobType").addClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feadback')
-                                .html(errors.jobType)
-                        } else {
-                            $("#jobType").removeClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feadback')
-                                .html('')
-                        }
-
-                        if (errors.vacancy) {
-                            $("#vacancy").addClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feadback')
-                                .html(errors.vacancy)
-                        } else {
-                            $("#vacancy").removeClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feadback')
-                                .html('')
-                        }
-
-                        if (errors.location) {
-                            $("#location").addClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feadback')
-                                .html(errors.location)
-                        } else {
-                            $("#location").removeClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feadback')
-                                .html('')
-                        }
-
-                        if (errors.description) {
-                            $("#description").addClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feadback')
-                                .html(errors.description)
-                        } else {
-                            $("#description").removeClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feadback')
-                                .html('')
-                        }
-
-                        if (errors.company_name) {
-                            $("#company_name").addClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feadback')
-                                .html(errors.company_name)
-                        } else {
-                            $("#company_name").removeClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feadback')
-                                .html('')
-                        }
+                        $("#title").removeClass('is-invalid').siblings('p').addClass('invalid-feadback').html('')
                     }
 
-                }
-            });
+                    if (errors.category) {
+                        $("#category").addClass('is-invalid').siblings('p').addClass('invalid-feadback').html(errors.category)
+                    } else {
+                        $("#category").removeClass('is-invalid').siblings('p').addClass('invalid-feadback').html('')
+                    }
 
+                    if (errors.jobType) {
+                        $("#jobType").addClass('is-invalid').siblings('p').addClass('invalid-feadback').html(errors.jobType)
+                    } else {
+                        $("#jobType").removeClass('is-invalid').siblings('p').addClass('invalid-feadback').html('')
+                    }
+
+                    if (errors.vacancy) {
+                        $("#vacancy").addClass('is-invalid').siblings('p').addClass('invalid-feadback').html(errors.vacancy)
+                    } else {
+                        $("#vacancy").removeClass('is-invalid').siblings('p').addClass('invalid-feadback').html('')
+                    }
+
+                    if (errors.location) {
+                        $("#location").addClass('is-invalid').siblings('p').addClass('invalid-feadback').html(errors.location)
+                    } else {
+                        $("#location").removeClass('is-invalid').siblings('p').addClass('invalid-feadback').html('')
+                    }
+
+                    if (errors.description) {
+                        $("#description").addClass('is-invalid').siblings('p').addClass('invalid-feadback').html(errors.description)
+                    } else {
+                        $("#description").removeClass('is-invalid').siblings('p').addClass('invalid-feadback').html('')
+                    }
+
+                    if (errors.company_name) {
+                        $("#company_name").addClass('is-invalid').siblings('p').addClass('invalid-feadback').html(errors.company_name)
+                    } else {
+                        $("#company_name").removeClass('is-invalid').siblings('p').addClass('invalid-feadback').html('')
+                    }
+                }
+            }
         });
-    </script>
+    });
+</script>
 @endsection

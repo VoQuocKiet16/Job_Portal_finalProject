@@ -6,51 +6,50 @@
         data-bg="{{ asset('assets/images/banner5.jpg') }}">
         <div class="container">
             <div class="row">
-                <div class="col-12 col-xl-8">
+                <div class="">
                     <h1>Find your dream job</h1>
                     <p>Thounsands of jobs available.</p>
-                    <div class="banner-btn mt-5"><a href="#" class="btn btn-primary mb-4 mb-sm-0">Explore Now</a></div>
+
+                    <section class="section-1 py-5 ">
+                        <div class="container">
+                            <div class="card border-0 shadow p-5">
+                                <form action="{{ route('jobs') }}" method="GET">
+                                    <div class="row">
+                                        <div class="col-md-3 mb-3 mb-sm-3 mb-lg-0">
+                                            <input type="text" class="form-control" name="keyword" id="keyword"
+                                                placeholder="Keywords">
+                                        </div>
+                                        <div class="col-md-3 mb-3 mb-sm-3 mb-lg-0">
+                                            <input type="text" class="form-control" name="location" id="location"
+                                                placeholder="Location">
+                                        </div>
+                                        <div class="col-md-3 mb-3 mb-sm-3 mb-lg-0">
+                                            <select name="category" id="category" class="form-control">
+                                                <option value="">Select a category</option>
+                                                @if ($newCategories->isNotEmpty())
+                                                    @foreach ($newCategories as $category)
+                                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+
+                                        <div class=" col-md-3 mb-xs-3 mb-sm-3 mb-lg-0">
+                                            <div class="d-grid gap-2">
+                                                {{-- <a href="jobs.html" class="btn btn-primary btn-block">Search</a> --}}
+                                                <button class="btn btn-primary btn-block" type="submit">Search</button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </section>
                 </div>
             </div>
         </div>
     </section>
-
-    <section class="section-1 py-5 ">
-        <div class="container">
-            <div class="card border-0 shadow p-5">
-                <form action="{{ route("jobs") }}" method="GET">
-                    <div class="row">
-                        <div class="col-md-3 mb-3 mb-sm-3 mb-lg-0">
-                            <input type="text" class="form-control" name="keyword" id="keyword" placeholder="Keywords">
-                        </div>
-                        <div class="col-md-3 mb-3 mb-sm-3 mb-lg-0">
-                            <input type="text" class="form-control" name="location" id="location"
-                                placeholder="Location">
-                        </div>
-                        <div class="col-md-3 mb-3 mb-sm-3 mb-lg-0">
-                            <select name="category" id="category" class="form-control">
-                                <option value="">Select a category</option>
-                                @if ($newCategories->isNotEmpty())
-                                    @foreach ($newCategories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
-
-                        <div class=" col-md-3 mb-xs-3 mb-sm-3 mb-lg-0">
-                            <div class="d-grid gap-2">
-                                {{-- <a href="jobs.html" class="btn btn-primary btn-block">Search</a> --}}
-                                <button class="btn btn-primary btn-block" type="submit">Search</button>
-                            </div>
-
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </section>
-
     <section class="section-2 bg-2 py-5">
         <div class="container">
             <h2>Popular Categories</h2>
@@ -60,7 +59,7 @@
                         <div class="col-lg-4 col-xl-3 col-md-6">
 
                             <div class="single_catagory">
-                                <a href="{{ route('jobs').'?category='.$category->id }}">
+                                <a href="{{ route('jobs') . '?category=' . $category->id }}">
                                     <h4 class="pb-2">{{ $category->name }}</h4>
                                 </a>
                                 <p class="mb-0"> <span>0</span> Availabel Position</p>

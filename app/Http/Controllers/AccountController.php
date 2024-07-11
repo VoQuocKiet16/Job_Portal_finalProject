@@ -240,15 +240,14 @@ class AccountController extends Controller
             'vacancy' => 'required|integer',
             'location' => 'required|max:50',
             'description' => 'required',
+            'image' => 'nullable|mimes:png,jpg,jpeg,webp',
             'company_name' => 'required|min:3|max:75',
         ];
-
+    
         $validator = Validator::make($request->all(), $rules);
-
+    
         if ($validator->passes()) {
-
             $job = new Job();
-
             $job->title = $request->title;
             $job->category_id = $request->category;
             $job->job_type_id = $request->jobType;
@@ -257,6 +256,15 @@ class AccountController extends Controller
             $job->salary = $request->salary;
             $job->location = $request->location;
             $job->description = $request->description;
+    
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $filename = time() . '.' . $file->getClientOriginalExtension();
+                $path = 'uploads/jobs/';
+                $file->move($path, $filename);
+                $job->image = $path . $filename;
+            }
+    
             $job->benefits = $request->benefits;
             $job->responsibility = $request->responsibility;
             $job->qualifications = $request->qualifications;
@@ -266,10 +274,9 @@ class AccountController extends Controller
             $job->company_location = $request->company_location;
             $job->company_website = $request->website;
             $job->save();
-
-
+    
             session()->flash('success', 'Job added successfully.');
-
+    
             return response()->json([
                 'status' => true,
                 'errors' => []
@@ -291,16 +298,22 @@ class AccountController extends Controller
             'vacancy' => 'required|integer',
             'location' => 'required|max:50',
             'description' => 'required',
+            'image' => 'nullable|mimes:png,jpg,jpeg,webp',
             'company_name' => 'required|min:3|max:75',
         ];
-
-        $validator = Validator::make($request->all(), $rules,);
-
+    
+        $validator = Validator::make($request->all(), $rules);
+    
         if ($validator->passes()) {
-
-
             $job = Job::find($id);
-
+    
+            if (!$job) {
+                return response()->json([
+                    'status' => false,
+                    'errors' => ['Job not found']
+                ]);
+            }
+    
             $job->title = $request->title;
             $job->category_id = $request->category;
             $job->job_type_id = $request->jobType;
@@ -309,6 +322,20 @@ class AccountController extends Controller
             $job->salary = $request->salary;
             $job->location = $request->location;
             $job->description = $request->description;
+    
+            if ($request->hasFile('image')) {
+                // Delete old image if exists
+                if ($job->image && file_exists(public_path($job->image))) {
+                    unlink(public_path($job->image));
+                }
+    
+                $file = $request->file('image');
+                $filename = time() . '.' . $file->getClientOriginalExtension();
+                $path = 'uploads/jobs/';
+                $file->move(public_path($path), $filename);
+                $job->image = $path . $filename;
+            }
+    
             $job->benefits = $request->benefits;
             $job->responsibility = $request->responsibility;
             $job->qualifications = $request->qualifications;
@@ -318,10 +345,9 @@ class AccountController extends Controller
             $job->company_location = $request->company_location;
             $job->company_website = $request->website;
             $job->save();
-
-
+    
             session()->flash('success', 'Job updated successfully.');
-
+    
             return response()->json([
                 'status' => true,
                 'errors' => []
