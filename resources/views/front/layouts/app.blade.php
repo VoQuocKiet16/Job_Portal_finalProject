@@ -1,4 +1,3 @@
-
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>CareerVibe | Find Best Jobs</title>
@@ -18,9 +17,9 @@
 </head>
 
 <body data-instant-intensity="mousedown">
-    
+
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow py-3">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow py-3 sticky-navbar">
             <div class="container">
                 <a class="navbar-brand" href="index.html">CareerVibe</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -42,21 +41,24 @@
                             type="submit">Login</a>
                     @else
                         @if (Auth::user()->role == 'admin')
-                        <a class="btn btn-outline-primary me-2" href="{{ route('admin.dashboard') }}"type="submit">Admin</a>
+                            <a class="btn btn-outline-primary me-2" href="{{ route('admin.dashboard') }}"
+                                type="submit">Admin</a>
                         @endif
-                        <a class="btn btn-outline-primary me-2" href="{{ route('account.profile') }}"type="submit">Account</a>
+                        <a class="btn btn-outline-primary me-2" href="{{ route('account.profile') }}"
+                            type="submit">Account</a>
                     @endif
                     <a class="btn btn-primary" href="{{ route('account.createJob') }}" type="submit">Post a Job</a>
-
                 </div>
             </div>
         </nav>
     </header>
 
+
+
     @yield('main')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
-    
+
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -92,6 +94,15 @@
     <script src="{{ asset('assets/js/lazyload.17.6.0.min.js') }}"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
     <script>
+        window.onscroll = function() {
+            var navbar = document.querySelector('.navbar');
+            if (window.pageYOffset > 0) {
+                navbar.classList.add('sticky-navbar');
+            } else {
+                navbar.classList.remove('sticky-navbar');
+            }
+        };
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
