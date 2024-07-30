@@ -31,4 +31,9 @@ class Resume extends Model
     {
         return $this->hasMany(Experience::class);
     }
+
+    public function skill()
+    {
+        return $this->hasMany(Skill::class);
+    }
 }

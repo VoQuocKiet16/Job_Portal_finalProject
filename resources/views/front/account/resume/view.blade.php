@@ -6,13 +6,13 @@
         <!-- Main content -->
         <div class="col-md-9">
             <!-- About -->
-            <section class="resume-section" id="about">
-                <div class="resume-section-content">
+            <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="about">
+                <div class="w-100">
                     <h1 class="mb-0">
                         {{ $information['personal_info']['first_name'] ?? 'Empty' }}
                         <span class="text-primary">{{ $information['personal_info']['last_name'] ?? '' }}</span>
                     </h1>
-                    <h3 class="">{{ $information['personal_info']['profile_title'] ?? '' }}</h3>
+                    <h3 class="mb-3">{{ $information['personal_info']['profile_title'] ?? '' }}</h3>
                     <div class="subheading mb-5">
                         <a href="mailto:{{ $information['contact_info']['email'] ?? '' }}">{{ $information['contact_info']['email'] ?? '' }}</a>
                         <a class="social-icon" href="{{ $information['contact_info']['linkedin_link'] ?? '' }}"><i class="fab fa-linkedin-in"></i></a>
@@ -22,8 +22,8 @@
             </section>
             <hr class="m-0" />
             <!-- Experience -->
-            <section class="resume-section" id="experience">
-                <div class="resume-section-content">
+            <section class="resume-section p-3 p-lg-5 d-flex justify-content-center" id="experience">
+                <div class="w-100">
                     <h2 class="mb-5">Experience</h2>
                     @foreach ($information['experience_info'] ?? [] as $experience_info)
                         <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
@@ -39,8 +39,8 @@
             </section>
             <hr class="m-0" />
             <!-- Education -->
-            <section class="resume-section" id="education">
-                <div class="resume-section-content">
+            <section class="resume-section p-3 p-lg-5 d-flex justify-content-center" id="education">
+                <div class="w-100">
                     <h2 class="mb-5">Education</h2>
                     @foreach ($information['education_info'] ?? [] as $education_info)
                         <div class="d-flex flex-column flex-md-row justify-content-between mb-5">

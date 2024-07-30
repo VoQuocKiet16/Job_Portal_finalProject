@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ContactInformation;
 use App\Models\Education;
 use App\Models\Experience;
+use App\Models\Skill;
 use App\Models\PersonalInformation;
 use App\Models\Resume;
 use Illuminate\Http\Request;
@@ -52,6 +53,13 @@ class ResumeController extends Controller
                     $user_info['experience_info'] = [];
                 }
 
+                $skill_info = Skill::where('resume_id', $resume->id)->get();
+                if ($skill_info->isNotEmpty()) {
+                    $user_info['skill_info'] = $skill_info->toArray();
+                } else {
+                    $user_info['skill_info'] = [];
+                }
+
                 $user_info['resume_id'] = $resume->id;
                 $user_data[] = $user_info;
             }
@@ -64,7 +72,7 @@ class ResumeController extends Controller
 
     public function view($id)
     {
-        $resume = Resume::with(['personalInformation', 'contactInformation', 'education', 'experience'])
+        $resume = Resume::with(['personalInformation', 'contactInformation', 'education', 'experience', 'skill'])
                         ->findOrFail($id);
 
         $information = [];
@@ -89,6 +97,18 @@ class ResumeController extends Controller
             $information['experience_info'] = [];
         }
 
+        if ($resume->experience->isNotEmpty()) {
+            $information['experience_info'] = $resume->experience->toArray();
+        } else {
+            $information['experience_info'] = [];
+        }
+
+        if ($resume->skill->isNotEmpty()) {
+            $information['skill_info'] = $resume->skill->toArray();
+        } else {
+            $information['skill_info'] = [];
+        }
+
         return view('front.account.resume.view', compact('information'));
     }
 
@@ -98,53 +118,111 @@ class ResumeController extends Controller
     }
 
 
+    // public function save(Request $request)
+    // {
+    //     $user_id = Auth::id();
+
+    //     $resume = new Resume();
+    //     $resume->user_id = $user_id;
+    //     $resume->title = $request->title;
+    //     $resume->save();
+
+    //     $personal_info = new PersonalInformation();
+    //     $personal_info->resume_id = $resume->id;
+    //     $personal_info->first_name = $request->first_name;
+    //     $personal_info->last_name = $request->last_name;
+    //     $personal_info->profile_title = $request->profile_title;
+    //     $personal_info->about_me = $request->about_me;
+    //     $personal_info->save();
+
+    //     $contact_info = new ContactInformation();
+    //     $contact_info->resume_id = $resume->id;
+    //     $contact_info->website = $request->website;
+    //     $contact_info->linkedin_link = $request->linkedin_link;
+    //     $contact_info->save();
+
+    //     foreach ($request->degree_title as $index => $degree_title) {
+    //         $education_info = new Education();
+    //         $education_info->resume_id = $resume->id;
+    //         $education_info->degree_title = $degree_title;
+    //         $education_info->institute = $request->institute[$index];
+    //         $education_info->edu_start_date = $request->edu_start_date[$index];
+    //         $education_info->edu_end_date = $request->edu_end_date[$index];
+    //         $education_info->education_description = $request->education_description[$index];
+    //         $education_info->save();
+    //     }
+
+    //     foreach ($request->job_title as $index => $job_title) {
+    //         $experience_info = new Experience();
+    //         $experience_info->resume_id = $resume->id;
+    //         $experience_info->job_title = $job_title;
+    //         $experience_info->organization = $request->organization[$index];
+    //         $experience_info->job_start_date = $request->job_start_date[$index];
+    //         $experience_info->job_end_date = $request->job_end_date[$index];
+    //         $experience_info->job_description = $request->job_description[$index];
+    //         $experience_info->save();
+    //     }
+
+    //     return redirect()->route('account.resume', ['resumeId' => $resume->id]);
+    // }
+
     public function save(Request $request)
-    {
-        $user_id = Auth::id();
+{
+    $user_id = Auth::id();
 
-        $resume = new Resume();
-        $resume->user_id = $user_id;
-        $resume->title = $request->title;
-        $resume->save();
+    $resume = new Resume();
+    $resume->user_id = $user_id;
+    $resume->title = $request->title;
+    $resume->save();
 
-        $personal_info = new PersonalInformation();
-        $personal_info->resume_id = $resume->id;
-        $personal_info->first_name = $request->first_name;
-        $personal_info->last_name = $request->last_name;
-        $personal_info->profile_title = $request->profile_title;
-        $personal_info->about_me = $request->about_me;
-        $personal_info->save();
+    $personal_info = new PersonalInformation();
+    $personal_info->resume_id = $resume->id;
+    $personal_info->first_name = $request->first_name;
+    $personal_info->last_name = $request->last_name;
+    $personal_info->profile_title = $request->profile_title;
+    $personal_info->about_me = $request->about_me;
+    $personal_info->save();
 
-        $contact_info = new ContactInformation();
-        $contact_info->resume_id = $resume->id;
-        $contact_info->website = $request->website;
-        $contact_info->linkedin_link = $request->linkedin_link;
-        $contact_info->save();
+    $contact_info = new ContactInformation();
+    $contact_info->resume_id = $resume->id;
+    $contact_info->website = $request->website;
+    $contact_info->linkedin_link = $request->linkedin_link;
+    $contact_info->save();
 
-        foreach ($request->degree_title as $index => $degree_title) {
-            $education_info = new Education();
-            $education_info->resume_id = $resume->id;
-            $education_info->degree_title = $degree_title;
-            $education_info->institute = $request->institute[$index];
-            $education_info->edu_start_date = $request->edu_start_date[$index];
-            $education_info->edu_end_date = $request->edu_end_date[$index];
-            $education_info->education_description = $request->education_description[$index];
-            $education_info->save();
-        }
-
-        foreach ($request->job_title as $index => $job_title) {
-            $experience_info = new Experience();
-            $experience_info->resume_id = $resume->id;
-            $experience_info->job_title = $job_title;
-            $experience_info->organization = $request->organization[$index];
-            $experience_info->job_start_date = $request->job_start_date[$index];
-            $experience_info->job_end_date = $request->job_end_date[$index];
-            $experience_info->job_description = $request->job_description[$index];
-            $experience_info->save();
-        }
-
-        return redirect()->route('account.resume', ['resumeId' => $resume->id]);
+    foreach ($request->degree_title as $index => $degree_title) {
+        $education_info = new Education();
+        $education_info->resume_id = $resume->id;
+        $education_info->degree_title = $degree_title;
+        $education_info->institute = $request->institute[$index];
+        $education_info->edu_start_date = $request->edu_start_date[$index];
+        $education_info->edu_end_date = $request->edu_end_date[$index];
+        $education_info->education_description = $request->education_description[$index];
+        $education_info->save();
     }
+
+    foreach ($request->job_title as $index => $job_title) {
+        $experience_info = new Experience();
+        $experience_info->resume_id = $resume->id;
+        $experience_info->job_title = $job_title;
+        $experience_info->organization = $request->organization[$index];
+        $experience_info->job_start_date = $request->job_start_date[$index];
+        $experience_info->job_end_date = $request->job_end_date[$index];
+        $experience_info->job_description = $request->job_description[$index];
+        $experience_info->save();
+    }
+
+    if ($request->has('skills') && is_array($request->skills)) {
+        foreach ($request->skills as $skill) {
+            $skill_info = new Skill();
+            $skill_info->resume_id = $resume->id;
+            $skill_info->skill = $skill;
+            $skill_info->save();
+        }
+    }
+
+    return redirect()->route('account.resume', ['resumeId' => $resume->id]);
+}
+
 
     public function destroy($id)
     {
@@ -153,6 +231,7 @@ class ResumeController extends Controller
             ContactInformation::where('user_id', $id)->delete();
             Education::where('user_id', $id)->delete();
             Experience::where('user_id', $id)->delete();
+            Skill::where('user_id', $id)->delete();
     
             return response()->json(['success' => 'Resume deleted successfully']);
         } else {
