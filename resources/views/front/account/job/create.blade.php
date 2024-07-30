@@ -18,9 +18,7 @@
                     @include('front.account.sidebar');
                 </div>
                 <div class="col-lg-9">
-                    @include('front.message');
-
-
+                    @include('front.message')
                     <form action="" method="post" id="createJobForm" name="createJobForm" enctype="multipart/form-data">
                         <div class="card border-0 shadow mb-4 ">
                             <div class="card-body card-form p-4">

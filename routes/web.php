@@ -9,6 +9,7 @@ use App\Http\Controllers\admin\JobTypeController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobsController;
+use App\Http\Controllers\ResumeController;
 use App\Models\Category;
 use App\Models\JobType;
 use Illuminate\Support\Facades\Route;
@@ -100,6 +101,16 @@ Route::group(['prefix' => 'account'], function(){
         Route::get('/saved-jobs',[AccountController::class,'savedJobs'])->name('account.savedJobs');  
         Route::post('/remove-saved-job',[AccountController::class,'removeSavedJob'])->name('account.removeSavedJob');
 
-        Route::post('/update-password',[AccountController::class,'updatePassword'])->name('account.updatePassword');   
+        Route::post('/update-password',[AccountController::class,'updatePassword'])->name('account.updatePassword'); 
+        
+        
+        Route::get('/resume', [ResumeController::class, 'index'])->name('account.resume');
+        Route::get('/resume/{id}', [ResumeController::class, 'view'])->name('resume.view');
+        Route::get('/create', [ResumeController::class, 'create'])->name('resume.create');
+        Route::post('/save', [ResumeController::class, 'save'])->name('save');
+        Route::delete('/resume',[ResumeController::class,'delete'])->name('resume.delete');
+
+
+        
     });
 });

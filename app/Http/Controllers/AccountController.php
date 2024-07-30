@@ -142,41 +142,7 @@ class AccountController extends Controller
         return redirect()->route('account.login');
     }
 
-    // public function updateProfilePic(Request $request){
-
-    //     $id = Auth::user()->id;
-
-    //     $validator = Validator::make($request->all(), [
-    //         'image' => 'required|image'
-    //     ]);
-
-    //     if($validator->passes()){
-
-    //         $image = $request->image;
-    //         $ext  = $image->getClientOriginalExtension();
-    //         $imageName = $id.'-'.time().'.'.$ext;
-    //         $image->move(public_path('/profile_pic/'), $imageName);
-
-    //         User::where('id', $id)->update(['image' => $imageName]);   
-
-    //         session()->flash('success','Profile picture update successfully.');
-
-    //         return response()->json([
-    //             'status' => true,
-    //             'errors' => []
-    //         ]);
-
-
-    //     } else {
-
-    //         return response()->json([
-    //             'status' => false,
-    //             'errors' => $validator->errors()
-    //         ]);
-
-    //     }
-    // }
-
+   
     public function updateProfilePic(Request $request)
     {
         $id = Auth::user()->id;

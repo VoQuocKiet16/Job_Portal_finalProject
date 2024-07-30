@@ -18,7 +18,7 @@
                     @include('front.account.sidebar');
                 </div>
                 <div class="col-lg-9">
-                    @include('front.message');
+                    @include('front.message')
                     <div class="card border-0 shadow mb-4 p-3">
                         <div class="card-body card-form">
                             <div class="d-flex justify-content-between">
