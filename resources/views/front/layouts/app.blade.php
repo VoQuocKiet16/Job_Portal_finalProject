@@ -13,8 +13,7 @@
     <!-- Fav Icon -->
     <link rel="shortcut icon" type="image/x-icon" href="#" />
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
-    {{-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet"> --}}
+    <link rel="stylesheet" href="{{ asset('path/to/style.css') }}"/>
 </head>
 
 <body data-instant-intensity="mousedown">
@@ -140,29 +139,6 @@
 
         });
 
-        function confirm_form_submit(element) {
-            var form = $(element).closest("form");
-
-            Swal.fire({
-                title: `Are you sure all the details are correct?`,
-                text: "Yoo won't be able to edit this resume after this.",
-                customClass: {
-                    cancelButton: 'btn btn-danger'
-                },
-                showCancelButton: true,
-                cancelButtonText: 'No',
-                cancelButtonColor: '#ce4242',
-                confirmButtonColor: '#004A99',
-                confirmButtonText: `Yes`,
-                closeOnConfirm: false
-            }).then((result) => {
-
-                if (!result.isConfirmed) return;
-
-                jQuery(form).submit();
-
-            });
-        }
     </script>
     @yield('customJs')
 </body>

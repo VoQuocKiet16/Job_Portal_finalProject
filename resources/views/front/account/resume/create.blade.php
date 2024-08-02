@@ -275,81 +275,6 @@
 @endsection
 
 <script>
-
-// document.addEventListener('DOMContentLoaded', function() {
-//     // Function to add a new education section
-//     document.getElementById('add_education').addEventListener('click', function(e) {
-//         e.preventDefault();
-//         var educationSection = document.querySelector('.education_section .section');
-//         if (educationSection) {
-//             var newEducationSection = educationSection.cloneNode(true);
-//             newEducationSection.querySelectorAll('input, textarea').forEach(function(input) {
-//                 input.value = ''; // Clear the values
-//             });
-//             document.querySelector('.education_section').appendChild(newEducationSection);
-//             addRemoveListener(newEducationSection);
-//         } else {
-//             addNewSection('education_section', 'education');
-//         }
-//     });
-
-//     // Function to add a new experience section
-//     document.getElementById('add_experience').addEventListener('click', function(e) {
-//         e.preventDefault();
-//         var experienceSection = document.querySelector('.experience_section .section');
-//         if (experienceSection) {
-//             var newExperienceSection = experienceSection.cloneNode(true);
-//             newExperienceSection.querySelectorAll('input, textarea').forEach(function(input) {
-//                 input.value = ''; // Clear the values
-//             });
-//             document.querySelector('.experience_section').appendChild(newExperienceSection);
-//             addRemoveListener(newExperienceSection);
-//         } else {
-//             addNewSection('experience_section', 'experience');
-//         }
-//     });
-
-//     // Function to add a new skill section
-//     document.getElementById('add_skill').addEventListener('click', function(e) {
-//         e.preventDefault();
-//         var skillSection = document.querySelector('.skills_section .section');
-//         if (skillSection) {
-//             var newSkillSection = skillSection.cloneNode(true);
-//             newSkillSection.querySelectorAll('input').forEach(function(input) {
-//                 input.value = ''; // Clear the values
-//             });
-//             document.querySelector('.skills_section').appendChild(newSkillSection);
-//             addRemoveListener(newSkillSection);
-//         } else {
-//             addNewSection('skills_section', 'skill');
-//         }
-//     });
-
-//     // Function to add remove button listener
-//     function addRemoveListener(section) {
-//         section.querySelector('.remove-section').addEventListener('click', function() {
-//             section.remove();
-//         });
-//     }
-
-//     // Function to add new section if none exist
-//     function addNewSection(sectionClass, sectionType) {
-//         var sectionDiv = document.createElement('div');
-//         sectionDiv.className = 'card section mb-3';
-//         sectionDiv.innerHTML = document.querySelector(`.${sectionClass} .section`).innerHTML;
-//         sectionDiv.querySelectorAll('input, textarea').forEach(function(input) {
-//             input.value = ''; // Clear the values
-//         });
-//         document.querySelector(`.${sectionClass}`).appendChild(sectionDiv);
-//         addRemoveListener(sectionDiv);
-//     }
-
-//     // Initial remove button listeners
-//     document.querySelectorAll('.section').forEach(function(section) {
-//         addRemoveListener(section);
-//     });
-// });
-
 document.addEventListener('DOMContentLoaded', function() {
     // Function to add a new education section
     document.getElementById('add_education').addEventListener('click', function(e) {
@@ -483,7 +408,6 @@ document.addEventListener('DOMContentLoaded', function() {
         addRemoveListener(section);
     });
 });
-
 
 </script>
 

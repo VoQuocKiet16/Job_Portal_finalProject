@@ -116,112 +116,62 @@ class ResumeController extends Controller
     {
         return view('front.account.resume.create');
     }
-
-
-    // public function save(Request $request)
-    // {
-    //     $user_id = Auth::id();
-
-    //     $resume = new Resume();
-    //     $resume->user_id = $user_id;
-    //     $resume->title = $request->title;
-    //     $resume->save();
-
-    //     $personal_info = new PersonalInformation();
-    //     $personal_info->resume_id = $resume->id;
-    //     $personal_info->first_name = $request->first_name;
-    //     $personal_info->last_name = $request->last_name;
-    //     $personal_info->profile_title = $request->profile_title;
-    //     $personal_info->about_me = $request->about_me;
-    //     $personal_info->save();
-
-    //     $contact_info = new ContactInformation();
-    //     $contact_info->resume_id = $resume->id;
-    //     $contact_info->website = $request->website;
-    //     $contact_info->linkedin_link = $request->linkedin_link;
-    //     $contact_info->save();
-
-    //     foreach ($request->degree_title as $index => $degree_title) {
-    //         $education_info = new Education();
-    //         $education_info->resume_id = $resume->id;
-    //         $education_info->degree_title = $degree_title;
-    //         $education_info->institute = $request->institute[$index];
-    //         $education_info->edu_start_date = $request->edu_start_date[$index];
-    //         $education_info->edu_end_date = $request->edu_end_date[$index];
-    //         $education_info->education_description = $request->education_description[$index];
-    //         $education_info->save();
-    //     }
-
-    //     foreach ($request->job_title as $index => $job_title) {
-    //         $experience_info = new Experience();
-    //         $experience_info->resume_id = $resume->id;
-    //         $experience_info->job_title = $job_title;
-    //         $experience_info->organization = $request->organization[$index];
-    //         $experience_info->job_start_date = $request->job_start_date[$index];
-    //         $experience_info->job_end_date = $request->job_end_date[$index];
-    //         $experience_info->job_description = $request->job_description[$index];
-    //         $experience_info->save();
-    //     }
-
-    //     return redirect()->route('account.resume', ['resumeId' => $resume->id]);
-    // }
-
     public function save(Request $request)
-{
-    $user_id = Auth::id();
+    {
+        $user_id = Auth::id();
 
-    $resume = new Resume();
-    $resume->user_id = $user_id;
-    $resume->title = $request->title;
-    $resume->save();
+        $resume = new Resume();
+        $resume->user_id = $user_id;
+        $resume->title = $request->title;
+        $resume->save();
 
-    $personal_info = new PersonalInformation();
-    $personal_info->resume_id = $resume->id;
-    $personal_info->first_name = $request->first_name;
-    $personal_info->last_name = $request->last_name;
-    $personal_info->profile_title = $request->profile_title;
-    $personal_info->about_me = $request->about_me;
-    $personal_info->save();
+        $personal_info = new PersonalInformation();
+        $personal_info->resume_id = $resume->id;
+        $personal_info->first_name = $request->first_name;
+        $personal_info->last_name = $request->last_name;
+        $personal_info->profile_title = $request->profile_title;
+        $personal_info->about_me = $request->about_me;
+        $personal_info->save();
 
-    $contact_info = new ContactInformation();
-    $contact_info->resume_id = $resume->id;
-    $contact_info->website = $request->website;
-    $contact_info->linkedin_link = $request->linkedin_link;
-    $contact_info->save();
+        $contact_info = new ContactInformation();
+        $contact_info->resume_id = $resume->id;
+        $contact_info->website = $request->website;
+        $contact_info->linkedin_link = $request->linkedin_link;
+        $contact_info->save();
 
-    foreach ($request->degree_title as $index => $degree_title) {
-        $education_info = new Education();
-        $education_info->resume_id = $resume->id;
-        $education_info->degree_title = $degree_title;
-        $education_info->institute = $request->institute[$index];
-        $education_info->edu_start_date = $request->edu_start_date[$index];
-        $education_info->edu_end_date = $request->edu_end_date[$index];
-        $education_info->education_description = $request->education_description[$index];
-        $education_info->save();
-    }
-
-    foreach ($request->job_title as $index => $job_title) {
-        $experience_info = new Experience();
-        $experience_info->resume_id = $resume->id;
-        $experience_info->job_title = $job_title;
-        $experience_info->organization = $request->organization[$index];
-        $experience_info->job_start_date = $request->job_start_date[$index];
-        $experience_info->job_end_date = $request->job_end_date[$index];
-        $experience_info->job_description = $request->job_description[$index];
-        $experience_info->save();
-    }
-
-    if ($request->has('skills') && is_array($request->skills)) {
-        foreach ($request->skills as $skill) {
-            $skill_info = new Skill();
-            $skill_info->resume_id = $resume->id;
-            $skill_info->skill = $skill;
-            $skill_info->save();
+        foreach ($request->degree_title as $index => $degree_title) {
+            $education_info = new Education();
+            $education_info->resume_id = $resume->id;
+            $education_info->degree_title = $degree_title;
+            $education_info->institute = $request->institute[$index];
+            $education_info->edu_start_date = $request->edu_start_date[$index];
+            $education_info->edu_end_date = $request->edu_end_date[$index];
+            $education_info->education_description = $request->education_description[$index];
+            $education_info->save();
         }
-    }
 
-    return redirect()->route('account.resume', ['resumeId' => $resume->id]);
-}
+        foreach ($request->job_title as $index => $job_title) {
+            $experience_info = new Experience();
+            $experience_info->resume_id = $resume->id;
+            $experience_info->job_title = $job_title;
+            $experience_info->organization = $request->organization[$index];
+            $experience_info->job_start_date = $request->job_start_date[$index];
+            $experience_info->job_end_date = $request->job_end_date[$index];
+            $experience_info->job_description = $request->job_description[$index];
+            $experience_info->save();
+        }
+
+        if ($request->has('skills') && is_array($request->skills)) {
+            foreach ($request->skills as $skill) {
+                $skill_info = new Skill();
+                $skill_info->resume_id = $resume->id;
+                $skill_info->skill = $skill;
+                $skill_info->save();
+            }
+        }
+
+        return redirect()->route('account.resume', ['resumeId' => $resume->id]);
+    }
 
 
     public function destroy($id)
