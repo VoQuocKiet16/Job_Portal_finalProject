@@ -1,6 +1,7 @@
 @extends('front.layouts.app')
-
 @section('main')
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
     <div class="container">
         <p class="text-center">For demo purposes, all inputs are pre-filled with values.</p>
         <div class="row g-5">

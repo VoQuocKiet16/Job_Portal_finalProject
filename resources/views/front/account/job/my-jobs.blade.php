@@ -52,7 +52,7 @@
                                                     </td>
                                                     <td>{{ \Carbon\Carbon::parse($job->create_at)->format(' d My, Y') }}
                                                     </td>
-                                                    <td>130 Applications</td>
+                                                    <td>{{ $job->applications->count() }}</td>
                                                     <td>
                                                         @if ($job->status == 1)
                                                             <div class="job-status text-capitalize">Active</div>

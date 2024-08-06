@@ -326,11 +326,16 @@ class AccountController extends Controller
         }
     }
 
+
     public function myJobs()
     {
-        $jobs = Job::where('user_id', Auth::user()->id)->with('jobType')->orderBy('created_at', 'DESC')->paginate(10);
+        $jobs = Job::where('user_id', Auth::user()->id)
+            ->with(['jobType', 'applications'])
+            ->orderBy('created_at', 'DESC')
+            ->paginate(10);
+
         return view('front.account.job.my-jobs', [
-            'jobs' => $jobs
+            'jobs' => $jobs,
         ]);
     }
 
@@ -416,10 +421,6 @@ class AccountController extends Controller
 
     public function savedJobs()
     {
-        // $jobApplications = JobApplication::where('user_id', Auth::user()->id)
-        //     ->with(['job', 'job.jobType', 'job.applications'])
-        //     ->orderBy('created_at', 'DESC')
-        //     ->paginate(10);
 
         $savedJobs = SavedJobs::where([
             'user_id' => Auth::user()->id

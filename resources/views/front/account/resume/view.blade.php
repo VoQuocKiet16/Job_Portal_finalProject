@@ -12,7 +12,8 @@
     <!-- Fav Icon -->
     <link rel="shortcut icon" type="image/x-icon" href="#" />
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('path/to/style.css') }}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
 </head>
 <div class="container-fluid p-0">
     <div class="row no-gutters">
@@ -32,18 +33,18 @@
                 </a>
             </div>
             <hr class="my-4">
-            <div class="nav flex-column">
-                <a class="nav-link text-white js-scroll-trigger" href="#about">About</a>
-                <a class="nav-link text-white js-scroll-trigger" href="#experience">Experience</a>
-                <a class="nav-link text-white js-scroll-trigger" href="#education">Education</a>
-                <a class="nav-link text-white js-scroll-trigger" href="#skills">Skills</a>
+            <div class="nav flex-column ">
+                <a class="nav-link text-black js-scroll-trigger" href="#about">About</a>
+                <a class="nav-link text-black js-scroll-trigger" href="#experience">Experience</a>
+                <a class="nav-link text-black js-scroll-trigger" href="#education">Education</a>
+                <a class="nav-link text-black js-scroll-trigger" href="#skills">Skills</a>
             </div>
-            <div class="social-icons mt-4 text-center">
-                <a href="{{ $information['contact_info']['linkedin_link'] ?? '#' }}" class="text-white mx-2"><i
+            <div class="social-icons mt-4">
+                <a href="{{ $information['contact_info']['linkedin_link'] ?? '#' }}" class="text-black mx-2"><i
                         class="fab fa-linkedin"></i></a>
-                <a href="{{ $information['contact_info']['github_link'] ?? '#' }}" class="text-white mx-2"><i
+                <a href="{{ $information['contact_info']['github_link'] ?? '#' }}" class="text-black mx-2"><i
                         class="fab fa-github"></i></a>
-                <a href="{{ $information['contact_info']['twitter_link'] ?? '#' }}" class="text-white mx-2"><i
+                <a href="{{ $information['contact_info']['twitter_link'] ?? '#' }}" class="text-black mx-2"><i
                         class="fab fa-twitter"></i></a>
             </div>
         </div>
@@ -63,6 +64,7 @@
                 </div>
             </section>
             <hr class="m-0">
+
             <!-- Experience -->
             <section class="resume-section p-5" id="experience">
                 <div class="w-100">
@@ -83,7 +85,7 @@
                     </div>
                 </div>
             </section>
-            
+
             <hr class="m-0">
             <!-- Education -->
             <section class="resume-section p-5" id="education">
@@ -115,7 +117,8 @@
                     <ul class="skills-list">
                         @foreach ($information['skill_info'] ?? [] as $skill)
                             <li class="skill-item">
-                                <i class="devicons devicons-{{ strtolower($skill['skill']) }}"></i> {{ $skill['skill'] }}
+                                <i class="devicons devicons-{{ strtolower($skill['skill']) }}"></i>
+                                {{ $skill['skill'] }}
                             </li>
                         @endforeach
                     </ul>
