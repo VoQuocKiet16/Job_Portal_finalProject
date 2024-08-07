@@ -35,6 +35,9 @@
             </li>
             <li class="nav-link list-group-item d-flex justify-content-between align-items-center p-3">
                 <a class="js-scroll-trigger text-dark text-decoration-none" href="{{ route ('account.resume') }}">My Resume (CV)</a>
+            </li>   
+            <li class="nav-link list-group-item d-flex justify-content-between align-items-center p-3">
+                <a class="js-scroll-trigger text-dark text-decoration-none" href="{{ route ('role_change_requests.create') }}">Request become Recuiter</a>
             </li>    
             <li class="nav-link list-group-item d-flex justify-content-between align-items-center p-3">
                 <a class="js-scroll-trigger text-dark text-decoration-none" href="{{ route('account.logout')}}">Logout</a>
