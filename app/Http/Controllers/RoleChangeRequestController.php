@@ -14,28 +14,48 @@ use App\Notifications\RoleChangeRequestRejected;
 
 class RoleChangeRequestController extends Controller
 {
-    public function create()
+    public function request()
     {
         return view('front.account.role.create');
     }
 
     public function store(Request $request)
     {
+        $requestedRole = $request->requested_role;
+
+        // Check if the user already has a pending role change request
+        $existingRequest = RoleChangeRequest::where([
+            'user_id' => Auth::id(),
+            'requested_role' => $requestedRole,
+            'approved' => false,
+        ])->first();
+
+        if ($existingRequest) {
+            session()->flash('error', 'You have already submitted a request for this role. Please wait for approval.');
+            return redirect()->back();
+        }
+
+        // Validate the requested role
         $request->validate([
             'requested_role' => 'required|string|max:255',
         ]);
 
+        // Create a new role change request
         RoleChangeRequest::create([
             'user_id' => Auth::id(),
-            'requested_role' => $request->requested_role,
+            'requested_role' => $requestedRole,
         ]);
 
-        // Notify admin (assuming you have a method to get admin users)
+        // Notify admins
         $adminUsers = User::whereRole('admin')->get();
         Notification::send($adminUsers, new RoleChangeRequestNotification(Auth::user()));
 
-        return redirect()->route('account.profile')->with('status', 'Role change request submitted successfully!');
+        session()->flash('success', 'Your role change request has been submitted successfully.');
+        return redirect()->back();
     }
+
+
+
 
     public function index()
     {

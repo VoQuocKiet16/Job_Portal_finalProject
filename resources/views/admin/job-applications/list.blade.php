@@ -45,8 +45,7 @@
                                         @foreach ($applications as $application)
                                         <tr>
                                             <td>
-                                                <p>{{ $application->job->title }}</p>
-                                                {{-- <p>Applicants: {{ $job->applications->count() }}</p> --}}
+                                            {{ $application->job->title }}
                                             </td>
                                             <td>{{ $application->user->name }}</td>
                                             <td>{{ $application->employer->name }}</</td>

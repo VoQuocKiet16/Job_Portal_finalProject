@@ -16,8 +16,7 @@ class ResumeController extends Controller
     public function index()
     {
         $user_id = Auth::id(); // Get the ID of the logged-in user
-        $resumes = Resume::where('user_id', $user_id)->get();
-        $resumes = Resume::paginate(3); 
+        $resumes = Resume::where('user_id', $user_id)->paginate(3); // Fetch and paginate the resumes
 
         $user_data = [];
 
@@ -67,6 +66,7 @@ class ResumeController extends Controller
 
         return view('front.account.resume.index', ['users_data' => $user_data, 'resumes' => $resumes]);
     }
+
 
 
 

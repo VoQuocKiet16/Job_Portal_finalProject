@@ -1,3 +1,6 @@
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>CareerVibe | Find Best Jobs</title>
@@ -15,7 +18,7 @@
     
 </head>
 
-<body data-instant-intensity="mousedown">
+<body data-instant-intensity="mousedown" class="d-flex flex-column min-vh-100">
 
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow py-3 sticky-navbar">
@@ -52,12 +55,20 @@
         </nav>
     </header>
 
+    <!-- Main Content -->
+    <main class="flex-grow-1">
+        @yield('main')
+    </main>
 
+    <!-- Footer -->
+    <footer class="bg-dark py-3 bg-2">
+        <div class="container">
+            <p class="text-center text-white pt-3 fw-bold fs-6">© 2023 xyz company, all right reserved</p>
+        </div>
+    </footer>
 
-    @yield('main')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
-
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -82,11 +93,6 @@
         </div>
     </div>
 
-    <footer class="bg-dark py-3 bg-2">
-        <div class="container">
-            <p class="text-center text-white pt-3 fw-bold fs-6">© 2023 xyz company, all right reserved</p>
-        </div>
-    </footer>
     <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.5.1.3.min.js') }}"></script>
     <script src="{{ asset('assets/js/instantpages.5.1.0.min.js') }}"></script>
@@ -142,4 +148,3 @@
     @yield('customJs')
 </body>
 
-</html>

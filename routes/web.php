@@ -117,7 +117,7 @@ Route::group(['prefix' => 'account'], function(){
         Route::delete('/resume',[ResumeController::class,'delete'])->name('resume.delete');
 
 
-        Route::get('/role-change-request', [RoleChangeRequestController::class, 'create'])->name('role_change_requests.create');
+        Route::get('/role-change-request', [RoleChangeRequestController::class, 'request'])->name('role_change_requests.request');
         Route::post('/role-change-request', [RoleChangeRequestController::class, 'store'])->name('role_change_requests.store');
     });
 });
