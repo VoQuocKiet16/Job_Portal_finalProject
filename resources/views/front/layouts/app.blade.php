@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>CareerVibe | Find Best Jobs</title>
+    <title>CareerQuest | Find Best Jobs</title>
     <meta name="description" content="" />
     <meta name="viewport"
         content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1, user-scalable=no" />
@@ -11,10 +11,13 @@
     <meta name="pinterest" content="nopin" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}" />
     <!-- Fav Icon -->
-    <link rel="shortcut icon" type="image/x-icon" href="#" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/images/logo1.png') }} "/>
     
 </head>
 
@@ -23,7 +26,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow py-3 sticky-navbar">
             <div class="container">
-                <a class="navbar-brand" href="index.html">CareerVibe</a>
+                <a class="navbar-brand" href="#">CareerQuest</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -147,4 +150,3 @@
     </script>
     @yield('customJs')
 </body>
-

@@ -38,10 +38,16 @@
                                 </div>
                                 <div class="jobs_right">
                                     <div class="">
-                                        <a class="heart_mark {{ $count ? 'green' : '' }}" href="javascript:void(0);"
-                                            onclick="saveJob({{ $job->id }})">
-                                            <i class="fa {{ $count ? 'fa-heart' : 'fa-heart-o' }}" aria-hidden="true"></i>
-                                        </a>
+                                        @if (Auth::check())
+                                            <a class="heart_mark {{ $count ? 'green' : '' }}" href="javascript:void(0);"
+                                                onclick="saveJob({{ $job->id }})">
+                                                <i class="fa {{ $count ? 'fa-heart' : 'fa-heart-o' }}"
+                                                    aria-hidden="true"></i>
+                                            </a>
+                                        @else
+                                            <a href="{{ route('account.login') }}"> <i class="fa {{ $count ? 'fa-heart' : 'fa-heart-o' }}"
+                                                aria-hidden="true"></i></a>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -71,12 +77,6 @@
                             @endif
                             <div class="border-bottom"></div>
                             <div class="pt-3 text-end">
-                                @if (Auth::check())
-                                    <a href="#" onclick="saveJob({{ $job->id }});"
-                                        class="btn btn-primary">Save</a>
-                                @else
-                                    <a href="{{ route('account.login') }}" class="btn btn-primary">Login to Save</a>
-                                @endif
                                 @if (Auth::check())
                                     <a href="#" onclick="applyJob({{ $job->id }})"
                                         class="btn btn-primary">Apply</a>
@@ -221,6 +221,7 @@
                     dataType: 'json',
                     success: function(response) {
                         window.location.href = "{{ url()->current() }}";
+                        window.location.href = "{{ url('jobs/detail') }}/" + id;
                     }
                 });
             }
@@ -238,7 +239,6 @@
                     success: function(response) {
                         $('.heart_mark').toggleClass('green');
                         window.location.href = "{{ url()->current() }}";
-
                     }
                 });
             }

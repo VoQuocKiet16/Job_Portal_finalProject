@@ -35,7 +35,6 @@
 
                                     <div class=" col-md-3 mb-xs-3 mb-sm-3 mb-lg-0">
                                         <div class="d-grid gap-2">
-                                            {{-- <a href="jobs.html" class="btn btn-primary btn-block">Search</a> --}}
                                             <button class="btn btn-primary btn-block" type="submit">Search</button>
                                         </div>
 

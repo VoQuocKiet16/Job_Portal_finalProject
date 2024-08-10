@@ -60,7 +60,7 @@
                                                     </button>
                                                     <ul class="dropdown-menu dropdown-menu-end">
                                                         <li><a class="dropdown-item" href="{{ route("jobDetail",$savedJob->job_id) }}"> <i class="fa fa-eye" aria-hidden="true"></i> View</a></li>
-                                                        <li><a class="dropdown-item" href="#" onclick="removeJob({{ $savedJob->id }})" ><i class="fa fa-trash" aria-hidden="true"></i> Remove</a></li>
+                                                        <li><a class="dropdown-item" href="#" onclick="removeSavedJob({{ $savedJob->id }})" ><i class="fa fa-trash" aria-hidden="true"></i> Remove</a></li>
                                                     </ul>
                                                 </div>
                                             </td>
@@ -70,9 +70,7 @@
                                     <tr>
                                         <td colspan="5">Job Saved not found</td>
                                     </tr>
-                                    @endif
-                                    
-                                    
+                                    @endif                                                                       
                                 </tbody>                                
                             </table>
                         </div>
@@ -88,7 +86,7 @@
 @endsection
 @section('customJs')
 <script type="text/javascript">   
-function removeJob(id) {
+function removeSavedJob(id) {
     if (confirm("Are you sure you want to remove?")) {
         $.ajax({
             url : '{{ route("account.removeSavedJob") }}',
@@ -96,7 +94,8 @@ function removeJob(id) {
             data: {id: id},
             dataType: 'json',
             success: function(response) {
-                window.location.href='{{ route("account.savedJobs") }}';
+                window.location.href = "{{ url()->current() }}";
+                window.location.href="{{ route('account.savedJobs') }}";
             }
         });
     } 

@@ -67,7 +67,8 @@
                                                                 <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                                                             </button>
                                                             <ul class="dropdown-menu dropdown-menu-end">
-                                                                <li><a class="dropdown-item" href="{{ route('jobDetail', $job->id) }}"> <i
+                                                                <li><a class="dropdown-item"
+                                                                        href="{{ route('jobDetail', $job->id) }}"> <i
                                                                             class="fa fa-eye" aria-hidden="true"></i>
                                                                         View</a></li>
                                                                 <li><a class="dropdown-item"
@@ -75,7 +76,7 @@
                                                                             class="fa fa-edit" aria-hidden="true"></i>
                                                                         Edit</a></li>
                                                                 <li><a class="dropdown-item" href="#"
-                                                                        onclick="deleteJob({{ $job->id }})"><i
+                                                                        onclick="removeMyJobs({{ $job->id }})"><i
                                                                             class="fa fa-trash" aria-hidden="true"></i>
                                                                         Delete</a></li>
                                                             </ul>
@@ -83,6 +84,10 @@
                                                     </td>
                                                 </tr>
                                             @endforeach
+                                        @else
+                                        <tr>
+                                            <td colspan="5">Job not found</td>
+                                        </tr>
                                         @endif
                                     </tbody>
                                 </table>
@@ -100,20 +105,19 @@
 
 @section('customJs')
     <script type="text/javascript">
-        // const deleteRoute = "{{ route('account.deleteJob') }}";
-        function deleteJob(jobId) {
+        function removeMyJobs(jobId) {
             if (confirm("Are you sure")) {
 
                 $.ajax({
-                    url: "{{ route('account.deleteJob') }}",
+                    url: "{{ route('account.removeMyJobs') }}",
                     type: 'post',
                     data: {
                         jobId: jobId
                     },
                     dataType: 'json',
                     success: function(response) {
-                        window.location.href = '{{ route("account.myJobs") }}';
-
+                        window.location.href = "{{ url()->current() }}";
+                        window.location.href = "{{ route('account.myJobs') }}";
                     }
                 });
             }

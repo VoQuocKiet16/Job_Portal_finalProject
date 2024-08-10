@@ -21,7 +21,7 @@ class JobApplicationController extends Controller
         $user = JobApplication::find($id);
 
         if($user == null){
-            session()->flash('error', 'JobApplication not found');
+            session()->flash('error', 'Job Application not found');
             return response()->json([
                 'status' => false,
                 
@@ -29,7 +29,7 @@ class JobApplicationController extends Controller
         }
 
         $user->delete();
-        session()->flash('success', 'JobApplication deleted successfully');
+        session()->flash('success', 'Job Application deleted successfully');
         return response()->json([
             'status' => true,
 

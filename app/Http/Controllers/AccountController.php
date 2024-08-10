@@ -361,7 +361,7 @@ class AccountController extends Controller
         ]);
     }
 
-    public function deleteJob(Request $request)
+    public function removeMyJobs(Request $request)
     {
         $job = Job::where([
             'user_id' => Auth::user()->id,
@@ -376,7 +376,7 @@ class AccountController extends Controller
         }
 
         Job::where('id', $request->jobId)->delete();
-        session()->flash('success', 'Job deleted successfully');
+        session()->flash('success', 'Job removed successfully');
         return response()->json([
             'status' => true,
         ]);
@@ -395,29 +395,30 @@ class AccountController extends Controller
     }
 
 
-    public function removeJobs(Request $request)
+    public function removeAppliedJobs(Request $request)
     {
-        $jobApplication = JobApplication::where(
-            [
-                'id' => $request->id,
-                'user_id' => Auth::user()->id
-            ]
-        )->first();
-
+        // Fetch the job application based on the provided ID and authenticated user
+        $jobApplication = JobApplication::where([
+            'id' => $request->id,
+            'user_id' => Auth::user()->id,
+        ])->first();
+ 
         if ($jobApplication == null) {
-            session()->flash('error', 'Job application not found');
+            session()->flash('error', 'Job application not found');  
             return response()->json([
                 'status' => false,
             ]);
         }
 
-        JobApplication::find($request->id)->delete();
+        // Proceed to delete the found job application
+        $jobApplication->delete();
         session()->flash('success', 'Job application removed successfully.');
-
         return response()->json([
             'status' => true,
         ]);
     }
+
+
 
     public function savedJobs()
     {
@@ -449,13 +450,13 @@ class AccountController extends Controller
         }
 
         SavedJobs::find($request->id)->delete();
-        session()->flash('success', 'Job removed successfully.');
+        session()->flash('success', 'The job has been successfully removed from your favorites list.');
 
         return response()->json([
             'status' => true,
         ]);
     }
-
+    
     public function updatePassword(Request $request){
         $validator = Validator::make($request->all(),[
             'old_password' => 'required',

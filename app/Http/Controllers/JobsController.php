@@ -192,34 +192,56 @@ class JobsController extends Controller
             ]);
         }
 
-        // Check if user already saved the job
-        $count = SavedJobs::where([
+        // // Check if user already saved the job
+        // $count = SavedJobs::where([
+        //     'user_id' => Auth::user()->id,
+        //     'job_id' => $id
+        // ])->count();
+
+        // if ($count > 0) {
+        //     session()->flash('error','You already saved this job.');
+
+        //     return response()->json([
+        //         'status' => false,
+        //     ]);
+        // }
+
+        // $savedJob = new SavedJobs();
+        // $savedJob->job_id = $id;
+        // $savedJob->user_id = Auth::user()->id;
+        // $savedJob->save();
+
+        // session()->flash('success','You have successfully saved the job.');
+
+        // return response()->json([
+        //     'status' => true,
+        // ]);
+
+        
+        // Check if the job is already saved
+        $savedJob = SavedJobs::where([
             'user_id' => Auth::user()->id,
             'job_id' => $id
-        ])->count();
-
-        if ($count > 0) {
-            session()->flash('error','You already saved this job.');
-
-            return response()->json([
-                'status' => false,
-            ]);
+        ])->first();
+    
+        if ($savedJob) {
+            // If already saved, remove it from saved jobs
+            $savedJob->delete();
+            session()->flash('success','You have successfully removed the job from your saved list.');
+        } else {
+            // If not saved, add it to saved jobs
+            $newSavedJob = new SavedJobs();
+            $newSavedJob->job_id = $id;
+            $newSavedJob->user_id = Auth::user()->id;
+            $newSavedJob->save();
+            session()->flash('success','You have successfully saved the job.');
+          
         }
-
-        $savedJob = new SavedJobs();
-        $savedJob->job_id = $id;
-        $savedJob->user_id = Auth::user()->id;
-        $savedJob->save();
-
-        session()->flash('success','You have successfully saved the job.');
-
+    
         return response()->json([
             'status' => true,
         ]);
 
     }
     
-
-    
-
 }
