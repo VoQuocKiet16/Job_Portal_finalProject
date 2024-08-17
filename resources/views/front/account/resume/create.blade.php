@@ -1,9 +1,9 @@
 @extends('front.layouts.app')
+
+
 @section('main')
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
     <div class="container">
-        <p class="text-center">For demo purposes, all inputs are pre-filled with values.</p>
         <div class="row g-5">
             <div class="col-md-12 col-lg-12">
                 <form action="{{ route('save') }}" id="createform" class="needs-validation" method="POST"
@@ -20,7 +20,7 @@
                                     <label for="first_name" class="form-label">First name<span
                                             class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="first_name" name="first_name"
-                                        placeholder="John" value="Sattiyan" required>
+                                        placeholder="John" required>
                                     <div class="invalid-feedback">
                                         Valid first name is required.
                                     </div>
@@ -30,7 +30,7 @@
                                     <label for="last_name" class="form-label">Last name<span
                                             class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="last_name" name="last_name"
-                                        placeholder="Doe" value="Selvarajah" required>
+                                        placeholder="Doe"  required>
                                     <div class="invalid-feedback">
                                         Valid last name is required.
                                     </div>
@@ -41,7 +41,7 @@
                                             class="text-danger">*</span></label>
                                     <div class="input-group has-validation">
                                         <input type="text" class="form-control" id="profile_title" name="profile_title"
-                                            placeholder="Web Developer" value="Web Developer" required>
+                                            placeholder="Web Developer" required>
                                         <div class="invalid-feedback">
                                             Your profile_title is required.
                                         </div>
@@ -52,7 +52,7 @@
                                     <label for="about_me" class="form-label">Summary<span
                                             class="text-danger">*</span></label>
                                     <textarea class="form-control" id="about_me" name="about_me" rows="5"
-                                        placeholder="Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit sit blanditiis similique aliquam qui maiores iste sunt necessitatibus! Totam, id.">I am a skilled PHP backend web developer experienced in Bootstrap, Tailwind CSS, Astro JS, Shopify, WordPress, and Drupal. I excel at creating efficient and visually appealing web applications, utilizing tools like Zapier, Freshdesk, and Trello to streamline workflows. Continuously staying up-to-date with the latest web development trends, I am eager to take on new challenges and expand my skillset. Contact me for reliable and talented web development services.</textarea>
+                                        placeholder="Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit sit blanditiis similique aliquam qui maiores iste sunt necessitatibus! Totam, id."></textarea>
                                     <div class="invalid-feedback">
                                         Please enter your resume summary.
                                     </div>
@@ -70,7 +70,7 @@
                                     <label for="phone_number" class="form-label">Phone<span
                                             class="text-danger">*</span></label>
                                     <input type="number" class="form-control" id="phone_number" name="phone_number"
-                                        placeholder="0123456789" value="0143072966">
+                                        placeholder="0123456789">
                                     <div class="invalid-feedback">
                                         Please enter a valid phone number.
                                     </div>
@@ -80,19 +80,18 @@
                                     <label for="website" class="form-label">Website<span
                                             class="text-danger">*</span></label>
                                     <input type="url" class="form-control" id="website" name="website"
-                                        placeholder="https://www.placeholder.com" value="https://www.sattiyans.com">
+                                        placeholder="https://www.placeholder.com">
                                     <div class="invalid-feedback">
                                         Please enter a valid link.
                                     </div>
                                 </div>
 
                                 <div class="col-6">
-                                    <label for="linkedin_link" class="form-label">LinkedIn<span
+                                    <label for="linkedin_link" class="form-label">Contact link<span
                                             class="text-danger">*</span></label>
                                     <div class="input-group has-validation">
                                         <input type="url" class="form-control" id="linkedin_link" name="linkedin_link"
-                                            placeholder="https://www.linkedin.com/in/test" required
-                                            value="https://www.linkedin.com/in/sattiyans">
+                                            placeholder="https://www.facebook.com/in/test">
                                         <div class="invalid-feedback">
                                             Your linkedin is required.
                                         </div>

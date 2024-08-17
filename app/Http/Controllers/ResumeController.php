@@ -211,6 +211,39 @@ class ResumeController extends Controller
 
         ]);
     }
+
+    public function showResume(Request $request)
+    {
+        $resumes = Resume::query(); // Remove the restriction of the logged-in user
+
+        // Search using degree title
+        if (!empty($request->degree_title)) {
+            $resumes = $resumes->whereHas('education', function ($query) use ($request) {
+                $query->where('degree_title', 'like', '%' . $request->degree_title . '%');
+            });
+        }
+
+        // Search using profile title
+        if (!empty($request->profile_title)) {
+            $resumes = $resumes->whereHas('personalInformation', function ($query) use ($request) {
+                $query->where('profile_title', 'like', '%' . $request->profile_title . '%');
+            });
+        }
+
+        // Search using skill
+        if (!empty($request->skill)) {
+            $resumes = $resumes->whereHas('skill', function ($query) use ($request) {
+                $query->where('skill', 'like', '%' . $request->skill . '%');
+            });
+        }
+
+        // Paginate the results
+        $resumes = $resumes->with(['personalInformation', 'education', 'experience', 'skill'])->paginate(6);
+
+        return view('front.account.resume.show', compact('resumes'));
+    }
+
+
     
     
 

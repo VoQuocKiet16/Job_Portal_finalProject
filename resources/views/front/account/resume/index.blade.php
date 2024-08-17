@@ -53,7 +53,7 @@
                                                             <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                                                         </button>
                                                         <ul class="dropdown-menu dropdown-menu-end">
-                                                            <li><a class="dropdown-item" target="_blank" href="{{ route('resume.view', ['id' => $user['resume_id'] ?? '']) }}"><i class="fa fa-eye" aria-hidden="true"></i> View</a></li>
+                                                            <li><a class="dropdown-item" href="{{ route('resume.view', ['id' => $user['resume_id'] ?? '']) }}"><i class="fa fa-eye" aria-hidden="true"></i> View</a></li>
                                                             <li><a class="dropdown-item" onclick="deleteResume({{ $user['resume_id'] ?? '' }})" href="javascript:void(0);"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a></li>
                                                         </ul>
                                                     </div>

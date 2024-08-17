@@ -115,9 +115,13 @@ Route::group(['prefix' => 'account'], function(){
         Route::get('/create', [ResumeController::class, 'create'])->name('resume.create');
         Route::post('/save', [ResumeController::class, 'save'])->name('save');
         Route::delete('/resume',[ResumeController::class,'delete'])->name('resume.delete');
+        Route::get('/resumes', [ResumeController::class, 'showResume'])->name('resumes');
 
 
         Route::get('/role-change-request', [RoleChangeRequestController::class, 'request'])->name('role_change_requests.request');
         Route::post('/role-change-request', [RoleChangeRequestController::class, 'store'])->name('role_change_requests.store');
+
+       
+
     });
 });

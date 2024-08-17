@@ -1,20 +1,10 @@
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>CareerVibe | Find Best Jobs</title>
-    <meta name="description" content="" />
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1, user-scalable=no" />
-    <meta name="HandheldFriendly" content="True" />
-    <meta name="pinterest" content="nopin" />
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}" />
-    <!-- Fav Icon -->
-    <link rel="shortcut icon" type="image/x-icon" href="#" />
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-
 </head>
+
+@extends('front.layouts.app')
+
+@section('main')
 <div class="container-fluid p-0">
     <div class="row no-gutters">
         <!-- Sidebar -->
@@ -41,11 +31,9 @@
             </div>
             <div class="social-icons mt-4">
                 <a href="{{ $information['contact_info']['linkedin_link'] ?? '#' }}" class="text-black mx-2"><i
-                        class="fab fa-linkedin"></i></a>
-                <a href="{{ $information['contact_info']['github_link'] ?? '#' }}" class="text-black mx-2"><i
-                        class="fab fa-github"></i></a>
-                <a href="{{ $information['contact_info']['twitter_link'] ?? '#' }}" class="text-black mx-2"><i
-                        class="fab fa-twitter"></i></a>
+                        class="fab fa-facebook"></i></a>
+                <a href="#" class="text-black mx-2"><i
+                        class="fab fa-facebook-messenger"></i></a>
             </div>
         </div>
         <!-- Main content -->
@@ -127,3 +115,4 @@
         </div>
     </div>
 </div>
+@endsection

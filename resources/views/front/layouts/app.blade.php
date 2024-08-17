@@ -40,6 +40,9 @@
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="{{ route('jobs') }}">Find Jobs</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="{{ route('resumes') }}">Find Resumes</a>
+                        </li>
                     </ul>
                     @if (!Auth::check())
                         <a class="btn btn-outline-primary me-2" href="{{ route('account.login') }}"

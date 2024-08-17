@@ -36,4 +36,5 @@ class Resume extends Model
     {
         return $this->hasMany(Skill::class);
     }
+
 }
