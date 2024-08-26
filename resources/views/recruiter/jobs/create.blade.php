@@ -15,7 +15,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-3">
-                    @include('front.account.sidebar');
+                    @include('recruiter.sidebar');
                 </div>
                 <div class="col-lg-9">
                     @include('front.message')
@@ -166,7 +166,7 @@
 
 @section('customJs')
 <script type="text/javascript">
-    const myJobsRoute = "{{ route('account.myJobs') }}";
+    const myJobsRoute = "{{ route('recruiter.myJobs') }}";
     $("#createJobForm").submit(function(e) {
         e.preventDefault();
         $("button[type='submit']").prop('disabled', true);
@@ -174,7 +174,7 @@
         var formData = new FormData(this);
 
         $.ajax({
-            url: "{{ route('account.saveJob') }}",
+            url: "{{ route('recruiter.saveJob') }}",
             type: 'POST',
             dataType: 'json',
             data: formData,

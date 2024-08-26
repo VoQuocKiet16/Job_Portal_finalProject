@@ -15,7 +15,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-3">
-                    @include('front.account.sidebar');
+                    @include('recruiter.sidebar')
                 </div>
                 <div class="col-lg-9">
                     @include('front.message')
@@ -26,7 +26,7 @@
                                     <h3 class="fs-4 mb-1">My Jobs</h3>
                                 </div>
                                 <div style="margin-top: -10px;">
-                                    <a href="{{ route('account.createJob') }}" class="btn btn-primary">Post a Job</a>
+                                    <a href="{{ route('recruiter.createJob') }}" class="btn btn-primary">Post a Job</a>
                                 </div>
 
                             </div>
@@ -72,7 +72,7 @@
                                                                             class="fa fa-eye" aria-hidden="true"></i>
                                                                         View</a></li>
                                                                 <li><a class="dropdown-item"
-                                                                        href="{{ route('account.editJob', $job->id) }}"><i
+                                                                        href="{{ route('recruiter.editJob', $job->id) }}"><i
                                                                             class="fa fa-edit" aria-hidden="true"></i>
                                                                         Edit</a></li>
                                                                 <li><a class="dropdown-item" href="#"
@@ -109,7 +109,7 @@
             if (confirm("Are you sure")) {
 
                 $.ajax({
-                    url: "{{ route('account.removeMyJobs') }}",
+                    url: "{{ route('recruiter.removeMyJobs') }}",
                     type: 'post',
                     data: {
                         jobId: jobId
@@ -117,7 +117,7 @@
                     dataType: 'json',
                     success: function(response) {
                         window.location.href = "{{ url()->current() }}";
-                        window.location.href = "{{ route('account.myJobs') }}";
+                        window.location.href = "{{ route('recruiter.myJobs') }}";
                     }
                 });
             }

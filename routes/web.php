@@ -9,6 +9,7 @@ use App\Http\Controllers\admin\JobTypeController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobsController;
+use App\Http\Controllers\recruiter\MyJobsController;
 use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\RoleChangeRequestController;
 use App\Models\Category;
@@ -43,8 +44,8 @@ Route::post('/process-forgot-password', [AccountController::class, 'processForgo
 Route::get('/reset-password/{token}',[AccountController::class,'resetPassword'])->name('account.resetPassword');
 Route::post('/process-reset-password',[AccountController::class,'processResetPassword'])->name('account.processResetPassword');
 
-Route::group(['prefix' => 'admin', 'middleware' => 'checkRole'], function(){
-    Route::get('/dashboard',[DashboardController::class,'index'])->name('admin.dashboard');
+Route::group(['prefix' => 'admin', 'middleware' => ['checkRole:admin']], function(){
+    Route::get('/dashboard',[DashboardController::class,'indexAdmin'])->name('admin.dashboard');
 
     Route::get('/users',[UserController::class,'index'])->name('admin.users');
     Route::get('/users/{id}',[UserController::class,'edit'])->name('admin.users.edit');
@@ -79,6 +80,17 @@ Route::group(['prefix' => 'admin', 'middleware' => 'checkRole'], function(){
 
 });
 
+Route::group(['prefix' => 'recruiter', 'middleware' => ['checkRole:recruiter']], function(){
+    Route::get('/dashboard',[DashboardController::class,'indexRecruiter'])->name('recruiter.dashboard');
+    Route::get('/create-job',[MyJobsController::class,'createJob'])->name('recruiter.createJob');   
+    Route::post('/save-job',[MyJobsController::class,'saveJob'])->name('recruiter.saveJob');
+    Route::get('/my-jobs',[MyJobsController::class,'myJobs'])->name('recruiter.myJobs');  
+    Route::get('/my-jobs/edit/{jobId}',[MyJobsController::class,'editJob'])->name('recruiter.editJob');  
+    Route::post('/update-job/{jobId}',[MyJobsController::class,'updateJob'])->name('recruiter.updateJob');   
+    Route::post('/delete-job',[MyJobsController::class,'removeMyJobs'])->name('recruiter.removeMyJobs');
+
+});
+
 Route::group(['prefix' => 'account'], function(){
     Route::group(['middleware' => 'guest'], function(){
         Route::get('/register',[AccountController::class,'registration'])->name('account.registration');
@@ -92,14 +104,6 @@ Route::group(['prefix' => 'account'], function(){
         Route::put('/update-profile',[AccountController::class,'updateProfile'])->name('account.updateProfile');
         Route::get('/logout',[AccountController::class,'logout'])->name('account.logout');   
         Route::post('/update-profile-pic',[AccountController::class,'updateProfilePic'])->name('account.updateProfilePic'); 
- 
-        Route::get('/create-job',[AccountController::class,'createJob'])->name('account.createJob');   
-        Route::post('/save-job',[AccountController::class,'saveJob'])->name('account.saveJob');
-
-        Route::get('/my-jobs',[AccountController::class,'myJobs'])->name('account.myJobs');  
-        Route::get('/my-jobs/edit/{jobId}',[AccountController::class,'editJob'])->name('account.editJob');  
-        Route::post('/update-job/{jobId}',[AccountController::class,'updateJob'])->name('account.updateJob');   
-        Route::post('/delete-job',[AccountController::class,'removeMyJobs'])->name('account.removeMyJobs'); 
 
         Route::get('/my-job-applications',[AccountController::class,'myJobApplications'])->name('account.myJobApplications');  
         Route::post('/remove-job-application',[AccountController::class,'removeAppliedJobs'])->name('account.removeAppliedJobs');

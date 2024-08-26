@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+
 
 class AccountController extends Controller
 {
@@ -184,204 +186,6 @@ class AccountController extends Controller
         }
     }
 
-    public function createJob()
-    {
-
-        $categories = Category::orderBy('name', 'ASC')->where('status', 1)->get();
-
-        $jobTypes = JobType::orderBy('name', 'ASC')->where('status', 1)->get();
-
-        return view('front.account.job.create', [
-            'categories' =>     $categories,
-            'jobTypes' =>      $jobTypes,
-        ]);
-    }
-
-    public function saveJob(Request $request)
-    {
-        $rules = [
-            'title' => 'required|min:5|max:200',
-            'category' => 'required',
-            'jobType' => 'required',
-            'vacancy' => 'required|integer',
-            'location' => 'required|max:50',
-            'description' => 'required',
-            'image' => 'nullable|mimes:png,jpg,jpeg,webp',
-            'company_name' => 'required|min:3|max:75',
-        ];
-    
-        $validator = Validator::make($request->all(), $rules);
-    
-        if ($validator->passes()) {
-            $job = new Job();
-            $job->title = $request->title;
-            $job->category_id = $request->category;
-            $job->job_type_id = $request->jobType;
-            $job->user_id = Auth::user()->id;
-            $job->vacancy = $request->vacancy;
-            $job->salary = $request->salary;
-            $job->location = $request->location;
-            $job->description = $request->description;
-    
-            if ($request->hasFile('image')) {
-                $file = $request->file('image');
-                $filename = time() . '.' . $file->getClientOriginalExtension();
-                $path = 'uploads/jobs/';
-                $file->move($path, $filename);
-                $job->image = $path . $filename;
-            }
-    
-            $job->benefits = $request->benefits;
-            $job->responsibility = $request->responsibility;
-            $job->qualifications = $request->qualifications;
-            $job->keywords = $request->keywords;
-            $job->experience = $request->experience;
-            $job->company_name = $request->company_name;
-            $job->company_location = $request->company_location;
-            $job->company_website = $request->website;
-            $job->save();
-    
-            session()->flash('success', 'Job added successfully.');
-    
-            return response()->json([
-                'status' => true,
-                'errors' => []
-            ]);
-        } else {
-            return response()->json([
-                'status' => false,
-                'errors' => $validator->errors()
-            ]);
-        }
-    }
-
-    public function updateJob(Request $request, $id)
-    {
-        $rules = [
-            'title' => 'required|min:5|max:200',
-            'category' => 'required',
-            'jobType' => 'required',
-            'vacancy' => 'required|integer',
-            'location' => 'required|max:50',
-            'description' => 'required',
-            'image' => 'nullable|mimes:png,jpg,jpeg,webp',
-            'company_name' => 'required|min:3|max:75',
-        ];
-    
-        $validator = Validator::make($request->all(), $rules);
-    
-        if ($validator->passes()) {
-            $job = Job::find($id);
-    
-            if (!$job) {
-                return response()->json([
-                    'status' => false,
-                    'errors' => ['Job not found']
-                ]);
-            }
-    
-            $job->title = $request->title;
-            $job->category_id = $request->category;
-            $job->job_type_id = $request->jobType;
-            $job->user_id = Auth::user()->id;
-            $job->vacancy = $request->vacancy;
-            $job->salary = $request->salary;
-            $job->location = $request->location;
-            $job->description = $request->description;
-    
-            if ($request->hasFile('image')) {
-                // Delete old image if exists
-                if ($job->image && file_exists(public_path($job->image))) {
-                    unlink(public_path($job->image));
-                }
-    
-                $file = $request->file('image');
-                $filename = time() . '.' . $file->getClientOriginalExtension();
-                $path = 'uploads/jobs/';
-                $file->move(public_path($path), $filename);
-                $job->image = $path . $filename;
-            }
-    
-            $job->benefits = $request->benefits;
-            $job->responsibility = $request->responsibility;
-            $job->qualifications = $request->qualifications;
-            $job->keywords = $request->keywords;
-            $job->experience = $request->experience;
-            $job->company_name = $request->company_name;
-            $job->company_location = $request->company_location;
-            $job->company_website = $request->website;
-            $job->save();
-    
-            session()->flash('success', 'Job updated successfully.');
-    
-            return response()->json([
-                'status' => true,
-                'errors' => []
-            ]);
-        } else {
-            return response()->json([
-                'status' => false,
-                'errors' => $validator->errors()
-            ]);
-        }
-    }
-
-
-    public function myJobs()
-    {
-        $jobs = Job::where('user_id', Auth::user()->id)
-            ->with(['jobType', 'applications'])
-            ->orderBy('created_at', 'DESC')
-            ->paginate(10);
-
-        return view('front.account.job.my-jobs', [
-            'jobs' => $jobs,
-        ]);
-    }
-
-    public function editJob(Request $request, $id)
-    {
-
-        $categories = Category::orderBy('name', 'ASC')->where('status', 1)->get();
-        $jobTypes = JobType::orderBy('name', 'ASC')->where('status', 1)->get();
-
-        $job = Job::where([
-            'user_id' => Auth::user()->id,
-            'id' => $id
-        ])->first();
-
-        if ($job == null) {
-            abort(404);
-        }
-
-        return view('front.account.job.edit', [
-            'categories' => $categories,
-            'jobTypes' => $jobTypes,
-            'job' => $job,
-        ]);
-    }
-
-    public function removeMyJobs(Request $request)
-    {
-        $job = Job::where([
-            'user_id' => Auth::user()->id,
-            'id' => $request->jobId,
-        ])->first();
-
-        if ($job == null) {
-            session()->flash('error', 'Either job deleted or nor found');
-            return response()->json([
-                'status' => true,
-            ]);
-        }
-
-        Job::where('id', $request->jobId)->delete();
-        session()->flash('success', 'Job removed successfully');
-        return response()->json([
-            'status' => true,
-        ]);
-    }
-
     public function myJobApplications()
     {
         $jobApplications = JobApplication::where('user_id', Auth::user()->id)
@@ -422,7 +226,6 @@ class AccountController extends Controller
 
     public function savedJobs()
     {
-
         $savedJobs = SavedJobs::where([
             'user_id' => Auth::user()->id
         ])->with(['job', 'job.jobType', 'job.applications'])->orderby('created_at', 'DESC')->paginate(10);
@@ -505,9 +308,9 @@ class AccountController extends Controller
 
         $token = Str::random(10);
 
-        \DB::table('password_reset_tokens')->where('email',$request->email)->delete();
+        DB::table('password_reset_tokens')->where('email',$request->email)->delete();
 
-        \DB::table('password_reset_tokens')->insert([
+        DB::table('password_reset_tokens')->insert([
             'email' =>$request->email,
             'token' => $token,
             'created_at' => now()
@@ -529,7 +332,7 @@ class AccountController extends Controller
     }
 
     public function resetPassword($tokenString) {
-        $token = \DB::table('password_reset_tokens')->where('token',$tokenString)->first();
+        $token = DB::table('password_reset_tokens')->where('token',$tokenString)->first();
 
         if ($token == null) {
             return redirect()->route('account.forgotPassword')->with('error','Invalid token.');
@@ -542,7 +345,7 @@ class AccountController extends Controller
 
     public function processResetPassword(Request $request) {
 
-        $token = \DB::table('password_reset_tokens')->where('token',$request->token)->first();
+        $token = DB::table('password_reset_tokens')->where('token',$request->token)->first();
 
         if ($token == null) {
             return redirect()->route('account.forgotPassword')->with('error','Invalid token.');

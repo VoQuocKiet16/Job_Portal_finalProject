@@ -17,8 +17,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}" />
     <!-- Fav Icon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/images/logo1.png') }} "/>
-    
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/images/logo1.png') }} " />
+
 </head>
 
 <body data-instant-intensity="mousedown" class="d-flex flex-column min-vh-100">
@@ -40,9 +40,11 @@
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="{{ route('jobs') }}">Find Jobs</a>
                         </li>
+                        @if (Auth::check() && (Auth::user()->role == 'recruiter' || Auth::user()->role == 'admin'))
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="{{ route('resumes') }}">Find Resumes</a>
                         </li>
+                    @endif
                     </ul>
                     @if (!Auth::check())
                         <a class="btn btn-outline-primary me-2" href="{{ route('account.login') }}"
@@ -50,12 +52,15 @@
                     @else
                         @if (Auth::user()->role == 'admin')
                             <a class="btn btn-outline-primary me-2" href="{{ route('admin.dashboard') }}"
-                                type="submit">Admin</a>
+                                type="submit">Manage</a>
+                        @elseif (Auth::user()->role == 'recruiter')
+                            <a class="btn btn-outline-primary me-2" href="{{ route('recruiter.dashboard') }}" type="submit">Manage</a>
+                            <a class="btn btn-outline-primary me-2" href="{{ route('recruiter.createJob') }}" type="submit">Post a Job</a>
                         @endif
-                        <a class="btn btn-outline-primary me-2" href="{{ route('account.profile') }}"
+                        <a class="btn btn-primary" href="{{ route('account.profile') }}"
                             type="submit">Account</a>
                     @endif
-                    <a class="btn btn-primary" href="{{ route('account.createJob') }}" type="submit">Post a Job</a>
+                    
                 </div>
             </div>
         </nav>
@@ -149,7 +154,6 @@
 
 
         });
-
     </script>
     @yield('customJs')
 </body>

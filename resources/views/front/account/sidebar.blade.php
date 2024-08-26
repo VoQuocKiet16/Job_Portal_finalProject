@@ -22,12 +22,6 @@
                  <a class="js-scroll-trigger text-dark text-decoration-none" href="{{ route ('account.profile')}}">Account Settings</a>
             </li>
             <li class="nav-link list-group-item d-flex justify-content-between align-items-center p-3">
-                <a class="js-scroll-trigger text-dark text-decoration-none" href="{{ route ('account.createJob')}}">Post a Job</a>
-            </li>
-            <li class="nav-link list-group-item d-flex justify-content-between align-items-center p-3">
-                <a class="js-scroll-trigger text-dark text-decoration-none" href="{{ route ('account.myJobs')}}">My Jobs</a>
-            </li>
-            <li class="nav-link list-group-item d-flex justify-content-between align-items-center p-3">
                 <a class="js-scroll-trigger text-dark text-decoration-none" href="{{ route ('account.myJobApplications') }}">Jobs Applied</a>
             </li>
             <li class="nav-link list-group-item d-flex justify-content-between align-items-center p-3">
@@ -37,7 +31,7 @@
                 <a class="js-scroll-trigger text-dark text-decoration-none" href="{{ route ('account.resume') }}">My Resume (CV)</a>
             </li>   
             <li class="nav-link list-group-item d-flex justify-content-between align-items-center p-3">
-                <a class="js-scroll-trigger text-dark text-decoration-none" href="{{ route ('role_change_requests.request') }}">Request become Recuiter</a>
+                <a class="js-scroll-trigger text-dark text-decoration-none" href="{{ route ('role_change_requests.request') }}">Send Request</a>
             </li>    
             <li class="nav-link list-group-item d-flex justify-content-between align-items-center p-3">
                 <a class="js-scroll-trigger text-dark text-decoration-none" href="{{ route('account.logout')}}">Logout</a>
