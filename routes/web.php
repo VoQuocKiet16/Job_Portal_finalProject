@@ -120,6 +120,7 @@ Route::group(['prefix' => 'account'], function(){
         Route::post('/save', [ResumeController::class, 'saveResume'])->name('save');
         Route::delete('/resume',[ResumeController::class,'delete'])->name('resume.delete');
         Route::get('/resumes', [ResumeController::class, 'showResume'])->name('resumes');
+        Route::post('/resumes/toggle-status/{id}', [ResumeController::class, 'toggleResumeStatus'])->name('resume.toggleStatus');
 
   
     });

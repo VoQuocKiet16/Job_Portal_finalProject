@@ -33,6 +33,7 @@
                                         <th scope="col">Title</th>
                                         <th scope="col">First Name</th>
                                         <th scope="col">Last Name</th>
+                                        <th scope="col">Status</th> 
                                         <th scope="col">Actions</th>
                                     </tr>
                                 </thead>
@@ -47,6 +48,17 @@
                                                 <td>{{ $user['personal_info']['profile_title'] ?? '' }}</td>
                                                 <td>{{ $user['personal_info']['first_name'] ?? '' }}</td>
                                                 <td>{{ $user['personal_info']['last_name'] ?? '' }}</td>
+                                                <td>                                                 
+                                                    <form action="{{ route('resume.toggleStatus', $user['resume_id']) }}" method="POST" class="status-toggle-form">
+                                                        @csrf
+                                                        @php
+                                                            $isPublic = $resumes->find($user['resume_id'])->status;
+                                                        @endphp
+                                                        <button type="button" class="btn btn-{{ $isPublic ? 'success' : 'danger' }}" onclick="confirmToggleStatus('{{ $user['resume_id'] }}', {{ $isPublic ? 'true' : 'false' }})">
+                                                            {{ $isPublic ? 'Public' : 'Private' }}
+                                                        </button>
+                                                    </form>
+                                                </td>
                                                 <td>
                                                     <div class="action-dots">
                                                         <button href="#" class="btn" data-bs-toggle="dropdown" aria-expanded="false">
@@ -63,11 +75,11 @@
                                                 $count++;
                                             @endphp
                                         @endforeach
-                                        @else
+                                    @else
                                         <tr>
-                                            <td colspan="5" class="text-center">No resumes found.</td>
+                                            <td colspan="6" class="text-center">No resumes found.</td>
                                         </tr>
-                                        @endif
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -82,22 +94,31 @@
 </section>
 @endsection
 
-
 @section('customJs')
     <script type="text/javascript">
-        function deleteResume(id) {
-        if (confirm("Are you sure you want to delete?")) {
-            $.ajax({
-                url: '{{ route("resume.delete") }}',
-                type: 'delete',
-                data: { id: id},
-                dataType: 'json',
-                success: function(response) {
-                    window.location.href = "{{ route('account.resume') }}";
-                }
-            });
+        function confirmToggleStatus(resumeId, isPublic) {
+            let message = isPublic 
+                ? "Your resume will be kept private and cannot be found by employers."
+                : "Do you want to make your resume public to employers?";
+            
+            if (confirm(message)) {
+                const form = document.querySelector(`form[action*="toggle-status/${resumeId}"]`);
+                form.submit();
+            }
         }
-    }
 
+        function deleteResume(id) {
+            if (confirm("Are you sure you want to delete?")) {
+                $.ajax({
+                    url: '{{ route("resume.delete") }}',
+                    type: 'delete',
+                    data: { id: id},
+                    dataType: 'json',
+                    success: function(response) {
+                        window.location.href = "{{ route('account.resume') }}";
+                    }
+                });
+            }
+        }
     </script>
 @endsection

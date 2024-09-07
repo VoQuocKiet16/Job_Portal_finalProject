@@ -125,6 +125,7 @@ class ResumeController extends Controller
         $resume = new Resume();
         $resume->user_id = $user_id;
         $resume->title = $request->title;
+        $resume->status = 0;
         $resume->save();
 
         $personal_info = new PersonalInformation();
@@ -175,20 +176,18 @@ class ResumeController extends Controller
     }
 
 
-    // public function destroy($id)
-    // {
-    //     if (!empty($id)) {
-    //         PersonalInformation::find($id)->delete();
-    //         ContactInformation::where('user_id', $id)->delete();
-    //         Education::where('user_id', $id)->delete();
-    //         Experience::where('user_id', $id)->delete();
-    //         Skill::where('user_id', $id)->delete();
+    public function toggleResumeStatus($id)
+    {
+        $resume = Resume::findOrFail($id);
     
-    //         return response()->json(['success' => 'Resume deleted successfully']);
-    //     } else {
-    //         return response()->json(['error' => 'Something went wrong']);
-    //     }
-    // }
+        // Toggle the status
+        $resume->status = !$resume->status;
+        $resume->save();
+    
+        session()->flash('success', 'Resume status updated successfully.');
+    
+        return redirect()->back();
+    }
 
     public function delete(Request $request) {
         $id = $request->id;
@@ -213,7 +212,7 @@ class ResumeController extends Controller
 
     public function showResume(Request $request)
     {
-        $resumes = Resume::query(); // Remove the restriction of the logged-in user
+        $resumes = Resume::where('status', 1);
 
         // Search using degree title
         if (!empty($request->degree_title)) {

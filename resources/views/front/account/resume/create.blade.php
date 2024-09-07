@@ -1,18 +1,17 @@
 @extends('front.layouts.app')
 
-
 @section('main')
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <div class="container">
         <div class="row g-5">
             <div class="col-md-12 col-lg-12">
-                <form action="{{ route('save') }}" id="createform" class="needs-validation" method="POST"
+                <form action="{{ route('save') }}" id="createform" class="needs-validation mt-4" method="POST"
                     enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" id="user_id" name="user_id" class="form-control" />
 
                     <!-- Personal details fields -->
-                    <div class="card mb-3">
+                    <div class="card mb-3 mt-4">
                         <div class="card-body">
                             <h4 class="mb-3">Personal details</h4>
                             <div class="row g-3">
