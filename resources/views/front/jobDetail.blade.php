@@ -78,7 +78,7 @@
                             <div class="border-bottom"></div>
                             <div class="pt-3 text-end">
                                 @if (Auth::check())
-                                    <a href="#" onclick="applyJob({{ $job->id }})"
+                                    <a href="javascript:void(0);" onclick="applyJob({{ $job->id }})"
                                         class="btn btn-primary">Apply</a>
                                 @else
                                     <a href="{{ route('account.login') }}" class="btn btn-primary">Login to Apply</a>
@@ -221,7 +221,7 @@
                     dataType: 'json',
                     success: function(response) {
                         window.location.href = "{{ url()->current() }}";
-                        window.location.href = "{{ url('jobs/detail') }}/" + id;
+                        // window.location.href = "{{ url('jobs/detail') }}/" + id;
                     }
                 });
             }

@@ -47,9 +47,7 @@ class MyJobsController extends Controller
     
     public function createJob()
     {
-
         $categories = Category::orderBy('name', 'ASC')->where('status', 1)->get();
-
         $jobTypes = JobType::orderBy('name', 'ASC')->where('status', 1)->get();
 
         return view('recruiter.jobs.create', [

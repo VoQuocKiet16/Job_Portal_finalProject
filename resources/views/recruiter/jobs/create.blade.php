@@ -15,7 +15,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-3">
-                    @include('recruiter.sidebar');
+                    @include('recruiter.sidebar')
                 </div>
                 <div class="col-lg-9">
                     @include('front.message')

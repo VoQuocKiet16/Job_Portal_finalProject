@@ -122,7 +122,7 @@ class JobsController extends Controller
             ]);
         }
 
-        // you can not apply on your own job
+        // You can not apply on your own job
         $employer_id = $job->user_id;
 
         if ($employer_id == Auth::user()->id) {

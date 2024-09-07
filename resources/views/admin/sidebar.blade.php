@@ -2,6 +2,9 @@
     <div class="card-body p-0">
         <ul class="list-group list-group-flush ">
             <li class="nav-link list-group-item d-flex justify-content-between p-3">
+                <a class ="js-scroll-trigger text-dark text-decoration-none" href="{{route('admin.statisticsAdmin')}}">Statistics</a>
+            </li>
+            <li class="nav-link list-group-item d-flex justify-content-between p-3">
                 <a class ="js-scroll-trigger text-dark text-decoration-none" href="{{route('admin.users')}}">Users</a>
             </li>
             <li class="nav-link list-group-item d-flex justify-content-between p-3">

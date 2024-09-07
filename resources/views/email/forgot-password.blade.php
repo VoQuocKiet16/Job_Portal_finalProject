@@ -1,19 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Forgot Password Email</title>
+    <title>Reset Password</title>
 </head>
 <body>
-    <h1>Hello {{ $mailData['user']->name }}</h1>
-    
+    <h1>Hello {{ $user->name }}</h1>
     <p>Click below to change your password.</p>
-
-    <a href="{{ route("account.resetPassword",$mailData['token']) }}">Click Here</a>
-
+    <p><a href="{{ route('account.resetPassword', ['token' => $token]) }}">Click Here</a></p>
+    
+    <p><strong>Note:</strong> This link will expire in 1 minute. Please use the link before it expires.</p>
+    
     <p>Thanks</p>
-
 </body>
 </html>

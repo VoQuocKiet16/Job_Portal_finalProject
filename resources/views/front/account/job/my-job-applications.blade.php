@@ -61,7 +61,7 @@
                                                     </button>
                                                     <ul class="dropdown-menu dropdown-menu-end">
                                                         <li><a class="dropdown-item" href="{{ route("jobDetail",$jobApplication->job_id) }}"> <i class="fa fa-eye" aria-hidden="true"></i> View</a></li>
-                                                        <li><a class="dropdown-item" href="#" onclick="removeAppliedJobs({{ $jobApplication->id }})" ><i class="fa fa-trash" aria-hidden="true"></i> Remove</a></li>
+                                                        <li><a class="dropdown-item" href="javascript:void(0);" onclick="removeAppliedJobs({{ $jobApplication->id }})" ><i class="fa fa-trash" aria-hidden="true"></i> Remove</a></li>
                                                     </ul>
                                                 </div>
                                             </td>
@@ -98,7 +98,7 @@ function removeAppliedJobs(id) {
             dataType: 'json',
             success: function(response) {
                 window.location.href = "{{ url()->current() }}";
-                window.location.href="{{ route('account.myJobApplications') }}";
+                // window.location.href="{{ route('account.myJobApplications') }}";
             }
         });
     } 

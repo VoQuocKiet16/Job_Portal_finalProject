@@ -109,6 +109,7 @@
     <script src="{{ asset('assets/js/instantpages.5.1.0.min.js') }}"></script>
     <script src="{{ asset('assets/js/lazyload.17.6.0.min.js') }}"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         window.onscroll = function() {
             var navbar = document.querySelector('.navbar');

@@ -9,11 +9,12 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ResetPassordEmail extends Mailable
+class ResetPasswordEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $mailData;
+    public $expiresAt;
     /**
      * Create a new message instance.
      */
@@ -39,6 +40,11 @@ class ResetPassordEmail extends Mailable
     {
         return new Content(
             view: 'email.forgot-password',
+            with: [
+                'token' => $this->mailData['token'],
+                'user' => $this->mailData['user'],
+                'expiresAt' => $this->expiresAt
+            ],
         );
     }
 
@@ -51,4 +57,5 @@ class ResetPassordEmail extends Mailable
     {
         return [];
     }
+    
 }

@@ -2,11 +2,11 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\admin\CategoryController;
-use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\JobApplicationController;
 use App\Http\Controllers\admin\JobController;
 use App\Http\Controllers\admin\JobTypeController;
 use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobsController;
 use App\Http\Controllers\recruiter\MyJobsController;
@@ -46,6 +46,7 @@ Route::post('/process-reset-password',[AccountController::class,'processResetPas
 
 Route::group(['prefix' => 'admin', 'middleware' => ['checkRole:admin']], function(){
     Route::get('/dashboard',[DashboardController::class,'indexAdmin'])->name('admin.dashboard');
+    Route::get('/statistics', [DashboardController::class, 'statisticsAdmin'])->name('admin.statisticsAdmin');
 
     Route::get('/users',[UserController::class,'index'])->name('admin.users');
     Route::get('/users/{id}',[UserController::class,'edit'])->name('admin.users.edit');
@@ -82,6 +83,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['checkRole:admin']], functio
 
 Route::group(['prefix' => 'recruiter', 'middleware' => ['checkRole:recruiter']], function(){
     Route::get('/dashboard',[DashboardController::class,'indexRecruiter'])->name('recruiter.dashboard');
+    Route::get('/statistics', [DashboardController::class, 'statisticsRecruiter'])->name('recruiter.statisticsRecruiter');
+
+
     Route::get('/create-job',[MyJobsController::class,'createJob'])->name('recruiter.createJob');   
     Route::post('/save-job',[MyJobsController::class,'saveJob'])->name('recruiter.saveJob');
     Route::get('/my-jobs',[MyJobsController::class,'myJobs'])->name('recruiter.myJobs');  
@@ -108,7 +112,7 @@ Route::group(['prefix' => 'account'], function(){
         Route::get('/my-job-applications',[AccountController::class,'myJobApplications'])->name('account.myJobApplications');  
         Route::post('/remove-job-application',[AccountController::class,'removeAppliedJobs'])->name('account.removeAppliedJobs');
 
-        Route::get('/saved-jobs',[AccountController::class,'savedJobs'])->name('account.savedJobs');  
+        Route::get('/saved-jobs',[AccountController::class,'listSavedJobs'])->name('account.savedJobs');  
         Route::post('/remove-saved-job',[AccountController::class,'removeSavedJob'])->name('account.removeSavedJob');
 
         Route::post('/update-password',[AccountController::class,'updatePassword'])->name('account.updatePassword'); 
@@ -116,8 +120,8 @@ Route::group(['prefix' => 'account'], function(){
         
         Route::get('/resume', [ResumeController::class, 'index'])->name('account.resume');
         Route::get('/resume/{id}', [ResumeController::class, 'view'])->name('resume.view');
-        Route::get('/create', [ResumeController::class, 'create'])->name('resume.create');
-        Route::post('/save', [ResumeController::class, 'save'])->name('save');
+        Route::get('/create', [ResumeController::class, 'createResume'])->name('resume.create');
+        Route::post('/save', [ResumeController::class, 'saveResume'])->name('save');
         Route::delete('/resume',[ResumeController::class,'delete'])->name('resume.delete');
         Route::get('/resumes', [ResumeController::class, 'showResume'])->name('resumes');
 

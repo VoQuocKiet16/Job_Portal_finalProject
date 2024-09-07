@@ -114,11 +114,11 @@ class ResumeController extends Controller
     }
     
 
-    public function create()
+    public function createResume()
     {
         return view('front.account.resume.create');
     }
-    public function save(Request $request)
+    public function saveResume(Request $request)
     {
         $user_id = Auth::id();
 
@@ -171,25 +171,24 @@ class ResumeController extends Controller
                 $skill_info->save();
             }
         }
-
         return redirect()->route('account.resume', ['resumeId' => $resume->id]);
     }
 
 
-    public function destroy($id)
-    {
-        if (!empty($id)) {
-            PersonalInformation::find($id)->delete();
-            ContactInformation::where('user_id', $id)->delete();
-            Education::where('user_id', $id)->delete();
-            Experience::where('user_id', $id)->delete();
-            Skill::where('user_id', $id)->delete();
+    // public function destroy($id)
+    // {
+    //     if (!empty($id)) {
+    //         PersonalInformation::find($id)->delete();
+    //         ContactInformation::where('user_id', $id)->delete();
+    //         Education::where('user_id', $id)->delete();
+    //         Experience::where('user_id', $id)->delete();
+    //         Skill::where('user_id', $id)->delete();
     
-            return response()->json(['success' => 'Resume deleted successfully']);
-        } else {
-            return response()->json(['error' => 'Something went wrong']);
-        }
-    }
+    //         return response()->json(['success' => 'Resume deleted successfully']);
+    //     } else {
+    //         return response()->json(['error' => 'Something went wrong']);
+    //     }
+    // }
 
     public function delete(Request $request) {
         $id = $request->id;
