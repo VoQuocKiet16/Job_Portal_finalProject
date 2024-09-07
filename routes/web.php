@@ -75,10 +75,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['checkRole:admin']], functio
     Route::put('/jobtypes/{id}',[JobTypeController::class,'update'])->name('admin.jobtypes.update');
     Route::delete('/jobtypes',[JobTypeController::class,'delete'])->name('admin.jobtypes.delete');
 
-    Route::get('/role-change-requests', [RoleChangeRequestController::class, 'index'])->name('admin.role_change_requests.index');
-    Route::patch('/role-change-requests/{id}', [RoleChangeRequestController::class, 'approve'])->name('admin.role_change_requests.approve');
-    Route::delete('/role-change-requests/{id}', [RoleChangeRequestController::class, 'reject'])->name('admin.role_change_requests.reject');
-
 });
 
 Route::group(['prefix' => 'recruiter', 'middleware' => ['checkRole:recruiter']], function(){
@@ -125,11 +121,6 @@ Route::group(['prefix' => 'account'], function(){
         Route::delete('/resume',[ResumeController::class,'delete'])->name('resume.delete');
         Route::get('/resumes', [ResumeController::class, 'showResume'])->name('resumes');
 
-
-        Route::get('/role-change-request', [RoleChangeRequestController::class, 'request'])->name('role_change_requests.request');
-        Route::post('/role-change-request', [RoleChangeRequestController::class, 'store'])->name('role_change_requests.store');
-
-       
-
+  
     });
 });

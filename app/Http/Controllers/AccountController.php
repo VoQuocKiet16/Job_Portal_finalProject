@@ -31,39 +31,82 @@ class AccountController extends Controller
     }
 
     //This method will save a user
+    // public function processRegistration(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'name' => 'required',
+    //         'email' => 'required|email|unique:users,email',
+    //         'password' => 'required|min:8|same:confirm_password',
+    //         'confirm_password' => 'required',
+    //     ]);
+
+    //     if ($validator->passes()) {
+
+    //         $user = new User();
+    //         $user->name = $request->name;
+    //         $user->email = $request->email;
+    //         $user->password = Hash::make($request->password);
+    //         $user->save();
+
+    //         session()->flash(
+    //             'success',
+    //             'You have registered successfully.'
+    //         );
+
+    //         return response()->json([
+    //             'status' => true,
+    //             'errors' => []
+    //         ]);
+    //     } else {
+    //         return response()->json([
+    //             'status' => false,
+    //             'errors' => $validator->errors()
+    //         ]);
+    //     }
+    // }
+
     public function processRegistration(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8|same:confirm_password',
-            'confirm_password' => 'required',
-        ]);
+{
+    $validator = Validator::make($request->all(), [
+        'name' => 'required',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|min:8|same:confirm_password',
+        'confirm_password' => 'required',
+        'recruiter' => 'required|in:yes,no',
+    ]);
 
-        if ($validator->passes()) {
+    if ($validator->passes()) {
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
 
-            $user = new User();
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = Hash::make($request->password);
-            $user->save();
-
-            session()->flash(
-                'success',
-                'You have registered successfully.'
-            );
-
-            return response()->json([
-                'status' => true,
-                'errors' => []
-            ]);
+        // Set the role based on the recruiter's selection
+        if ($request->recruiter == 'yes') {
+            $user->role = 'recruiter';
         } else {
-            return response()->json([
-                'status' => false,
-                'errors' => $validator->errors()
-            ]);
+            $user->role = 'user';
         }
+
+        $user->save();
+
+        session()->flash(
+            'success',
+            'You have registered successfully.'
+        );
+
+        return response()->json([
+            'status' => true,
+            'errors' => []
+        ]);
+    } else {
+        return response()->json([
+            'status' => false,
+            'errors' => $validator->errors()
+        ]);
     }
+}
+
 
     // This method will show login page
     public function login()

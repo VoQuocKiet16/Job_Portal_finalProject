@@ -22,6 +22,14 @@
                                 <p></p>
                             </div>
                             <div class="mb-3">
+                                <label for="recruiter" class="mb-2">Are you a recruiter?</label>
+                                <select name="recruiter" id="recruiter" class="form-control">
+                                    <option value="no">No</option>
+                                    <option value="yes">Yes</option>
+                                </select>
+                                <p></p>
+                            </div>
+                            <div class="mb-3">
                                 <label for="" class="mb-2">Password*</label>
                                 <input type="password" name="password" id="password" class="form-control"
                                     placeholder="Enter Password">
