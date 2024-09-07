@@ -13418,7 +13418,21 @@
 }
 
 
-  /* Avatar styles */
-  .avatar {
-    border: 3px solid white; 
+/* Avatar styles */
+.avatar {
+  border: 3px solid white; 
+}
+
+.card-registration .select-input.form-control[readonly]:not([disabled]) {
+  font-size: 1rem;
+  line-height: 2.15;
+  padding-left: .75em;
+  padding-right: .75em;
   }
+  .card-registration .select-arrow {
+  top: 13px;
+  }
+
+  .custom-bg {
+    background-color: #FFE5CF !important;
+}
