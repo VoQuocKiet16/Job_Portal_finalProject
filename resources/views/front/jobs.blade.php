@@ -26,11 +26,17 @@
                                 <input value="{{ Request::get('keyword') }}" type="text" name="keyword" id="keyword"
                                     placeholder="Keywords" class="form-control">
                             </div>
-
                             <div class="mb-4">
                                 <h2>Location</h2>
-                                <input value="{{ Request::get('location') }}" type="text" name="location" id="location"
-                                    placeholder="Location" class="form-control">
+                                <select name="location" id="location" class="form-control">
+                                    <option value="">Select a Location</option>
+                                    @if ($locations)
+                                        @foreach ($locations as $location)
+                                            <option {{ Request::get('location') == $location->id ? 'selected' : '' }}
+                                                value="{{ $location->id }}">{{ $location->name }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
                             </div>
 
                             <div class="mb-4">
@@ -114,7 +120,7 @@
                                                         <h3 class="fs-5 pb-2 mb-0">{{ $job->title }}</h3>
                                                         <p class="mb-2">
                                                             <span class="fw-bolder"><i class="fa fa-map-marker"></i></span>
-                                                            <span class="ps-1">{{ $job->location }}</span>
+                                                            <span class="ps-1">{{ $job->location ? $job->location->name : 'No Location' }}</span>
                                                         </p>
                                                         <p class="mb-2">{{ Str::words(strip_tags($job->description), $words = 10, '...') }}</p>
                                                     </div>

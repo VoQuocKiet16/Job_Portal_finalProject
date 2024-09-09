@@ -7,7 +7,7 @@
         <div class="row">
             <div class="">
                 <h1>Find your dream job</h1>
-                <p>Thounsands of jobs available.</p>
+                <p>Thousands of jobs available.</p>
 
                 <section class="section-1 py-5 ">
                     <div class="container">
@@ -15,12 +15,17 @@
                             <form action="{{ route('jobs') }}" method="GET">
                                 <div class="row">
                                     <div class="col-md-3 mb-3 mb-sm-3 mb-lg-0">
-                                        <input type="text" class="form-control" name="keyword" id="keyword"
-                                            placeholder="Keywords">
+                                        <input type="text" class="form-control" name="keyword" id="keyword" placeholder="Keywords">
                                     </div>
                                     <div class="col-md-3 mb-3 mb-sm-3 mb-lg-0">
-                                        <input type="text" class="form-control" name="location" id="location"
-                                            placeholder="Location">
+                                        <select name="location" id="location" class="form-control">
+                                            <option value="">Select a location</option>
+                                            @if ($locations->isNotEmpty())
+                                                @foreach ($locations as $location)
+                                                    <option value="{{ $location->id }}">{{ $location->name }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
                                     </div>
                                     <div class="col-md-3 mb-3 mb-sm-3 mb-lg-0">
                                         <select name="category" id="category" class="form-control">
@@ -32,12 +37,10 @@
                                             @endif
                                         </select>
                                     </div>
-
-                                    <div class=" col-md-3 mb-xs-3 mb-sm-3 mb-lg-0">
+                                    <div class="col-md-3 mb-xs-3 mb-sm-3 mb-lg-0">
                                         <div class="d-grid gap-2">
                                             <button class="btn btn-primary btn-block" type="submit">Search</button>
                                         </div>
-
                                     </div>
                                 </div>
                             </form>
@@ -71,7 +74,7 @@
                                                 <p class="mb-0">Location</p>
                                                 <p class="mb-0">
                                                     <span class="fw-bolder"><i class="fa fa-map-marker"></i></span>
-                                                    <span class="ps-1">{{ $featuredJob->location }}</span>
+                                                    <span class="ps-1">{{ $featuredJob->location ? $featuredJob->location->name : 'No Location' }}</span>
                                                 </p>
                                             </div>
                                             <div class="text-end ms-3">
@@ -114,7 +117,7 @@
                                                 <p class="mb-0">Location</p>
                                                 <p class="mb-0">
                                                     <span class="fw-bolder"><i class="fa fa-map-marker"></i></span>
-                                                    <span class="ps-1">{{ $latestJob->location }}</span>
+                                                    <span class="ps-1">{{ $latestJob->location ? $latestJob->location->name : 'No Location' }}</span>
                                                 </p>
                                             </div>
                                             <div class="text-end ms-3">
@@ -127,6 +130,49 @@
                             @endforeach
                         @else
                             <p>No latest jobs available.</p>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-4 py-5">
+    <div class="container">
+        <h2>Suggested Jobs</h2>
+        <div class="row pt-5">
+            <div class="job_listing_area">
+                <div class="job_lists">
+                    <div class="row">
+                        @if ($suggestedJobs->isNotEmpty())
+                            @foreach ($suggestedJobs as $suggestedJob)
+                                <div class="col-md-12">
+                                    <div class="card border-0 p-3 shadow mb-4">
+                                        <div class="card-body d-flex align-items-start">
+                                            @if ($suggestedJob->image)
+                                                <div class="me-3">
+                                                    <img src="{{ asset($suggestedJob->image) }}" class="img-fluid" style="width: 70px; height: 70px; object-fit: cover;">
+                                                </div>
+                                            @endif
+                                            <div class="flex-grow-1">
+                                                <h3 class="fs-5 pb-2 mb-0">{{ $suggestedJob->title }}</h3>
+                                                <p class="mb-0">Location</p>
+                                                <p class="mb-0">
+                                                    <span class="fw-bolder"><i class="fa fa-map-marker"></i></span>
+                                                    <span class="ps-1">{{ $suggestedJob->location ? $suggestedJob->location->name : 'No Location' }}</span>
+                                                </p>
+                                            </div>
+                                            <div class="text-end ms-3">
+                                                <p class="mb-0"><strong>Salary:</strong> {{ $suggestedJob->salary }}</p>
+                                                <a href="{{ route('jobDetail', $suggestedJob->id) }}" class="btn btn-outline-primary">Details</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <p>No suggested jobs available.</p>
                         @endif
                     </div>
                 </div>

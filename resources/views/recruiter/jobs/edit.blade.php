@@ -67,18 +67,31 @@
                                         <p></p>
                                     </div>
                                 </div>
+                                <div class="mb-4">
+                                    <label for="" class="mb-2">Salary</label>
+                                    <input type="text" placeholder="Salary" id="salary" name="salary"
+                                        class="form-control">
+                                </div>
 
                                 <div class="row">
-                                    <div class="mb-4 col-md-6">
-                                        <label for="" class="mb-2">Salary</label>
-                                        <input type="text" placeholder="Salary" id="salary" name="salary"
-                                            class="form-control" value="{{ $job->salary }}">
+                                    <div class="col-md-6  mb-4">
+                                        <label for="" class="mb-2">Location<span class="req">*</span></label>
+                                        <select name="location" id="location" class="form-control">
+                                            <option value="">Select a Location</option>
+                                            @if ($locations->isNotEmpty())
+                                                @foreach ($locations as $location)
+                                                    <option value="{{ $location->id }}">{{ $location->name }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        <p></p>
                                     </div>
 
                                     <div class="mb-4 col-md-6">
-                                        <label for="" class="mb-2">Location<span class="req">*</span></label>
-                                        <input type="text" placeholder="Location" id="location" name="location"
-                                            class="form-control" value="{{ $job->location }}">
+                                        <label for="" class="mb-2">Location Description<span
+                                                class="req">*</span></label>
+                                        <input type="text" placeholder="Location Desciption" id="location_description"
+                                            name="location_description" class="form-control">
                                         <p></p>
                                     </div>
                                 </div>
@@ -91,7 +104,8 @@
                                 </div>
                                 <div class="mb-4">
                                     <label for="" class="mb-2">Benefits</label>
-                                    <textarea class="form-control" name="benefits" id="benefits" cols="5" rows="5" placeholder="Benefits">{{ $job->benefits }}</textarea>
+                                    <textarea class="form-control" name="benefits" id="benefits" cols="5" rows="5"
+                                        placeholder="Benefits">{{ $job->benefits }}</textarea>
                                 </div>
                                 <div class="mb-4">
                                     <label for="" class="mb-2">Responsibility</label>
@@ -172,7 +186,8 @@
                                 <div class="mb-4 custom-image-label">
                                     <label for="" class="mb-2">Image</label>
                                     @if ($job->image)
-                                        <img src="{{ asset($job->image) }}" class="img-fluid mb-3" style="width: 100px; height: 100px;">
+                                        <img src="{{ asset($job->image) }}" class="img-fluid mb-3"
+                                            style="width: 100px; height: 100px;">
                                     @endif
                                 </div>
                                 <div class="mb-3 col-md-6">
@@ -220,6 +235,8 @@
                             'invalid-feadback').html('')
                         $("#location").removeClass('is-invalid').siblings('p').addClass(
                             'invalid-feadback').html('')
+                        $("#location_description").removeClass('is-invalid').siblings('p').addClass(
+                            'invalid-feadback').html('')
                         $("#description").removeClass('is-invalid').siblings('p').addClass(
                             'invalid-feadback').html('')
                         $("#company_name").removeClass('is-invalid').siblings('p').addClass(
@@ -266,6 +283,14 @@
                                 'invalid-feadback').html(errors.location)
                         } else {
                             $("#location").removeClass('is-invalid').siblings('p').addClass(
+                                'invalid-feadback').html('')
+                        }
+
+                        if (errors.location_description) {
+                            $("#location_description").addClass('is-invalid').siblings('p').addClass(
+                                'invalid-feadback').html(errors.location)
+                        } else {
+                            $("#location_description").removeClass('is-invalid').siblings('p').addClass(
                                 'invalid-feadback').html('')
                         }
 

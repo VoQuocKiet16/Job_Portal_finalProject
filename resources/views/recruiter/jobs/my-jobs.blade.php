@@ -47,7 +47,12 @@
                                                 <tr class="active">
                                                     <td>
                                                         <div class="job-name fw-500">{{ $job->title }}</div>
-                                                        <div class="info1">{{ $job->jobType->name }}/{{ $job->location }}
+                                                        <div class="info1">{{ $job->jobType->name }}/
+                                                            @if($job->location)
+                                                            {{ $job->location->name }}
+                                                        @else
+                                                            No Location
+                                                        @endif
                                                         </div>
                                                     </td>
                                                     <td>{{ \Carbon\Carbon::parse($job->create_at)->format(' d My, Y') }}

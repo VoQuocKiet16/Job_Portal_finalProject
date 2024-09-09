@@ -11,13 +11,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\JobNotificationEmail;
+use App\Models\Location;
 use App\Models\SavedJobs;
 
 class JobsController extends Controller
 {
     public function index(Request $request)
     {
-
+        $locations = Location::where('status', 1)->get();
         $categories = Category::where('status', 1)->get();
         $jobTypes = JobType::where('status', 1)->get();
         $jobs = Job::where('status', 1)->with('jobType')->orderBy('created_at', 'DESC')->paginate(9);
@@ -35,7 +36,7 @@ class JobsController extends Controller
 
         // Search using location
         if (!empty($request->location)) {
-            $jobs = $jobs->where('location', $request->location);
+            $jobs = $jobs->where('location_id', $request->location);
         }
 
         // Search using category
@@ -73,6 +74,7 @@ class JobsController extends Controller
             'categories' => $categories,
             'jobTypes' => $jobTypes,
             'jobs' => $jobs,
+            'locations' => $locations,
             'jobTypeArray' => $jobTypeArray
         ]);
     }

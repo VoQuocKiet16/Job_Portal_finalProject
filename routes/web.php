@@ -5,6 +5,7 @@ use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\JobApplicationController;
 use App\Http\Controllers\admin\JobController;
 use App\Http\Controllers\admin\JobTypeController;
+use App\Http\Controllers\admin\LocationController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
@@ -67,6 +68,13 @@ Route::group(['prefix' => 'admin', 'middleware' => ['checkRole:admin']], functio
     Route::get('/categories/{id}',[CategoryController::class,'edit'])->name('admin.categories.edit');
     Route::put('/categories/{id}',[CategoryController::class,'update'])->name('admin.categories.update');
     Route::delete('/categories',[CategoryController::class,'delete'])->name('admin.categories.delete');
+
+    Route::get('/locations',[LocationController::class,'index'])->name('admin.locations');
+    Route::get('admin/locations/create', [LocationController::class, 'create'])->name('admin.locations.create');
+    Route::post('admin/locations/save', [LocationController::class, 'saveLocation'])->name('admin.locations.save');
+    Route::get('/locations/{id}',[LocationController::class,'edit'])->name('admin.locations.edit');
+    Route::put('/locations/{id}',[LocationController::class,'update'])->name('admin.locations.update');
+    Route::delete('/locations',[LocationController::class,'delete'])->name('admin.locations.delete');
 
     Route::get('/jobtypes',[JobTypeController::class,'index'])->name('admin.jobtypes');
     Route::get('admin/jobtypes/create', [JobTypeController::class, 'create'])->name('admin.jobtypes.create');

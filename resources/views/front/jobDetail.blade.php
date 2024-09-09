@@ -28,7 +28,7 @@
                                         </a>
                                         <div class="links_locat d-flex align-items-center">
                                             <div class="location">
-                                                <p><i class="fa fa-map-marker"></i> {{ $job->location }}</p>
+                                                <p><i class="fa fa-map-marker"></i> {{ $job->location->name }}</p>
                                             </div>
                                             <div class="location">
                                                 <p><i class="fa fa-clock-o"></i> {{ $job->jobType->name }}</p>
@@ -134,7 +134,7 @@
                                                                     <h5 class="card-title">{{ $relatedJob->title }}</h5>
                                                                     <p class="card-text">
                                                                         <i class="fa fa-map-marker"></i>
-                                                                        {{ $relatedJob->location }}<br>
+                                                                        {{ $relatedJob->location->name }}<br>
                                                                         <i class="fa fa-clock-o"></i>
                                                                         {{ $relatedJob->jobType->name }}
                                                                     </p>
@@ -175,7 +175,7 @@
                                     @if (!empty($job->salary))
                                         <li>Salary: <span>{{ $job->salary }}</span></li>
                                     @endif
-                                    <li>Location: <span>{{ $job->location }}</span></li>
+                                    <li>Location: <span>{{ $job->location->name }}</span></li>
                                     <li>Job Nature: <span>{{ $job->jobType->name }}</span></li>
                                 </ul>
                             </div>

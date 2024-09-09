@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Job;
 use App\Models\JobType;
+use App\Models\Location;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,13 +16,13 @@ class MyJobsController extends Controller
     public function myJobs()
     {
         $jobs = Job::where('user_id', Auth::user()->id)
-            ->with(['jobType', 'applications'])
-            ->orderBy('created_at', 'DESC')
-            ->paginate(10);
+        ->with(['jobType', 'applications', 'location']) 
+        ->orderBy('created_at', 'DESC')
+        ->paginate(10);
 
-        return view('recruiter.jobs.my-jobs', [
-            'jobs' => $jobs,
-        ]);
+    return view('recruiter.jobs.my-jobs', [
+        'jobs' => $jobs,
+    ]);
     }
 
     public function removeMyJobs(Request $request)
@@ -47,10 +48,12 @@ class MyJobsController extends Controller
     
     public function createJob()
     {
+        $locations = Location::orderBy('name', 'ASC')->where('status', 1)->get();
         $categories = Category::orderBy('name', 'ASC')->where('status', 1)->get();
         $jobTypes = JobType::orderBy('name', 'ASC')->where('status', 1)->get();
 
         return view('recruiter.jobs.create', [
+            'locations' =>     $locations,
             'categories' =>     $categories,
             'jobTypes' =>      $jobTypes,
         ]);
@@ -63,7 +66,8 @@ class MyJobsController extends Controller
             'category' => 'required',
             'jobType' => 'required',
             'vacancy' => 'required|integer',
-            'location' => 'required|max:50',
+            'location' => 'required',
+            'location_description' => 'required|max:50',
             'description' => 'required',
             'image' => 'nullable|mimes:png,jpg,jpeg,webp',
             'company_name' => 'required|min:3|max:75',
@@ -80,7 +84,8 @@ class MyJobsController extends Controller
             $job->user_id = Auth::user()->id;
             $job->vacancy = $request->vacancy;
             $job->salary = $request->salary;
-            $job->location = $request->location;
+            $job->location_id = $request->location;
+            $job->location_description = $request->location_description;
             $job->description = $request->description;
     
             if ($request->hasFile('image')) {
@@ -123,7 +128,8 @@ class MyJobsController extends Controller
             'category' => 'required',
             'jobType' => 'required',
             'vacancy' => 'required|integer',
-            'location' => 'required|max:50',
+            'location' => 'required',
+            'location_description' => 'required|max:50',
             'description' => 'required',
             'image' => 'nullable|mimes:png,jpg,jpeg,webp',
             'company_name' => 'required|min:3|max:75',
@@ -147,7 +153,8 @@ class MyJobsController extends Controller
             $job->user_id = Auth::user()->id;
             $job->vacancy = $request->vacancy;
             $job->salary = $request->salary;
-            $job->location = $request->location;
+            $job->location_id = $request->location;
+            $job->location_description = $request->location_description;
             $job->description = $request->description;
     
             if ($request->hasFile('image')) {
@@ -189,7 +196,7 @@ class MyJobsController extends Controller
 
     public function editJob(Request $request, $id)
     {
-
+        $locations = Location::orderBy('name', 'ASC')->where('status', 1)->get();
         $categories = Category::orderBy('name', 'ASC')->where('status', 1)->get();
         $jobTypes = JobType::orderBy('name', 'ASC')->where('status', 1)->get();
 
@@ -204,6 +211,7 @@ class MyJobsController extends Controller
 
         return view('recruiter.jobs.edit', [
             'categories' => $categories,
+            'locations' => $locations,
             'jobTypes' => $jobTypes,
             'job' => $job,
         ]);
