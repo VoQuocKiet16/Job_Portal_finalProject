@@ -8,7 +8,7 @@
 <div class="container-fluid p-0">
     <div class="row no-gutters">
         <!-- Sidebar -->
-        <div class="col-md-3 sidebar text-white p-4">
+        <div class="col-md-3 sidebar text-white p-4" id="sidebar">
             <div class="text-center mb-4">
                 <a class="navbar-brand js-scroll-trigger" href="#page-top">
                     <span class="d-none d-lg-block">
@@ -22,18 +22,24 @@
                     </span>
                 </a>
             </div>
-            <hr class="my-4">
+
+            <div class="social-icons mt-4 text-secondary">
+                @if (!empty($information['contact_info']['linkedin_link']))
+                    <a href="{{ $information['contact_info']['linkedin_link'] }}" class="text-black mx-2" target="_blank">
+                        <i class="fa fa-link"></i> {{ $information['contact_info']['linkedin_link'] }}
+                    </a>
+                @else
+                    <p>No LinkedIn profile available</p>
+                @endif
+            </div>
+
+            <hr class="m-0">
             <div class="nav flex-column ">
                 <a class="nav-link text-black js-scroll-trigger" href="#about">About</a>
                 <a class="nav-link text-black js-scroll-trigger" href="#experience">Experience</a>
                 <a class="nav-link text-black js-scroll-trigger" href="#education">Education</a>
                 <a class="nav-link text-black js-scroll-trigger" href="#skills">Skills</a>
-            </div>
-            <div class="social-icons mt-4">
-                <a href="{{ $information['contact_info']['linkedin_link'] ?? '#' }}" class="text-black mx-2"><i
-                        class="fab fa-facebook"></i></a>
-                <a href="#" class="text-black mx-2"><i
-                        class="fab fa-facebook-messenger"></i></a>
+                <a class="nav-link text-black js-scroll-trigger" href="{{ route ('account.resume') }}">My Resume</a>
             </div>
         </div>
         <!-- Main content -->

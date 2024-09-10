@@ -126,6 +126,8 @@ Route::group(['prefix' => 'account'], function(){
         Route::get('/resume/{id}', [ResumeController::class, 'view'])->name('resume.view');
         Route::get('/create', [ResumeController::class, 'createResume'])->name('resume.create');
         Route::post('/save', [ResumeController::class, 'saveResume'])->name('save');
+        Route::get('/resume/{id}/edit', [ResumeController::class, 'editResume'])->name('resume.edit');
+        Route::post('/resume/{id}/update', [ResumeController::class, 'updateResume'])->name('resume.update');
         Route::delete('/resume',[ResumeController::class,'delete'])->name('resume.delete');
         Route::get('/resumes', [ResumeController::class, 'showResume'])->name('resumes');
         Route::post('/resumes/toggle-status/{id}', [ResumeController::class, 'toggleResumeStatus'])->name('resume.toggleStatus');

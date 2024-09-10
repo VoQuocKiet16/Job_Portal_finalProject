@@ -124,7 +124,6 @@ class ResumeController extends Controller
 
         $resume = new Resume();
         $resume->user_id = $user_id;
-        $resume->title = $request->title;
         $resume->status = 0;
         $resume->save();
 
@@ -240,6 +239,78 @@ class ResumeController extends Controller
 
         return view('front.account.resume.show', compact('resumes'));
     }
+
+    public function editResume($id)
+    {
+        $resume = Resume::with(['personalInformation', 'contactInformation', 'education', 'experience', 'skill'])->findOrFail($id);
+
+        return view('front.account.resume.edit', compact('resume'));
+    }
+
+    public function updateResume(Request $request, $id)
+    {
+        $resume = Resume::findOrFail($id);
+
+        $resume->save();
+
+
+        $personal_info = PersonalInformation::where('resume_id', $resume->id)->first();
+        if ($personal_info) {
+            $personal_info->first_name = $request->first_name;
+            $personal_info->last_name = $request->last_name;
+            $personal_info->profile_title = $request->profile_title;
+            $personal_info->about_me = $request->about_me;
+            $personal_info->save();
+        }
+
+
+        $contact_info = ContactInformation::where('resume_id', $resume->id)->first();
+        if ($contact_info) {
+            $contact_info->website = $request->website;
+            $contact_info->linkedin_link = $request->linkedin_link;
+            $contact_info->save();
+        }
+
+        Education::where('resume_id', $resume->id)->delete();
+        foreach ($request->degree_title as $index => $degree_title) {
+            $education_info = new Education();
+            $education_info->resume_id = $resume->id;
+            $education_info->degree_title = $degree_title;
+            $education_info->institute = $request->institute[$index];
+            $education_info->edu_start_date = $request->edu_start_date[$index];
+            $education_info->edu_end_date = $request->edu_end_date[$index];
+            $education_info->education_description = $request->education_description[$index];
+            $education_info->save();
+        }
+
+        Experience::where('resume_id', $resume->id)->delete();
+        foreach ($request->job_title as $index => $job_title) {
+            $experience_info = new Experience();
+            $experience_info->resume_id = $resume->id;
+            $experience_info->job_title = $job_title;
+            $experience_info->organization = $request->organization[$index];
+            $experience_info->job_start_date = $request->job_start_date[$index];
+            $experience_info->job_end_date = $request->job_end_date[$index];
+            $experience_info->job_description = $request->job_description[$index];
+            $experience_info->save();
+        }
+
+        Skill::where('resume_id', $resume->id)->delete();
+        if ($request->has('skills') && is_array($request->skills)) {
+            foreach ($request->skills as $skill) {
+                $skill_info = new Skill();
+                $skill_info->resume_id = $resume->id;
+                $skill_info->skill = $skill;
+                $skill_info->save();
+            }
+        }
+
+        return redirect()->route('resume.view', $resume->id)->with('success', 'Resume updated successfully.');
+    }
+
+
+
+
 
 
     

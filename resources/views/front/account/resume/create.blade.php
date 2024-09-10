@@ -9,7 +9,6 @@
                     enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" id="user_id" name="user_id" class="form-control" />
-
                     <!-- Personal details fields -->
                     <div class="card mb-3 mt-4">
                         <div class="card-body">
@@ -19,7 +18,7 @@
                                     <label for="first_name" class="form-label">First name<span
                                             class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="first_name" name="first_name"
-                                        placeholder="John" required>
+                                        placeholder="First name" required>
                                     <div class="invalid-feedback">
                                         Valid first name is required.
                                     </div>
@@ -29,7 +28,7 @@
                                     <label for="last_name" class="form-label">Last name<span
                                             class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="last_name" name="last_name"
-                                        placeholder="Doe"  required>
+                                        placeholder="Last name"  required>
                                     <div class="invalid-feedback">
                                         Valid last name is required.
                                     </div>
@@ -40,7 +39,7 @@
                                             class="text-danger">*</span></label>
                                     <div class="input-group has-validation">
                                         <input type="text" class="form-control" id="profile_title" name="profile_title"
-                                            placeholder="Web Developer" required>
+                                            placeholder="Profile title" required>
                                         <div class="invalid-feedback">
                                             Your profile_title is required.
                                         </div>
@@ -51,7 +50,7 @@
                                     <label for="about_me" class="form-label">Summary<span
                                             class="text-danger">*</span></label>
                                     <textarea class="form-control" id="about_me" name="about_me" rows="5"
-                                        placeholder="Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit sit blanditiis similique aliquam qui maiores iste sunt necessitatibus! Totam, id."></textarea>
+                                        placeholder="Summary..."></textarea>
                                     <div class="invalid-feedback">
                                         Please enter your resume summary.
                                     </div>
@@ -69,7 +68,7 @@
                                     <label for="phone_number" class="form-label">Phone<span
                                             class="text-danger">*</span></label>
                                     <input type="number" class="form-control" id="phone_number" name="phone_number"
-                                        placeholder="0123456789">
+                                        placeholder="Phone">
                                     <div class="invalid-feedback">
                                         Please enter a valid phone number.
                                     </div>
@@ -77,20 +76,20 @@
 
                                 <div class="col-6">
                                     <label for="website" class="form-label">Website<span
-                                            class="text-danger">*</span></label>
+                                            class="text-danger"></span></label>
                                     <input type="url" class="form-control" id="website" name="website"
-                                        placeholder="https://www.placeholder.com">
+                                        placeholder="Link of Website">
                                     <div class="invalid-feedback">
                                         Please enter a valid link.
                                     </div>
                                 </div>
 
                                 <div class="col-6">
-                                    <label for="linkedin_link" class="form-label">Contact link<span
+                                    <label for="linkedin_link" class="form-label">Contact Link<span
                                             class="text-danger">*</span></label>
                                     <div class="input-group has-validation">
                                         <input type="url" class="form-control" id="linkedin_link" name="linkedin_link"
-                                            placeholder="https://www.facebook.com/in/test">
+                                            placeholder="Contact Link">
                                         <div class="invalid-feedback">
                                             Your linkedin is required.
                                         </div>
@@ -111,7 +110,7 @@
                                     <label for="degree_title" class="form-label">Degree<span
                                             class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="degree_title" name="degree_title[]"
-                                        placeholder="Bachelor of Memes" required>
+                                        placeholder="Degree" required>
                                     <div class="invalid-feedback">
                                         Valid degree is required.
                                     </div>
@@ -121,7 +120,7 @@
                                     <label for="institute" class="form-label">Institute<span
                                             class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="institute" name="institute[]"
-                                        placeholder="University of Memes" required>
+                                        placeholder="Institute" required>
                                     <div class="invalid-feedback">
                                         Valid institute is required.
                                     </div>
@@ -155,7 +154,7 @@
                                     <label for="education_description" class="form-label">Description<span
                                             class="text-danger">*</span></label>
                                     <textarea class="form-control" id="education_description" name="education_description[]" rows="6"
-                                        placeholder="Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit sit blanditiis similique aliquam qui maiores iste sunt necessitatibus! Totam, id."></textarea>
+                                        placeholder="Description..."></textarea>
                                     <div class="invalid-feedback">
                                         Please enter your education description.
                                     </div>
@@ -182,7 +181,7 @@
                                     <label for="job_title" class="form-label">Job Title<span
                                             class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="job_title" name="job_title[]"
-                                        placeholder="Chief Meme Officer" required>
+                                        placeholder="Job Title" required>
                                     <div class="invalid-feedback">
                                         Valid job title is required.
                                     </div>
@@ -192,7 +191,7 @@
                                     <label for="organization" class="form-label">Organization<span
                                             class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="organization" name="organization[]"
-                                        placeholder="Supreme Memes Corp" required>
+                                        placeholder="Organization or Company" required>
                                     <div class="invalid-feedback">
                                         Valid organization is required.
                                     </div>
@@ -226,7 +225,7 @@
                                     <label for="job_description" class="form-label">Description<span
                                             class="text-danger">*</span></label>
                                     <textarea class="form-control" id="job_description" name="job_description[]" rows="5"
-                                        placeholder="Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit sit blanditiis similique aliquam qui maiores iste sunt necessitatibus! Totam, id."></textarea>
+                                        placeholder="Description..."></textarea>
                                     <div class="invalid-feedback">
                                         Please enter your job description.
                                     </div>
