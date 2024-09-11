@@ -228,7 +228,7 @@
         }
 
         function saveJob(id) {
-            if (confirm("Are you sure you want to apply on this job?")) {
+            if (confirm("Are you sure you want to save this job?")) {
                 $.ajax({
                     url: '{{ route('saveJob') }}',
                     type: 'post',
