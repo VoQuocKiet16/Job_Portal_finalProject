@@ -5,13 +5,13 @@
                 <a class ="js-scroll-trigger text-dark text-decoration-none" href="{{route('admin.statisticsAdmin')}}">Statistics</a>
             </li>
             <li class="nav-link list-group-item d-flex justify-content-between p-3">
-                <a class ="js-scroll-trigger text-dark text-decoration-none" href="{{route('admin.users')}}">Users</a>
+                <a class ="js-scroll-trigger text-dark text-decoration-none" href="{{route('admin.users')}}">Accounts</a>
             </li>
             <li class="nav-link list-group-item d-flex justify-content-between p-3">
-                <a class ="js-scroll-trigger text-dark text-decoration-none" href="{{route('admin.categories')}}">Category</a>
+                <a class ="js-scroll-trigger text-dark text-decoration-none" href="{{route('admin.categories')}}">Categories</a>
             </li>
             <li class="nav-link list-group-item d-flex justify-content-between p-3">
-                <a class ="js-scroll-trigger text-dark text-decoration-none" href="{{route('admin.locations')}}">Location</a>
+                <a class ="js-scroll-trigger text-dark text-decoration-none" href="{{route('admin.locations')}}">Locations</a>
             </li>
             <li class="nav-link list-group-item d-flex justify-content-between p-3">
                 <a class ="js-scroll-trigger text-dark text-decoration-none" href="{{route('admin.jobtypes')}}">Job Types</a>

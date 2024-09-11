@@ -80,21 +80,24 @@
                                             <option value="">Select a Location</option>
                                             @if ($locations->isNotEmpty())
                                                 @foreach ($locations as $location)
-                                                    <option value="{{ $location->id }}">{{ $location->name }}</option>
+                                                    <option value="{{ $location->id }}" 
+                                                        {{ $job->location_id == $location->id ? 'selected' : '' }}>
+                                                        {{ $location->name }}
+                                                    </option>
                                                 @endforeach
                                             @endif
                                         </select>
                                         <p></p>
                                     </div>
-
+                                
                                     <div class="mb-4 col-md-6">
-                                        <label for="" class="mb-2">Location Description<span
-                                                class="req">*</span></label>
-                                        <input type="text" placeholder="Location Desciption" id="location_description"
-                                            name="location_description" class="form-control">
+                                        <label for="" class="mb-2">Location Description<span class="req">*</span></label>
+                                        <input type="text" placeholder="Location Description" id="location_description"
+                                            name="location_description" class="form-control"
+                                            value="{{ $job->location_description }}">
                                         <p></p>
                                     </div>
-                                </div>
+                                </div>                                
 
                                 <div class="mb-4">
                                     <label for="" class="mb-2">Description<span class="req">*</span></label>
@@ -176,13 +179,6 @@
                                     <input type="text" placeholder="Website" id="website" name="website"
                                         class="form-control" value="{{ $job->company_website }}">
                                 </div>
-                                {{-- <div class="mb-4">
-                                    <label for="" class="mb-2">Image</label>
-                                    @if ($job->image)
-                                        <img src="{{ asset($job->image) }}" class="img-fluid mb-3"
-                                            style="width: 100px; height: 100px">
-                                    @endif
-                                </div> --}}
                                 <div class="mb-4 custom-image-label">
                                     <label for="" class="mb-2">Image</label>
                                     @if ($job->image)

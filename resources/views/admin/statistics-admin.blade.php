@@ -50,7 +50,7 @@
                                 <div class="col-md-4">
                                     <div class="card text-white bg-primary shadow-sm">
                                         <div class="card-body text-center">
-                                            <h5 class="card-title">Total Users</h5>
+                                            <h5 class="card-title">Total Accounts</h5>
                                             <p class="card-text display-4 fw-bold" style=" text-shadow: 2px 2px 8px rgba(0,0,0,0.5); color: white;">{{ $totalUsers }}</p>
                                         </div>
                                     </div>
@@ -66,7 +66,7 @@
                                 <div class="col-md-4">
                                     <div class="card text-white bg-info shadow-sm">
                                         <div class="card-body text-center">
-                                            <h5 class="card-title">Total Applicants</h5>
+                                            <h5 class="card-title">Total Users</h5>
                                             <p class="card-text display-4 fw-bold" style=" text-shadow: 2px 2px 8px rgba(0,0,0,0.5); color: white;">{{ $totalApplicants }}</p>
                                         </div>
                                     </div>
@@ -133,10 +133,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
-
-
                         </div>
                     </div>
                 </div>

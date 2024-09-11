@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Job;
 use App\Models\JobType;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -20,12 +21,13 @@ class JobController extends Controller
 
     public function edit($id) {
         $job = Job::findOrFail($id);
-
-        $categories = Category::orderBy('name','ASC')->get();
+        $locations = Location::orderBy('name', 'ASC')->where('status', 1)->get();
+        $categories = Category::orderBy('name','ASC')->get();   
         $jobTypes = JobType::orderBy('name','ASC')->get();
         
         return view('admin.jobs.edit',[
             'job' => $job,
+            'locations' => $locations,
             'categories' => $categories,
             'jobTypes' => $jobTypes,
         ]);
@@ -54,7 +56,8 @@ class JobController extends Controller
             $job->job_type_id  = $request->jobType;
             $job->vacancy = $request->vacancy;
             $job->salary = $request->salary;
-            $job->location = $request->location;
+            $job->location_id = $request->location;
+            $job->location_description = $request->location_description;
             $job->description = $request->description;
             $job->benefits = $request->benefits;
             $job->responsibility = $request->responsibility;

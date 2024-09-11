@@ -70,48 +70,93 @@ class ResumeController extends Controller
 
 
 
+    // public function view($id)
+    // {
+    //     $resume = Resume::with([
+    //         'personalInformation', 
+    //         'contactInformation', 
+    //         'education', 
+    //         'experience' => function ($query) {
+    //             $query->orderBy('job_start_date', 'asc'); 
+    //         }, 
+    //         'skill'
+    //     ])->findOrFail($id);
+    
+    //     $information = [];
+    
+    //     if ($resume->personalInformation) {
+    //         $information['personal_info'] = $resume->personalInformation->toArray();
+    //     }
+    
+    //     if ($resume->contactInformation) {
+    //         $information['contact_info'] = $resume->contactInformation->toArray();
+    //     }
+    
+    //     if ($resume->education->isNotEmpty()) {
+    //         $information['education_info'] = $resume->education->toArray();
+    //     } else {
+    //         $information['education_info'] = [];
+    //     }
+    
+    //     if ($resume->experience->isNotEmpty()) {
+    //         $information['experience_info'] = $resume->experience->toArray();
+    //     } else {
+    //         $information['experience_info'] = [];
+    //     }
+    
+    //     if ($resume->skill->isNotEmpty()) {
+    //         $information['skill_info'] = $resume->skill->toArray();
+    //     } else {
+    //         $information['skill_info'] = [];
+    //     }
+    
+    //     return view('front.account.resume.view', compact('information'));
+    // }
+
     public function view($id)
-    {
-        $resume = Resume::with([
-            'personalInformation', 
-            'contactInformation', 
-            'education', 
-            'experience' => function ($query) {
-                $query->orderBy('job_start_date', 'asc'); 
-            }, 
-            'skill'
-        ])->findOrFail($id);
-    
-        $information = [];
-    
-        if ($resume->personalInformation) {
-            $information['personal_info'] = $resume->personalInformation->toArray();
-        }
-    
-        if ($resume->contactInformation) {
-            $information['contact_info'] = $resume->contactInformation->toArray();
-        }
-    
-        if ($resume->education->isNotEmpty()) {
-            $information['education_info'] = $resume->education->toArray();
-        } else {
-            $information['education_info'] = [];
-        }
-    
-        if ($resume->experience->isNotEmpty()) {
-            $information['experience_info'] = $resume->experience->toArray();
-        } else {
-            $information['experience_info'] = [];
-        }
-    
-        if ($resume->skill->isNotEmpty()) {
-            $information['skill_info'] = $resume->skill->toArray();
-        } else {
-            $information['skill_info'] = [];
-        }
-    
-        return view('front.account.resume.view', compact('information'));
+{
+    $resume = Resume::with([
+        'personalInformation', 
+        'contactInformation', 
+        'education', 
+        'experience' => function ($query) {
+            $query->orderBy('job_start_date', 'asc'); 
+        }, 
+        'skill'
+    ])->findOrFail($id);
+
+    $information = [];
+
+    if ($resume->personalInformation) {
+        $information['personal_info'] = $resume->personalInformation->toArray();
     }
+
+    if ($resume->contactInformation) {
+        $information['contact_info'] = $resume->contactInformation->toArray();
+    }
+
+    if ($resume->education->isNotEmpty()) {
+        $information['education_info'] = $resume->education->toArray();
+    } else {
+        $information['education_info'] = [];
+    }
+
+    if ($resume->experience->isNotEmpty()) {
+        $information['experience_info'] = $resume->experience->toArray();
+    } else {
+        $information['experience_info'] = [];
+    }
+
+    if ($resume->skill->isNotEmpty()) {
+        $information['skill_info'] = $resume->skill->toArray();
+    } else {
+        $information['skill_info'] = [];
+    }
+
+    // Pass both $information and $resume to the view
+    return view('front.account.resume.view', compact('information', 'resume'));
+}
+
     
 
     public function createResume()

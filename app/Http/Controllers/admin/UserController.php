@@ -41,7 +41,7 @@ class UserController extends Controller
             $user->designation = $request->designation;
             $user->save();
 
-            session()->flash('success','User information updated successfully.');
+            session()->flash('success','Account information updated successfully.');
 
             return response()->json([
                 'status' => true,
@@ -62,7 +62,7 @@ class UserController extends Controller
         $user = User::find($id);
 
         if($user == null){
-            session()->flash('error', 'User not found');
+            session()->flash('error', 'Account not found');
             return response()->json([
                 'status' => false,
                 
@@ -70,7 +70,7 @@ class UserController extends Controller
         }
 
         $user->delete();
-        session()->flash('success', 'User deleted successfully');
+        session()->flash('success', 'Account deleted successfully');
         return response()->json([
             'status' => true,
 

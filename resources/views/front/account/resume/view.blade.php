@@ -12,13 +12,13 @@
             <div class="text-center mb-4">
                 <a class="navbar-brand js-scroll-trigger" href="#page-top">
                     <span class="d-none d-lg-block">
-                        @if (Auth::user()->image != '')
-                            <img src="{{ asset('profile_pic/' . Auth::user()->image) }}" alt="avatar"
-                                class="rounded-circle img-fluid avatar" style="width: 150px;">
-                        @else
-                            <img src="{{ asset('assets/images/avatar7.png') }}" alt="avatar"
-                                class="rounded-circle img-fluid avatar" style="width: 150px;">
-                        @endif
+                        @if ($resume->user->image != '')
+                        <img src="{{ asset('profile_pic/' . $resume->user->image) }}" alt="avatar"
+                             class="rounded-circle img-fluid avatar" style="width: 150px; height: 150px;">
+                    @else
+                        <img src="{{ asset('assets/images/avatar7.png') }}" alt="avatar"
+                             class="rounded-circle img-fluid avatar" style="width: 150px; height: 150px;">
+                    @endif
                     </span>
                 </a>
             </div>
