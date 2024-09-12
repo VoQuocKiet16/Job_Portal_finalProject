@@ -111,75 +111,88 @@ class JobsController extends Controller
 
     public function applyJob(Request $request) {
         $id = $request->id;
-
-        $job = Job::where('id',$id)->first();
-
-        // If job not found in db
+    
+        $job = Job::where('id', $id)->first();
+    
+        // If job not found in the database
         if ($job == null) {
             $message = 'Job does not exist.';
-            session()->flash('error',$message);
+            session()->flash('error', $message);
             return response()->json([
                 'status' => false,
                 'message' => $message
             ]);
         }
 
-        // You can not apply on your own job
+    
+        // You cannot apply to your own job
         $employer_id = $job->user_id;
-
         if ($employer_id == Auth::user()->id) {
-            $message = 'You can not apply on your own job.';
-            session()->flash('error',$message);
+            $message = 'You cannot apply to your own job.';
+            session()->flash('error', $message);
             return response()->json([
                 'status' => false,
                 'message' => $message
             ]);
         }
-
-        // You can not apply on a job twise
+    
+        // You cannot apply for a job twice
         $jobApplicationCount = JobApplication::where([
             'user_id' => Auth::user()->id,
             'job_id' => $id
         ])->count();
         
         if ($jobApplicationCount > 0) {
-            $message = 'You already applied on this job.';
-            session()->flash('error',$message);
+            $message = 'You already applied to this job.';
+            session()->flash('error', $message);
             return response()->json([
                 'status' => false,
                 'message' => $message
             ]);
         }
 
+            
+        // Check if the job is full
+        $applicationCount = JobApplication::where('job_id', $id)->count();
+        if ($applicationCount >= $job->vacancy) {
+            $message = 'Job is Full, please find another job.';
+            session()->flash('error', $message);
+            return response()->json([
+                'status' => false,
+                'message' => $message
+            ]);
+        }
+    
+        // Save the application
         $application = new JobApplication();
         $application->job_id = $id;
         $application->user_id = Auth::user()->id;
         $application->employer_id = $employer_id;
         $application->applied_date = now();
         $application->save();
-
-
-        //Send Notification Email to Employer
-        $employer = User::where('id',$employer_id)->first();
+    
+        // Send Notification Email to Employer
+        $employer = User::where('id', $employer_id)->first();
         
         $mailData = [
             'employer' => $employer,
             'user' => Auth::user(),
             'job' => $job,
         ];
-
+    
         Mail::to($employer->email)->send(new JobNotificationEmail($mailData));
-
+    
         $message = 'You have successfully applied.';
-
-        session()->flash('success',$message);
-
+    
+        session()->flash('success', $message);
+    
         return response()->json([
             'status' => true,
             'message' => $message
         ]);
     }
-
+    
+   
     public function saveJob(Request $request) {
 
         $id = $request->id;

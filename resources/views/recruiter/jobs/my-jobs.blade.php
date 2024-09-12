@@ -28,16 +28,16 @@
                                 <div style="margin-top: -10px;">
                                     <a href="{{ route('recruiter.createJob') }}" class="btn btn-primary">Post a Job</a>
                                 </div>
-
                             </div>
                             <div class="table-responsive">
-                                <table class="table ">
+                                <table class="table">
                                     <thead class="bg-light">
                                         <tr>
                                             <th scope="col">Title</th>
                                             <th scope="col">Job Created</th>
                                             <th scope="col">Applicants</th>
                                             <th scope="col">Status</th>
+                                            <th scope="col">Full Status</th> <!-- New Full Status Column -->
                                             <th scope="col">Action</th>
                                         </tr>
                                     </thead>
@@ -49,50 +49,52 @@
                                                         <div class="job-name fw-500">{{ $job->title }}</div>
                                                         <div class="info1">{{ $job->jobType->name }}/
                                                             @if($job->location)
-                                                            {{ $job->location->name }}
-                                                        @else
-                                                            No Location
-                                                        @endif
+                                                                {{ $job->location->name }}
+                                                            @else
+                                                                No Location
+                                                            @endif
                                                         </div>
                                                     </td>
-                                                    <td>{{ \Carbon\Carbon::parse($job->create_at)->format(' d My, Y') }}
-                                                    </td>
+                                                    <td>{{ \Carbon\Carbon::parse($job->created_at)->format('d M, Y') }}</td>
                                                     <td>{{ $job->applications->count() }}</td>
                                                     <td>
                                                         @if ($job->status == 1)
-                                                            <div class="job-status text-capitalize">Active</div>
+                                                            <div class="job-status text-success text-capitalize">Active</div>
                                                         @else
-                                                            <div class="job-status text-capitalize">Block</div>
+                                                            <div class="job-status text-capitalize text-danger">Blocked</div>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if ($job->isFull())
+                                                            <div class="text-danger text-capitalize">Full</div>
+                                                        @else
+                                                            <div class="text-success text-capitalize">Not Full</div>
                                                         @endif
                                                     </td>
                                                     <td>
                                                         <div class="action-dots float-end">
-                                                            <button href="#" class="btn" data-bs-toggle="dropdown"
-                                                                aria-expanded="false">
+                                                            <button href="#" class="btn" data-bs-toggle="dropdown" aria-expanded="false">
                                                                 <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                                                             </button>
                                                             <ul class="dropdown-menu dropdown-menu-end">
-                                                                <li><a class="dropdown-item"
-                                                                        href="{{ route('jobDetail', $job->id) }}"> <i
-                                                                            class="fa fa-eye" aria-hidden="true"></i>
-                                                                        View</a></li>
-                                                                <li><a class="dropdown-item"
-                                                                        href="{{ route('recruiter.editJob', $job->id) }}"><i
-                                                                            class="fa fa-edit" aria-hidden="true"></i>
-                                                                        Edit</a></li>
-                                                                <li><a class="dropdown-item" href="#"
-                                                                        onclick="removeMyJobs({{ $job->id }})"><i
-                                                                            class="fa fa-trash" aria-hidden="true"></i>
-                                                                        Delete</a></li>
+                                                                <li><a class="dropdown-item" href="{{ route('jobDetail', $job->id) }}">
+                                                                    <i class="fa fa-eye" aria-hidden="true"></i> View</a>
+                                                                </li>
+                                                                <li><a class="dropdown-item" href="{{ route('recruiter.editJob', $job->id) }}">
+                                                                    <i class="fa fa-edit" aria-hidden="true"></i> Edit</a>
+                                                                </li>
+                                                                <li><a class="dropdown-item" href="#" onclick="removeMyJobs({{ $job->id }})">
+                                                                    <i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
+                                                                </li>
                                                             </ul>
                                                         </div>
                                                     </td>
                                                 </tr>
                                             @endforeach
                                         @else
-                                        <tr>
-                                            <td colspan="5">Job not found</td>
-                                        </tr>
+                                            <tr>
+                                                <td colspan="6">Job not found</td>
+                                            </tr>
                                         @endif
                                     </tbody>
                                 </table>
@@ -112,7 +114,6 @@
     <script type="text/javascript">
         function removeMyJobs(jobId) {
             if (confirm("Are you sure")) {
-
                 $.ajax({
                     url: "{{ route('recruiter.removeMyJobs') }}",
                     type: 'post',
@@ -122,7 +123,6 @@
                     dataType: 'json',
                     success: function(response) {
                         window.location.href = "{{ url()->current() }}";
-                        window.location.href = "{{ route('recruiter.myJobs') }}";
                     }
                 });
             }

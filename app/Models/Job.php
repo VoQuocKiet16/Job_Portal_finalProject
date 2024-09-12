@@ -37,4 +37,9 @@ class Job extends Model
                   ->limit(5)
                   ->get();
     }
+
+    public function isFull()
+    {
+        return $this->applications->count() >= $this->vacancy;
+    }
 }

@@ -14,8 +14,9 @@ use Illuminate\Support\Facades\Auth;
 class MyJobsController extends Controller
 {
     public function myJobs()
-    {
-        $jobs = Job::where('user_id', Auth::user()->id)
+{
+    // Lấy tất cả các công việc của user
+    $jobs = Job::where('user_id', Auth::user()->id)
         ->with(['jobType', 'applications', 'location']) 
         ->orderBy('created_at', 'DESC')
         ->paginate(10);
@@ -23,7 +24,10 @@ class MyJobsController extends Controller
     return view('recruiter.jobs.my-jobs', [
         'jobs' => $jobs,
     ]);
-    }
+}
+
+    
+    
 
     public function removeMyJobs(Request $request)
     {
@@ -120,7 +124,6 @@ class MyJobsController extends Controller
         }
     }
 
-    
     public function updateJob(Request $request, $id)
     {
         $rules = [
@@ -158,7 +161,6 @@ class MyJobsController extends Controller
             $job->description = $request->description;
     
             if ($request->hasFile('image')) {
-                // Delete old image if exists
                 if ($job->image && file_exists(public_path($job->image))) {
                     unlink(public_path($job->image));
                 }
@@ -178,8 +180,9 @@ class MyJobsController extends Controller
             $job->company_name = $request->company_name;
             $job->company_location = $request->company_location;
             $job->company_website = $request->website;
-            $job->save();
     
+            $job->status = $request->status;
+            $job->save();
             session()->flash('success', 'Job updated successfully.');
     
             return response()->json([

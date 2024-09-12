@@ -86,30 +86,6 @@
                             </div>
                         </div>
                     </div>
-                    @if (Auth::user() && Auth::user()->id == $job->user_id)
-                        <div class="card shadow border-0 mt-4">
-                            <div class="job_details_header">
-                                <div class="single_jobs white-bg d-flex justify-content-between">
-                                    <div class="jobs_left d-flex align-items-center">
-                                        <div class="jobs_conetent">
-                                            <h4>Applicants</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="descript_wrap white-bg">
-                                <table class="table table-striped">
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Mobile</th>
-                                        <th>Applied Date</th>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    @endif
-
                     <div class="card shadow border-0 mt-4">
                         <div class="job_details_header">
                             <div class="single_jobs white-bg d-flex justify-content-between">
