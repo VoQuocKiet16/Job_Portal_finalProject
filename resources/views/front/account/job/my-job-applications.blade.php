@@ -46,13 +46,13 @@
                                             </td>
                                             <td>{{ \Carbon\Carbon::parse($jobApplication->applied_date)->format('d M, Y') }}</td>
                                             <td>
-                                                @if($jobApplication->status == 1)
-                                                    <span class="badge bg-success">Approved</span>
-                                                @elseif($jobApplication->status == 0)
-                                                    <span class="badge bg-danger">Rejected</span>
-                                                @else
-                                                    <span class="badge bg-warning">Pending</span>
-                                                @endif
+                                                @if(is_null($jobApplication->status))
+                                                <span class="badge bg-warning">Pending</span>
+                                            @elseif($jobApplication->status == 1)
+                                                <span class="badge bg-success">Approved</span>
+                                            @elseif($jobApplication->status == 0)
+                                                <span class="badge bg-danger">Rejected</span>
+                                            @endif
                                             </td> 
                                             <td>
                                                 <div class="action-dots float-end">
@@ -88,17 +88,44 @@
 @section('customJs')
 <script type="text/javascript">   
 function removeAppliedJobs(id) {
-    if (confirm("Are you sure you want to remove?")) {
-        $.ajax({
-            url : '{{ route("account.removeAppliedJobs") }}',
-            type: 'post',
-            data: {id: id},
-            dataType: 'json',
-            success: function(response) {
-                window.location.href = "{{ url()->current() }}";
-            }
-        });
-    } 
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, remove it!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url : '{{ route("account.removeAppliedJobs") }}',
+                type: 'post',
+                data: {
+                    id: id,
+                    _token: "{{ csrf_token() }}"
+                },
+                dataType: 'json',
+                success: function(response) {
+                    Swal.fire({
+                        title: "Removed!",
+                        text: "The job application has been removed.",
+                        icon: "success"
+                    }).then(() => {
+                        window.location.href = "{{ url()->current() }}";
+                    });
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Something went wrong, please try again.",
+                        icon: "error"
+                    });
+                }
+            });
+        }
+    });
 }
+
 </script>
 @endsection

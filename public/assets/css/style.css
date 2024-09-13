@@ -13436,3 +13436,8 @@
   .custom-bg {
     background-color: #FFE5CF !important;
 }
+.swal2-title::after {
+  background: none !important; 
+  border: none !important;     
+  content: none !important;  
+}

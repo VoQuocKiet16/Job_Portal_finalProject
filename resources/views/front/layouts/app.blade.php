@@ -19,6 +19,11 @@
     <!-- Fav Icon -->
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/images/logo1.png') }} " />
 
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+
+
 </head>
 
 <body data-instant-intensity="mousedown" class="d-flex flex-column min-vh-100">
@@ -110,6 +115,7 @@
     <script src="{{ asset('assets/js/lazyload.17.6.0.min.js') }}"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         window.onscroll = function() {
             var navbar = document.querySelector('.navbar');

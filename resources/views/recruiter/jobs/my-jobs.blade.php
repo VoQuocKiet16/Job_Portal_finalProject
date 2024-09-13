@@ -48,7 +48,7 @@
                                                     <td>
                                                         <div class="job-name fw-500">{{ $job->title }}</div>
                                                         <div class="info1">{{ $job->jobType->name }}/
-                                                            @if($job->location)
+                                                            @if ($job->location)
                                                                 {{ $job->location->name }}
                                                             @else
                                                                 No Location
@@ -59,9 +59,11 @@
                                                     <td>{{ $job->applications->count() }}</td>
                                                     <td>
                                                         @if ($job->status == 1)
-                                                            <div class="job-status text-success text-capitalize">Active</div>
+                                                            <div class="job-status text-success text-capitalize">Active
+                                                            </div>
                                                         @else
-                                                            <div class="job-status text-capitalize text-danger">Blocked</div>
+                                                            <div class="job-status text-capitalize text-danger">Blocked
+                                                            </div>
                                                         @endif
                                                     </td>
                                                     <td>
@@ -73,18 +75,25 @@
                                                     </td>
                                                     <td>
                                                         <div class="action-dots float-end">
-                                                            <button href="#" class="btn" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <button href="#" class="btn" data-bs-toggle="dropdown"
+                                                                aria-expanded="false">
                                                                 <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                                                             </button>
                                                             <ul class="dropdown-menu dropdown-menu-end">
-                                                                <li><a class="dropdown-item" href="{{ route('jobDetail', $job->id) }}">
-                                                                    <i class="fa fa-eye" aria-hidden="true"></i> View</a>
+                                                                <li><a class="dropdown-item"
+                                                                        href="{{ route('jobDetail', $job->id) }}">
+                                                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                                                        View</a>
                                                                 </li>
-                                                                <li><a class="dropdown-item" href="{{ route('recruiter.editJob', $job->id) }}">
-                                                                    <i class="fa fa-edit" aria-hidden="true"></i> Edit</a>
+                                                                <li><a class="dropdown-item"
+                                                                        href="{{ route('recruiter.editJob', $job->id) }}">
+                                                                        <i class="fa fa-edit" aria-hidden="true"></i>
+                                                                        Edit</a>
                                                                 </li>
-                                                                <li><a class="dropdown-item" href="#" onclick="removeMyJobs({{ $job->id }})">
-                                                                    <i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
+                                                                <li><a class="dropdown-item" href="javascript:void(0);"
+                                                                        onclick="removeMyJobs({{ $job->id }})">
+                                                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                                                        Remove</a>
                                                                 </li>
                                                             </ul>
                                                         </div>
@@ -113,19 +122,43 @@
 @section('customJs')
     <script type="text/javascript">
         function removeMyJobs(jobId) {
-            if (confirm("Are you sure")) {
-                $.ajax({
-                    url: "{{ route('recruiter.removeMyJobs') }}",
-                    type: 'post',
-                    data: {
-                        jobId: jobId
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        window.location.href = "{{ url()->current() }}";
-                    }
-                });
-            }
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, remove it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ route('recruiter.removeMyJobs') }}",
+                        type: 'post',
+                        data: {
+                            jobId: jobId,
+                            _token: "{{ csrf_token() }}" 
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            Swal.fire({
+                                title: "Remove!",
+                                text: "Your job has been removed.",
+                                icon: "success"
+                            }).then(() => {
+                                window.location.href = "{{ url()->current() }}";
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                title: "Error!",
+                                text: "Something went wrong, please try again.",
+                                icon: "error"
+                            });
+                        }
+                    });
+                }
+            });
         }
     </script>
 @endsection

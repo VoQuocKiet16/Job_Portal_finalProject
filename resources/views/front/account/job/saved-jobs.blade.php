@@ -87,18 +87,45 @@
 @section('customJs')
 <script type="text/javascript">   
 function removeSavedJob(id) {
-    if (confirm("Are you sure you want to remove?")) {
-        $.ajax({
-            url : '{{ route("account.removeSavedJob") }}',
-            type: 'post',
-            data: {id: id},
-            dataType: 'json',
-            success: function(response) {
-                window.location.href = "{{ url()->current() }}";
-                // window.location.href="{{ route('account.savedJobs') }}";
-            }
-        });
-    } 
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, remove it!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url : '{{ route("account.removeSavedJob") }}',
+                type: 'post',
+                data: {
+                    id: id,
+                    _token: "{{ csrf_token() }}"  
+                },
+                dataType: 'json',
+                success: function(response) {
+                    Swal.fire({
+                        title: "Removed!",
+                        text: "The job has been removed from your saved jobs.",
+                        icon: "success"
+                    }).then(() => {
+                        
+                        window.location.href = "{{ url()->current() }}";
+                    });
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Something went wrong, please try again.",
+                        icon: "error"
+                    });
+                }
+            });
+        }
+    });
 }
+
 </script>
 @endsection

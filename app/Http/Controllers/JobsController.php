@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\JobNotificationEmail;
 use App\Models\Location;
+use App\Models\Resume;
 use App\Models\SavedJobs;
 
 class JobsController extends Controller
@@ -89,78 +90,85 @@ class JobsController extends Controller
         if ($job == null) {
             abort(404);
         }
-    
         $count = 0;
-    
+        $resumes = [];
         if (Auth::check()) {
             $count = SavedJobs::where([
                 'user_id' => Auth::user()->id,
                 'job_id' => $id
             ])->count();
+                $resumes = Resume::where('user_id', Auth::id())->get();
         }
-
-        $relatedJobs = $job->relatedJobs();
-
-        return view('front.jobDetail', [
-            'job' => $job, 
-            'count' => $count, 
-            'relatedJobs' => $relatedJobs
-        ]);
     
+        $relatedJobs = $job->relatedJobs();
+            return view('front.jobDetail', [
+            'job' => $job,
+            'count' => $count,
+            'relatedJobs' => $relatedJobs,
+            'resumes' => $resumes, 
+        ]);
     }
 
-    public function applyJob(Request $request) {
+    public function applyJob(Request $request)
+    {
         $id = $request->id;
+        $job = Job::find($id);
     
-        $job = Job::where('id', $id)->first();
-    
-        // If job not found in the database
-        if ($job == null) {
-            $message = 'Job does not exist.';
-            session()->flash('error', $message);
+        // Hàm xử lý thông báo lỗi
+        $sendErrorResponse = function($message) {
             return response()->json([
                 'status' => false,
                 'message' => $message
             ]);
+        };
+    
+        // Check if the job exists
+        if (is_null($job)) {
+            return $sendErrorResponse('Job does not exist.');
         }
-
     
         // You cannot apply to your own job
         $employer_id = $job->user_id;
         if ($employer_id == Auth::user()->id) {
-            $message = 'You cannot apply to your own job.';
-            session()->flash('error', $message);
-            return response()->json([
-                'status' => false,
-                'message' => $message
-            ]);
+            return $sendErrorResponse('You cannot apply to your own job.');
         }
     
-        // You cannot apply for a job twice
-        $jobApplicationCount = JobApplication::where([
+        // Check if the user has already applied for this job
+        $alreadyApplied = JobApplication::where([
             'user_id' => Auth::user()->id,
             'job_id' => $id
-        ])->count();
-        
-        if ($jobApplicationCount > 0) {
-            $message = 'You already applied to this job.';
-            session()->flash('error', $message);
-            return response()->json([
-                'status' => false,
-                'message' => $message
-            ]);
+        ])->exists();
+    
+        if ($alreadyApplied) {
+            return $sendErrorResponse('You already applied to this job.');
         }
-
-            
+    
         // Check if the job is full
         $applicationCount = JobApplication::where('job_id', $id)->count();
         if ($applicationCount >= $job->vacancy) {
-            $message = 'Job is Full, please find another job.';
-            session()->flash('error', $message);
-            return response()->json([
-                'status' => false,
-                'message' => $message
-            ]);
+            return $sendErrorResponse('Job is Full, please find another job.');
+        }
+    
+        // Handle CV file or resume
+        $cvFilePath = '';
+        $resumeId = null;
+    
+        if ($request->input('cvOption') == 'upload' && $request->hasFile('cv_file')) {
+            // Handle file upload
+            $file = $request->file('cv_file');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = 'uploads/cv_files/';
+            $file->move(public_path($filePath), $fileName);
+            $cvFilePath = $filePath . $fileName;
+        } elseif ($request->input('cvOption') == 'existing') {
+            $resumeId = $request->input('resume_id');
+            $resume = Resume::find($resumeId);
+    
+            if (is_null($resume)) {
+                return $sendErrorResponse('Selected resume not found.');
+            }
+        } else {
+            return $sendErrorResponse('You need to upload a resume or choose one from your account.');
         }
     
         // Save the application
@@ -169,11 +177,13 @@ class JobsController extends Controller
         $application->user_id = Auth::user()->id;
         $application->employer_id = $employer_id;
         $application->applied_date = now();
+        $application->cv_file = $cvFilePath;
+        $application->resume_id = $resumeId;
+        $application->cover_letter = $request->input('cover_letter');
         $application->save();
     
         // Send Notification Email to Employer
-        $employer = User::where('id', $employer_id)->first();
-        
+        $employer = User::find($employer_id);
         $mailData = [
             'employer' => $employer,
             'user' => Auth::user(),
@@ -182,9 +192,8 @@ class JobsController extends Controller
     
         Mail::to($employer->email)->send(new JobNotificationEmail($mailData));
     
+        // Success message
         $message = 'You have successfully applied.';
-    
-        session()->flash('success', $message);
     
         return response()->json([
             'status' => true,
@@ -192,7 +201,8 @@ class JobsController extends Controller
         ]);
     }
     
-   
+
+
     public function saveJob(Request $request) {
 
         $id = $request->id;

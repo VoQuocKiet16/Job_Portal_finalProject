@@ -48,7 +48,7 @@
                                                     </button>
                                                     <ul class="dropdown-menu dropdown-menu-end">
                                                         <li><a class="dropdown-item" href="{{ route("admin.categories.edit",$category->id) }}"><i class="fa fa-edit" aria-hidden="true"></i> Edit</a></li>
-                                                        <li><a class="dropdown-item" onclick="deleteCategory({{ $category->id }})" href="javascript:void(0);"  ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a></li>
+                                                        <li><a class="dropdown-item" onclick="deleteCategory({{ $category->id }})" href="javascript:void(0);"  ><i class="fa fa-trash" aria-hidden="true"></i> Remove</a></li>
                                                     </ul>
                                                 </div>
                                             </td>
@@ -75,18 +75,44 @@
 
 @section('customJs')
 <script type="text/javascript">
-    function deleteCategory(id) {
-        if (confirm("Are you sure you want to delete?")) {
+function deleteCategory(id) {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, remove it!"
+    }).then((result) => {
+        if (result.isConfirmed) {
             $.ajax({
                 url: '{{ route("admin.categories.delete") }}',
                 type: 'delete',
-                data: { id: id},
+                data: {
+                    id: id,
+                    _token: "{{ csrf_token() }}"  
+                },
                 dataType: 'json',
                 success: function(response) {
-                    window.location.href = "{{ route('admin.categories') }}";
+                    Swal.fire({
+                        title: "Removed!",
+                        text: "The category has been removed.",
+                        icon: "success"
+                    }).then(() => {
+                        window.location.href = "{{ route('admin.categories') }}";
+                    });
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Something went wrong, please try again.",
+                        icon: "error"
+                    });
                 }
             });
         }
-    }
+    });
+}
 </script>
 @endsection

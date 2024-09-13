@@ -65,7 +65,7 @@
                                                     </button>
                                                     <ul class="dropdown-menu dropdown-menu-end">
                                                         <li><a class="dropdown-item" href="{{ route('admin.jobs.edit',$job->id) }}"><i class="fa fa-edit" aria-hidden="true"></i> Edit</a></li>
-                                                        <li><a class="dropdown-item" onclick="deleteJob({{ $job->id }})" href="javascript:void(0);"  ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a></li>
+                                                        <li><a class="dropdown-item" onclick="deleteJob({{ $job->id }})" href="javascript:void(0);"  ><i class="fa fa-trash" aria-hidden="true"></i> Remove</a></li>
                                                     </ul>
                                                 </div>
                                             </td>
@@ -88,18 +88,45 @@
 
 @section('customJs')
 <script type="text/javascript">
-    function deleteJob(id) {
-        if (confirm("Are you sure you want to delete?")) {
-            $.ajax({
-                url: '{{ route("admin.jobs.delete") }}',
-                type: 'delete',
-                data: { id: id},
-                dataType: 'json',
-                success: function(response) {
-                    window.location.href = "{{ route('admin.jobs') }}";
-                }
-            });
-        }
+ function deleteJob(id) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, remove it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '{{ route("admin.jobs.delete") }}',
+                    type: 'DELETE',
+                    data: {
+                        id: id,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        Swal.fire({
+                            title: "Removed!",
+                            text: "The job has been removed.",
+                            icon: "success"
+                        }).then(() => {
+                            // Redirect after successful deletion
+                            window.location.href = "{{ route('admin.jobs') }}";
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire({
+                            title: "Error!",
+                            text: "Something went wrong, please try again.",
+                            icon: "error"
+                        });
+                    }
+                });
+            }
+        });
     }
 </script>
 @endsection

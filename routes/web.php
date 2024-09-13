@@ -10,6 +10,7 @@ use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobsController;
+use App\Http\Controllers\recruiter\MyApplicantsController;
 use App\Http\Controllers\recruiter\MyJobsController;
 use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\RoleChangeRequestController;
@@ -97,9 +98,12 @@ Route::group(['prefix' => 'recruiter', 'middleware' => ['checkRole:recruiter']],
     Route::post('/update-job/{jobId}',[MyJobsController::class,'updateJob'])->name('recruiter.updateJob');   
     Route::post('/delete-job',[MyJobsController::class,'removeMyJobs'])->name('recruiter.removeMyJobs');
 
-    Route::get('/applications', [MyJobsController::class, 'showApplications'])->name('recruiter.applications');
-    Route::post('/applications/approve/{id}', [MyJobsController::class, 'approveApplication'])->name('recruiter.applications.approve');
-    Route::post('/applications/reject/{id}', [MyJobsController::class, 'rejectApplication'])->name('recruiter.applications.reject');
+    Route::get('/applications', [MyApplicantsController::class, 'showApplications'])->name('recruiter.applications');
+    Route::post('/applications/approve/{id}', [MyApplicantsController::class, 'approveApplication'])->name('recruiter.applications.approve');
+    Route::post('/applications/reject/{id}', [MyApplicantsController::class, 'rejectApplication'])->name('recruiter.applications.reject');
+    Route::post('/delete-applications',[MyApplicantsController::class,'removeMyApplicants'])->name('recruiter.removeMyApplicants');
+    Route::get('/applications/{id}/detail', [MyApplicantsController::class, 'viewApplicationDetail'])->name('recruiter.applications.detail');
+    Route::get('/resume/{id}', [MyApplicantsController::class, 'viewResumeDetail'])->name('viewResumeDetail');
 });
 
 Route::group(['prefix' => 'account'], function(){
@@ -133,6 +137,7 @@ Route::group(['prefix' => 'account'], function(){
         Route::post('/resume/{id}/update', [ResumeController::class, 'updateResume'])->name('resume.update');
         Route::delete('/resume',[ResumeController::class,'delete'])->name('resume.delete');
         Route::get('/resumes', [ResumeController::class, 'showResume'])->name('resumes');
+
         Route::get('resumes/download-doc/{id}', [ResumeController::class, 'downloadDoc'])->name('resume.downloadDoc');
         Route::post('/resumes/toggle-status/{id}', [ResumeController::class, 'toggleResumeStatus'])->name('resume.toggleStatus');
 

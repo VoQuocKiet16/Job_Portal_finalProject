@@ -43,7 +43,7 @@
                                                     <td>{{ $application->user->name }}</td>
                                                     <td>{{ $application->job->title }}</td>
                                                     <td>
-                                                        @if($application->status === 1)
+                                                        @if ($application->status === 1)
                                                             <span class="badge bg-success">Approved</span>
                                                         @elseif($application->status === 0)
                                                             <span class="badge bg-danger">Rejected</span>
@@ -52,15 +52,41 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        <form method="POST" action="{{ route('recruiter.applications.approve', $application->id) }}" style="display: inline;">
+                                                        <form method="POST"
+                                                            action="{{ route('recruiter.applications.approve', $application->id) }}"
+                                                            style="display: inline;">
                                                             @csrf
-                                                            <button class="btn btn-success" {{ $application->status === 1 ? 'disabled' : '' }}>Approve</button>
+                                                            <button class="btn btn-success"
+                                                                {{ $application->status === 1 ? 'disabled' : '' }}>Approve</button>
                                                         </form>
 
-                                                        <form method="POST" action="{{ route('recruiter.applications.reject', $application->id) }}" style="display: inline;">
+                                                        <form method="POST"
+                                                            action="{{ route('recruiter.applications.reject', $application->id) }}"
+                                                            style="display: inline;">
                                                             @csrf
-                                                            <button class="btn btn-danger" {{ $application->status === 0 ? 'disabled' : '' }}>Reject</button>
+                                                            <button class="btn btn-danger"
+                                                                {{ $application->status === 0 ? 'disabled' : '' }}>Reject</button>
                                                         </form>
+                                                        <div class="action-dots float-end">
+                                                            <button href="#" class="btn" data-bs-toggle="dropdown"
+                                                                aria-expanded="false">
+                                                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                                            </button>
+                                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                                <li>
+                                                                    <a class="dropdown-item"
+                                                                        href="{{ route('recruiter.applications.detail', $application->id) }}">
+                                                                        <i class="fa fa-eye" aria-hidden="true"></i> View
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" href="javascript:void(0);"
+                                                                        onclick="removeMyApplicants({{ $application->id }})">
+                                                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                                                        Remove</a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -81,4 +107,48 @@
             </div>
         </div>
     </section>
+@endsection
+
+@section('customJs')
+    <script type="text/javascript">
+        function removeMyApplicants(applicantId) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, remove it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ route('recruiter.removeMyApplicants') }}",
+                        type: 'post',
+                        data: {
+                            applicantId: applicantId,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            Swal.fire({
+                                title: "Remove!",
+                                text: "Your job has been removed.",
+                                icon: "success"
+                            }).then(() => {
+                                window.location.href = "{{ url()->current() }}";
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                title: "Error!",
+                                text: "Something went wrong, please try again.",
+                                icon: "error"
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    </script>
 @endsection

@@ -17,7 +17,10 @@
         <div class="container job_details_area">
             <div class="row pb-5">
                 <div class="col-md-8"> <!-- Left Column -->
-                    @include('front.message')
+
+                    <div id="message">
+                        @include('front.message')
+                    </div> <!-- Thêm phần này để hiển thị thông báo động -->
                     <div class="card shadow border-0">
                         <div class="job_details_header">
                             <div class="single_jobs white-bg d-flex justify-content-between">
@@ -45,8 +48,9 @@
                                                     aria-hidden="true"></i>
                                             </a>
                                         @else
-                                            <a href="{{ route('account.login') }}"> <i class="fa {{ $count ? 'fa-heart' : 'fa-heart-o' }}"
-                                                aria-hidden="true"></i></a>
+                                            <a href="{{ route('account.login') }}"> <i
+                                                    class="fa {{ $count ? 'fa-heart' : 'fa-heart-o' }}"
+                                                    aria-hidden="true"></i></a>
                                         @endif
                                     </div>
                                 </div>
@@ -79,7 +83,107 @@
                             <div class="pt-3 text-end">
                                 @if (Auth::check())
                                     <a href="javascript:void(0);" onclick="applyJob({{ $job->id }})"
-                                        class="btn btn-primary">Apply</a>
+                                        class="btn btn-primary">Apply
+                                    </a>
+                                    <!-- Apply Job Modal -->
+                                    <div class="modal fade" id="applyJobModal" tabindex="-1"
+                                        aria-labelledby="applyJobModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content rounded-3"
+                                                style="border: none; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);">
+                                                <form id="applyJobForm" method="POST" action="{{ route('applyJob') }}"
+                                                    enctype="multipart/form-data">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ $job->id }}">
+
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header"
+                                                        style="background: linear-gradient(135deg, #FF7F50 0%, #FF4500 100%); border-top-left-radius: .3rem; border-top-right-radius: .3rem;">
+                                                        <h5 class="modal-title text-white fw-bold text-uppercase text-start"
+                                                            id="applyJobModalLabel">Apply for {{ $job->title }}</h5>
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+
+                                                    <!-- Modal Body -->
+                                                    <div class="modal-body p-4" style="background-color: #fff8f2;">
+                                                        <!-- Select CV Option -->
+                                                        <div class="form-group mb-4">
+                                                            <label for="cvOption"
+                                                                class="form-label fw-bold text-dark text-start"
+                                                                style="font-size: 1.1rem; display: block;">Select CV to
+                                                                apply</label>
+                                                            <div class="form-check text-start">
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="cvOption" id="useExisting" value="existing"
+                                                                    checked>
+                                                                <label class="form-check-label" for="useExisting">
+                                                                    <i class="bi bi-folder-check"></i> Choose from my CV
+                                                                    library
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check mt-2 text-start">
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="cvOption" id="uploadNew" value="upload">
+                                                                <label class="form-check-label" for="uploadNew">
+                                                                    <i class="bi bi-cloud-upload"></i> Upload new CV
+                                                                </label>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- CV Selection -->
+                                                        <div class="form-group mb-4 text-start" id="resumeSelectSection">
+                                                            <label for="resume_id"
+                                                                class="form-label fw-bold text-dark text-start"
+                                                                style="font-size: 1.1rem;">Select CV from your
+                                                                account</label>
+                                                            <select name="resume_id" id="resume_id"
+                                                                class="form-select form-select-lg">
+                                                                @foreach ($resumes as $resume)
+                                                                    <option value="{{ $resume->id }}">
+                                                                        {{ $resume->personalInformation->profile_title }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+
+                                                        <!-- Upload New CV -->
+                                                        <div class="form-group mb-4 text-start" id="cvUploadSection"
+                                                            style="display: none;">
+                                                            <label for="cv_file"
+                                                                class="form-label fw-bold text-dark text-start"
+                                                                style="font-size: 1.1rem;">Upload CV (doc, docx,
+                                                                pdf)</label>
+                                                            <input type="file" name="cv_file" id="cv_file"
+                                                                class="form-control form-control-lg"
+                                                                accept=".doc,.docx,.pdf">
+                                                        </div>
+
+                                                        <!-- Cover Letter -->
+                                                        <div class="form-group mb-4 text-start">
+                                                            <label for="cover_letter"
+                                                                class="form-label fw-bold text-dark text-start"
+                                                                style="font-size: 1.1rem;">Cover Letter</label>
+                                                            <textarea name="cover_letter" id="cover_letter" class="form-control text-start"
+                                                                placeholder="Write your cover letter here..." style="resize: none; border-radius: .25rem; height: 300px;"></textarea>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Modal Footer -->
+                                                    <div class="modal-footer justify-content-between"
+                                                        style="background-color: #ffefde;">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal"
+                                                            style="background-color: #6c757d; color: white; border-color: #6c757d;">Close</button>
+                                                        <button type="submit" class="btn btn-primary px-5"
+                                                            style="background: linear-gradient(135deg, #FF7F50 0%, #FF4500 100%); border: none;">
+                                                            Application</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @else
                                     <a href="{{ route('account.login') }}" class="btn btn-primary">Login to Apply</a>
                                 @endif
@@ -187,37 +291,77 @@
 @section('customJs')
     <script type="text/javascript">
         function applyJob(id) {
-            if (confirm("Are you sure you want to apply on this job?")) {
+            $('#applyJobModal').modal('show'); 
+            $('#applyJobForm').on('submit', function(e) {
+                e.preventDefault(); 
+                var formData = new FormData(this); 
+
                 $.ajax({
                     url: '{{ route('applyJob') }}',
-                    type: 'post',
-                    data: {
-                        id: id
-                    },
-                    dataType: 'json',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
                     success: function(response) {
-                        window.location.href = "{{ url()->current() }}";
-                        // window.location.href = "{{ url('jobs/detail') }}/" + id;
+                        if (response.status) {
+
+                            $('#applyJobModal').modal('hide');
+
+  
+                            $('#message').html(
+                                '<div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert" style="padding: 15px; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">' +
+                                '<i class="bi bi-check-circle-fill me-2" style="font-size: 24px;"></i>' +
+                                '<div>' + response.message + '</div>' +
+                                '<button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close" style="outline: none;"></button>' +
+                                '</div>'
+                            );
+                        } else {
+
+                            $('#applyJobModal').modal('hide');
+
+
+                            $('#message').html(
+                                '<div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert" style="padding: 15px; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">' +
+                                '<i class="bi bi-exclamation-circle-fill me-2" style="font-size: 24px;"></i>' +
+                                '<div>' + response.message + '</div>' +
+                                '<button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close" style="outline: none;"></button>' +
+                                '</div>'
+                            );
+                        }
+
+
+                        window.setTimeout(function() {
+                            $('.alert').alert('close');
+                        }, 5000);
                     }
                 });
-            }
+            });
         }
 
         function saveJob(id) {
-            if (confirm("Are you sure you want to save this job?")) {
-                $.ajax({
-                    url: '{{ route('saveJob') }}',
-                    type: 'post',
-                    data: {
-                        id: id
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        $('.heart_mark').toggleClass('green');
-                        window.location.href = "{{ url()->current() }}";
-                    }
-                });
-            }
+            $.ajax({
+                url: '{{ route('saveJob') }}',
+                type: 'post',
+                data: {
+                    id: id
+                },
+                dataType: 'json',
+                success: function(response) {
+                    $('.heart_mark').toggleClass('green');
+                    window.location.href = "{{ url()->current() }}";
+                }
+            });
         }
+        $(document).ready(function() {
+            $('input[name="cvOption"]').on('change', function() {
+                if ($(this).val() == 'upload') {
+                    $('#cvUploadSection').show();
+                    $('#resumeSelectSection').hide(); 
+                } else {
+                    $('#cvUploadSection').hide(); 
+                    $('#resumeSelectSection').show(); 
+                }
+            });
+        });
     </script>
 @endsection
