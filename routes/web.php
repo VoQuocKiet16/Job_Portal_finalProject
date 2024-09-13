@@ -97,6 +97,9 @@ Route::group(['prefix' => 'recruiter', 'middleware' => ['checkRole:recruiter']],
     Route::post('/update-job/{jobId}',[MyJobsController::class,'updateJob'])->name('recruiter.updateJob');   
     Route::post('/delete-job',[MyJobsController::class,'removeMyJobs'])->name('recruiter.removeMyJobs');
 
+    Route::get('/applications', [MyJobsController::class, 'showApplications'])->name('recruiter.applications');
+    Route::post('/applications/approve/{id}', [MyJobsController::class, 'approveApplication'])->name('recruiter.applications.approve');
+    Route::post('/applications/reject/{id}', [MyJobsController::class, 'rejectApplication'])->name('recruiter.applications.reject');
 });
 
 Route::group(['prefix' => 'account'], function(){

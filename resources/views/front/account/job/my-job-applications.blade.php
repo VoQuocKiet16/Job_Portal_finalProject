@@ -32,7 +32,6 @@
                                     <tr>
                                         <th scope="col">Title</th>
                                         <th scope="col">Applied Date</th>
-                                        <th scope="col">Applicants</th>
                                         <th scope="col">Status</th>
                                         <th scope="col">Action</th>
                                     </tr>
@@ -43,17 +42,18 @@
                                         <tr class="active">
                                             <td>
                                                 <div class="job-name fw-500">{{ $jobApplication->job->title }}</div>
-                                                <div class="info1">{{ $jobApplication->job->jobType->name }} . {{ $jobApplication->job->location }}</div>
+                                                <div class="info1">{{ $jobApplication->job->jobType->name }} . {{ $jobApplication->job->location->name }}</div>
                                             </td>
                                             <td>{{ \Carbon\Carbon::parse($jobApplication->applied_date)->format('d M, Y') }}</td>
-                                            <td>{{ $jobApplication->job->applications->count() }} Applications</td>
                                             <td>
-                                                @if ($jobApplication->job->status == 1)
-                                                <div class="job-status text-capitalize">Active</div>
+                                                @if($jobApplication->status == 1)
+                                                    <span class="badge bg-success">Approved</span>
+                                                @elseif($jobApplication->status == 0)
+                                                    <span class="badge bg-danger">Rejected</span>
                                                 @else
-                                                <div class="job-status text-capitalize">Block</div>
-                                                @endif                                    
-                                            </td>
+                                                    <span class="badge bg-warning">Pending</span>
+                                                @endif
+                                            </td> 
                                             <td>
                                                 <div class="action-dots float-end">
                                                     <button href="#" class="btn" data-bs-toggle="dropdown" aria-expanded="false">
@@ -72,8 +72,6 @@
                                         <td colspan="5">Job Applications not found</td>
                                     </tr>
                                     @endif
-                                    
-                                    
                                 </tbody>                                
                             </table>
                         </div>
@@ -98,7 +96,6 @@ function removeAppliedJobs(id) {
             dataType: 'json',
             success: function(response) {
                 window.location.href = "{{ url()->current() }}";
-                // window.location.href="{{ route('account.myJobApplications') }}";
             }
         });
     } 

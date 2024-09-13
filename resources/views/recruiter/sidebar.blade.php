@@ -7,7 +7,9 @@
             <li class="nav-link list-group-item d-flex justify-content-between align-items-center p-3">                
                 <a class="js-scroll-trigger text-dark text-decoration-none" href="{{ route ('recruiter.myJobs')}}">My Jobs</a>
             </li>
-           
+            <li class="nav-link list-group-item d-flex justify-content-between align-items-center p-3">                
+                <a class="js-scroll-trigger text-dark text-decoration-none" href="{{ route ('recruiter.applications')}}">My Applications</a>
+            </li>
         </ul>
     </div>
 </div>

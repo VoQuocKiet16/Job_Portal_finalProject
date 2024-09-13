@@ -5,6 +5,7 @@ namespace App\Http\Controllers\recruiter;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Job;
+use App\Models\JobApplication;
 use App\Models\JobType;
 use App\Models\Location;
 use Illuminate\Support\Facades\Validator;
@@ -14,17 +15,17 @@ use Illuminate\Support\Facades\Auth;
 class MyJobsController extends Controller
 {
     public function myJobs()
-{
-    // Lấy tất cả các công việc của user
-    $jobs = Job::where('user_id', Auth::user()->id)
-        ->with(['jobType', 'applications', 'location']) 
-        ->orderBy('created_at', 'DESC')
-        ->paginate(10);
+    {
 
-    return view('recruiter.jobs.my-jobs', [
-        'jobs' => $jobs,
-    ]);
-}
+        $jobs = Job::where('user_id', Auth::user()->id)
+            ->with(['jobType', 'applications', 'location']) 
+            ->orderBy('created_at', 'DESC')
+            ->paginate(10);
+
+        return view('recruiter.jobs.my-jobs', [
+            'jobs' => $jobs,
+        ]);
+    }
 
     
     
@@ -219,5 +220,54 @@ class MyJobsController extends Controller
             'job' => $job,
         ]);
     }
+
+    public function showApplications()
+    {
+        $applications = JobApplication::where('employer_id', Auth::user()->id)
+            ->with(['user', 'job'])
+            ->orderBy('created_at', 'DESC')
+            ->paginate(10); 
+    
+        return view('recruiter.applicants.my-applicants', [
+            'applications' => $applications,
+        ]);
+    }
+
+    public function approveApplication($id)
+    {
+        $application = JobApplication::find($id);
+    
+        if (!$application) {
+            session()->flash('error', 'Application not found.');
+            return redirect()->back();  
+        }
+    
+
+        $application->status = 1; // 1 - Approved
+        $application->save();
+    
+        session()->flash('success', 'Application approved successfully.');
+    
+        return redirect()->route('recruiter.applications');
+    }
+    
+    public function rejectApplication($id)
+    {
+        $application = JobApplication::find($id);
+    
+        if (!$application) {
+            session()->flash('error', 'Application not found.');
+            return redirect()->back(); 
+        }
+    
+        // Update the status to Rejected
+        $application->status = 0; // 0 - Rejected
+        $application->save();
+    
+        session()->flash('success', 'Application rejected successfully.');
+    
+        return redirect()->route('recruiter.applications');
+    }
+
 
 }
