@@ -68,6 +68,8 @@
                                                             <li><a class="dropdown-item" href="{{ route('resume.view', ['id' => $user['resume_id'] ?? '']) }}"><i class="fa fa-eye" aria-hidden="true"></i> View</a></li>
                                                             <li><a class="dropdown-item" href="{{ route('resume.edit', ['id' => $user['resume_id'] ?? '']) }}"><i class="fa fa-eye" aria-hidden="true"></i> Edit</a></li>
                                                             <li><a class="dropdown-item" onclick="deleteResume({{ $user['resume_id'] ?? '' }})" href="javascript:void(0);"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a></li>
+                                                            <li><a class="dropdown-item" href="{{ route('resume.downloadDoc', ['id' => $user['resume_id'] ?? '']) }}">
+                                                                <i class="fa fa-download" aria-hidden="true"></i> Download as DOC</a></li>
                                                         </ul>
                                                     </div>
                                                 </td>

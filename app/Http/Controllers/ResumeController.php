@@ -11,6 +11,7 @@ use App\Models\Resume;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class ResumeController extends Controller
 {
@@ -131,17 +132,17 @@ class ResumeController extends Controller
             'phone_number' => 'required|numeric',
             'website' => 'nullable|url',
             'linkedin_link' => 'required|url',
-            'degree_title.*' => 'required|string|max:255',
-            'institute.*' => 'required|string|max:255',
-            'edu_start_date.*' => 'required|date',
-            'edu_end_date.*' => 'required|date|after_or_equal:edu_start_date.*',
+            'degree_title' => 'required|string|max:255',
+            'institute' => 'required|string|max:255',
+            'edu_start_date' => 'required|date',
+            'edu_end_date' => 'required|date|after_or_equal:edu_start_date.*',
             'education_description.*' => 'required|string|max:1000',
-            'job_title.*' => 'required|string|max:255',
-            'organization.*' => 'required|string|max:255',
-            'job_start_date.*' => 'required|date',
-            'job_end_date.*' => 'nullable|date|after_or_equal:job_start_date.*',
-            'job_description.*' => 'required|string|max:1000',
-            'skills.*' => 'required|string|max:255',
+            'job_title' => 'required|string|max:255',
+            'organization' => 'required|string|max:255',
+            'job_start_date' => 'required|date',
+            'job_end_date' => 'nullable|date|after_or_equal:job_start_date.*',
+            'job_description' => 'required|string|max:1000',
+            'skills' => 'required|string|max:255',
         ]);
     
         if ($validator->fails()) {
@@ -340,6 +341,63 @@ class ResumeController extends Controller
 
         return redirect()->route('resume.view', $resume->id)->with('success', 'Resume updated successfully.');
     }
+
+
+public function downloadResume($id, $format)
+{
+    $resume = Resume::with(['personalInformation', 'education', 'experience', 'skill'])->findOrFail($id);
+
+    if (!in_array($format, ['docx', 'doc'])) {
+        abort(404, 'Invalid format');
+    }
+
+    return $this->generateDocx($resume, $format);
+}
+
+public function downloadDoc($resumeId)
+{
+    $resume = Resume::find($resumeId);
+
+    if (!$resume) {
+        return redirect()->back()->with('error', 'Resume not found.');
+    }
+
+    $htmlContent = '<html><body>';
+    $htmlContent .= '<h1>' . $resume->personalInformation->first_name . ' ' . $resume->personalInformation->last_name . '</h1>';
+    $htmlContent .= '<p><strong>Profile Title:</strong> ' . $resume->personalInformation->profile_title . '</p>';
+    $htmlContent .= '<p><strong>About Me:</strong> ' . $resume->personalInformation->about_me . '</p>';
+    $htmlContent .= '<h2>Experience</h2>';
+
+    foreach ($resume->experience as $experience) {
+        $htmlContent .= '<p><strong>' . $experience->job_title . ' at ' . $experience->organization . '</strong><br>';
+        $htmlContent .= 'From ' . $experience->job_start_date . ' to ' . ($experience->job_end_date ? $experience->job_end_date : 'Present') . '<br>';
+        $htmlContent .= $experience->job_description . '</p>';
+    }
+
+    $htmlContent .= '<h2>Education</h2>';
+
+    foreach ($resume->education as $education) {
+        $htmlContent .= '<p><strong>' . $education->degree_title . '</strong> at ' . $education->institute . '<br>';
+        $htmlContent .= 'From ' . $education->edu_start_date . ' to ' . $education->edu_end_date . '<br>';
+        $htmlContent .= $education->education_description . '</p>';
+    }
+
+    $htmlContent .= '<h2>Skills</h2>';
+    $htmlContent .= '<ul>';
+    foreach ($resume->skill as $skill) {
+        $htmlContent .= '<li>' . $skill->skill . '</li>';
+    }
+    $htmlContent .= '</ul>';
+    
+    $htmlContent .= '</body></html>';
+
+    header("Content-type: application/vnd.ms-word");
+    header("Content-Disposition: attachment;Filename=resume_" . Str::slug($resume->personalInformation->profile_title, '_') . ".doc");
+
+    echo $htmlContent;
+    exit;
+}
+
 
 
 

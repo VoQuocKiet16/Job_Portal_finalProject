@@ -14,7 +14,7 @@ class Resume extends Model
 
     public function personalInformation()
     {
-        return $this->hasOne(PersonalInformation::class);
+        return $this->hasOne(PersonalInformation::class, 'resume_id', 'id');
     }
 
     public function contactInformation()
