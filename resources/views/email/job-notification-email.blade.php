@@ -80,7 +80,7 @@
         </div>
 
         <div class="details">
-            <h2>Employee Details:</h2>
+            <h2>Applicant Details:</h2>
             <p><strong>Name:</strong> {{ $mailData['user']->name }}</p>
             <p><strong>Email:</strong> <a href="mailto:{{ $mailData['user']->email }}">{{ $mailData['user']->email }}</a></p>
             <p><strong>Mobile No:</strong> {{ $mailData['user']->mobile }}</p>

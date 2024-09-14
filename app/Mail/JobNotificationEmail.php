@@ -29,7 +29,7 @@ class JobNotificationEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Job Notification Email',
+            subject: $this->mailData['subject'],
         );
     }
 

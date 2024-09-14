@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ResetPasswordEmail;
+use App\Mail\VerifyAccountEmail;
 use App\Models\Category;
 use App\Models\Job;
 use App\Models\JobApplication;
@@ -10,6 +11,7 @@ use App\Models\JobType;
 use App\Models\SavedJobs;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -22,7 +24,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
 
-class AccountController extends Controller
+class AccountController extends Controller 
 {
     // This method will show registration page
     public function registration()
@@ -71,7 +73,6 @@ class AccountController extends Controller
             ]);
         }
     }
-
 
     // This method will show login page
     public function login()
@@ -337,7 +338,6 @@ class AccountController extends Controller
          Mail::to($request->email)->send(new ResetPasswordEmail($mailData));
 
          return redirect()->route('account.forgotPassword')->with('success','Reset password email has been sent to your inbox.');
- 
     }
 
     public function resetPassword($tokenString) {
