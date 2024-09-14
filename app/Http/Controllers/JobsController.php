@@ -114,7 +114,6 @@ class JobsController extends Controller
         $id = $request->id;
         $job = Job::find($id);
     
-        // Hàm xử lý thông báo lỗi
         $sendErrorResponse = function($message) {
             return response()->json([
                 'status' => false,
@@ -144,9 +143,17 @@ class JobsController extends Controller
         }
     
         // Check if the job is full
-        $applicationCount = JobApplication::where('job_id', $id)->count();
-        if ($applicationCount >= $job->vacancy) {
-            return $sendErrorResponse('Job is Full, please find another job.');
+        $approvedApplicationsCount = JobApplication::where('job_id', $id)
+        ->where('status', 1) 
+        ->count();
+    
+        if ($approvedApplicationsCount >= $job->vacancy) {
+            $message = 'Job is Full, please find another job.';
+            session()->flash('error', $message);
+            return response()->json([
+                'status' => false,
+                'message' => $message
+            ]);
         }
     
         // Handle CV file or resume

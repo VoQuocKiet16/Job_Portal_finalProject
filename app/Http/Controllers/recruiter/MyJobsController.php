@@ -221,53 +221,7 @@ class MyJobsController extends Controller
         ]);
     }
 
-    public function showApplications()
-    {
-        $applications = JobApplication::where('employer_id', Auth::user()->id)
-            ->with(['user', 'job'])
-            ->orderBy('created_at', 'DESC')
-            ->paginate(10); 
-    
-        return view('recruiter.applicants.my-applicants', [
-            'applications' => $applications,
-        ]);
-    }
 
-    public function approveApplication($id)
-    {
-        $application = JobApplication::find($id);
-    
-        if (!$application) {
-            session()->flash('error', 'Application not found.');
-            return redirect()->back();  
-        }
-    
-
-        $application->status = 1; // 1 - Approved
-        $application->save();
-    
-        session()->flash('success', 'Application approved successfully.');
-    
-        return redirect()->route('recruiter.applications');
-    }
-    
-    public function rejectApplication($id)
-    {
-        $application = JobApplication::find($id);
-    
-        if (!$application) {
-            session()->flash('error', 'Application not found.');
-            return redirect()->back(); 
-        }
-    
-        // Update the status to Rejected
-        $application->status = 0; // 0 - Rejected
-        $application->save();
-    
-        session()->flash('success', 'Application rejected successfully.');
-    
-        return redirect()->route('recruiter.applications');
-    }
 
 
 }

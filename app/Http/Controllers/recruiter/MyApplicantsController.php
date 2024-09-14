@@ -139,6 +139,8 @@ class MyApplicantsController extends Controller
     return view('front.account.resume.view', compact('information', 'resume'));
 }
 
+
+
     
 
 }

@@ -40,6 +40,10 @@ class Job extends Model
 
     public function isFull()
     {
-        return $this->applications->count() >= $this->vacancy;
+
+        $approvedApplicationsCount = $this->applications()->where('status', 1)->count();
+    
+        return $approvedApplicationsCount >= $this->vacancy;
     }
+    
 }

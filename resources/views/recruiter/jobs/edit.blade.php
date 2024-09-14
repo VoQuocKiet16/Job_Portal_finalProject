@@ -70,7 +70,7 @@
                                 <div class="mb-4">
                                     <label for="" class="mb-2">Salary</label>
                                     <input type="text" placeholder="Salary" id="salary" name="salary"
-                                        class="form-control">
+                                        class="form-control" value="{{ $job->salary }}">
                                 </div>
 
                                 <div class="row">
