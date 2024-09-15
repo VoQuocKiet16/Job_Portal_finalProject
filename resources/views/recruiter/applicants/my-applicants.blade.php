@@ -111,6 +111,14 @@
 
 @section('customJs')
     <script type="text/javascript">
+        @if (session('swal_message'))
+            Swal.fire({
+                title: "Job is Full!",
+                text: "{{ session('swal_message') }}",
+                icon: "error",
+                confirmButtonText: "OK"
+            });
+        @endif
         function removeMyApplicants(applicantId) {
             Swal.fire({
                 title: "Are you sure?",
@@ -150,5 +158,6 @@
                 }
             });
         }
+        
     </script>
 @endsection

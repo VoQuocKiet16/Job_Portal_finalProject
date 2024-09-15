@@ -49,8 +49,8 @@ class DashboardController extends Controller
             'totalRecruiters', 
             'totalApplicants', 
             'totalApplications', 
-            'totalCategories', // Thêm biến totalCategories
-            'totalJobs', // Thêm biến totalJobs
+            'totalCategories', 
+            'totalJobs', 
             'applicationsPerJob', 
             'applicationChartLabels', 
             'applicationChartData'
