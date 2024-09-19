@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Job Notification Email</title>
+    <title>Email Verification</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -36,14 +36,6 @@
             font-size: 16px;
         }
 
-        .details {
-            margin: 20px 0;
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-left: 5px solid #EE7214;
-            border-radius: 4px;
-        }
-
         .btn {
             display: inline-block;
             background-color: #EE7214;
@@ -64,41 +56,28 @@
             font-size: 12px;
             color: #888;
         }
-
-        a {
-            color: #EE7214;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 
 <body>
     <div class="email-container">
-        <h1>Hello {{ $mailData['employer']->name }},</h1>
+        <h1>Verify your email address to complete your registration</h1>
 
-        <p>We have a new job application for the job you posted.</p>
-        
-        <div class="details">
-            <h2>Job Details:</h2>
-            <p><strong>Job Title:</strong> {{ $mailData['job']->title }}</p>
-        </div>
+        <p>Hi {{ $mailData['name'] }},</p>
+        <p>Welcome to CareerQuest!</p>
+        <p>Please verify your email address so you can get full access to qualified freelancers eager to tackle your project.</p>
 
-        <div class="details">
-            <h2>Applicant Details:</h2>
-            <p><strong>Name:</strong> {{ $mailData['user']->name }}</p>
-            <p><strong>Email:</strong> <a href="mailto:{{ $mailData['user']->email }}">{{ $mailData['user']->email }}</a></p>
-            <p><strong>Mobile No:</strong> {{ $mailData['user']->mobile }}</p>
-        </div>
+        @if($mailData['verified'])
+            <p>Your email has already been verified.</p>
+        @else
+            <a href="{{ $mailData['verification_link'] }}" class="btn">Verify Email</a>
+            <p>If you did not create an account, no further action is required.</p>
+        @endif
 
-        <p>If you want to view the full application, please log in to your employer account.</p>
+        <p>Thanks for your time,<br>The CareerQuest Team</p>
 
         <div class="footer">
-            <p>Thanks,<br>QuestCareer</p>
-            <p><a href="{{ url('/') }}">Visit our website</a></p>
+            <p>If you have any issues, feel free to contact us at support@careerquest.com.</p>
         </div>
     </div>
 </body>

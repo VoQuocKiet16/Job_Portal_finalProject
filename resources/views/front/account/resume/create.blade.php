@@ -15,9 +15,9 @@
                             <h4 class="mb-3">Personal details</h4>
                             <div class="row g-3">
                                 <div class="col-sm-6">
-                                    <label for="first_name" class="form-label">First name<span
+                                    <label for="first_name" class="form-label " >First name<span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="first_name" name="first_name"
+                                    <input type="text" class="form-control" id="first_name" name="first_name" value="{{ old('first_name') }}"
                                         placeholder="First name" required>
                                     <div class="invalid-feedback">
                                         Valid first name is required.
@@ -27,7 +27,7 @@
                                 <div class="col-sm-6">
                                     <label for="last_name" class="form-label">Last name<span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="last_name" name="last_name"
+                                    <input type="text" class="form-control" id="last_name" name="last_name" value="{{ old('last_name') }}"
                                         placeholder="Last name"  required>
                                     <div class="invalid-feedback">
                                         Valid last name is required.
@@ -38,7 +38,7 @@
                                     <label for="profile_title" class="form-label">Profile title<span
                                             class="text-danger">*</span></label>
                                     <div class="input-group has-validation">
-                                        <input type="text" class="form-control" id="profile_title" name="profile_title"
+                                        <input type="text" class="form-control" id="profile_title" name="profile_title" value="{{ old('profile_title') }}"
                                             placeholder="Profile title" required>
                                         <div class="invalid-feedback">
                                             Your profile_title is required.
@@ -49,7 +49,7 @@
                                 <div class="col-12">
                                     <label for="about_me" class="form-label">Summary<span
                                             class="text-danger">*</span></label>
-                                    <textarea class="form-control" id="about_me" name="about_me" rows="5"
+                                    <textarea class="form-control" id="about_me" name="about_me" rows="5" value="{{ old('about_me') }}"
                                         placeholder="Summary..."></textarea>
                                     <div class="invalid-feedback">
                                         Please enter your resume summary.
@@ -67,7 +67,7 @@
                                 <div class="col-6">
                                     <label for="phone_number" class="form-label">Phone<span
                                             class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" id="phone_number" name="phone_number"
+                                    <input type="number" class="form-control" id="phone_number" name="phone_number" value="{{ old('phone_number') }}"
                                         placeholder="Phone">
                                     <div class="invalid-feedback">
                                         Please enter a valid phone number.
@@ -77,7 +77,7 @@
                                 <div class="col-6">
                                     <label for="website" class="form-label">Website<span
                                             class="text-danger"></span></label>
-                                    <input type="url" class="form-control" id="website" name="website"
+                                    <input type="url" class="form-control" id="website" name="website" value="{{ old('website') }}"
                                         placeholder="Link of Website">
                                     <div class="invalid-feedback">
                                         Please enter a valid link.
@@ -88,7 +88,7 @@
                                     <label for="linkedin_link" class="form-label">Contact Link<span
                                             class="text-danger">*</span></label>
                                     <div class="input-group has-validation">
-                                        <input type="url" class="form-control" id="linkedin_link" name="linkedin_link"
+                                        <input type="url" class="form-control" id="linkedin_link" name="linkedin_link" value="{{ old('linkedin_link') }}"
                                             placeholder="Contact Link">
                                         <div class="invalid-feedback">
                                             Your linkedin is required.
@@ -109,7 +109,7 @@
                                 <div class="col-sm-12">
                                     <label for="degree_title" class="form-label">Degree<span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="degree_title" name="degree_title[]"
+                                    <input type="text" class="form-control" id="degree_title" name="degree_title[]" value="{{ old('degree_title') }}"
                                         placeholder="Degree" required>
                                     <div class="invalid-feedback">
                                         Valid degree is required.
@@ -119,7 +119,7 @@
                                 <div class="col-sm-12">
                                     <label for="institute" class="form-label">Institute<span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="institute" name="institute[]"
+                                    <input type="text" class="form-control" id="institute" name="institute[]" value="{{ old('institute') }}"
                                         placeholder="Institute" required>
                                     <div class="invalid-feedback">
                                         Valid institute is required.
@@ -130,7 +130,7 @@
                                     <label for="edu_start_date" class="form-label">Start date<span
                                             class="text-danger">*</span></label>
                                     <div class="input-group has-validation">
-                                        <input type="date" class="form-control" id="edu_start_date"
+                                        <input type="date" class="form-control" id="edu_start_date" 
                                             name="edu_start_date[]" required>
                                         <div class="invalid-feedback">
                                             Your start date is required.
@@ -153,7 +153,7 @@
                                 <div class="col-12">
                                     <label for="education_description" class="form-label">Description<span
                                             class="text-danger">*</span></label>
-                                    <textarea class="form-control" id="education_description" name="education_description[]" rows="6"
+                                    <textarea class="form-control" id="education_description" name="education_description[]" rows="6" value="{{ old('education_description') }}"
                                         placeholder="Description..."></textarea>
                                     <div class="invalid-feedback">
                                         Please enter your education description.
@@ -180,7 +180,7 @@
                                 <div class="col-sm-12">
                                     <label for="job_title" class="form-label">Job Title<span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="job_title" name="job_title[]"
+                                    <input type="text" class="form-control" id="job_title" name="job_title[]" value="{{ old('job_title') }}"
                                         placeholder="Job Title" required>
                                     <div class="invalid-feedback">
                                         Valid job title is required.
@@ -190,7 +190,7 @@
                                 <div class="col-sm-12">
                                     <label for="organization" class="form-label">Organization<span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="organization" name="organization[]"
+                                    <input type="text" class="form-control" id="organization" name="organization[]" value="{{ old('organization') }}"
                                         placeholder="Organization or Company" required>
                                     <div class="invalid-feedback">
                                         Valid organization is required.
@@ -224,7 +224,7 @@
                                 <div class="col-12">
                                     <label for="job_description" class="form-label">Description<span
                                             class="text-danger">*</span></label>
-                                    <textarea class="form-control" id="job_description" name="job_description[]" rows="5"
+                                    <textarea class="form-control" id="job_description" name="job_description[]" rows="5" value="{{ old('job_description') }}"
                                         placeholder="Description..."></textarea>
                                     <div class="invalid-feedback">
                                         Please enter your job description.
@@ -247,7 +247,7 @@
                             <div class="card-body row g-3">
                                 <div class="col-sm-12">
                                     <label for="skills[]" class="form-label">Skill<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="skills" name="skills[]" placeholder="Enter a skill" required>
+                                    <input type="text" class="form-control" id="skills" name="skills[]" value="{{ old('skills') }}" placeholder="Enter a skill" required>
                                     <div class="invalid-feedback">
                                         Please enter a valid skill.
                                     </div>

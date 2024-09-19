@@ -76,7 +76,7 @@
                                                                         View</a></li>
                                                                 <li><a class="dropdown-item"
                                                                         href="{{ route('resume.edit', ['id' => $user['resume_id'] ?? '']) }}"><i
-                                                                            class="fa fa-eye" aria-hidden="true"></i>
+                                                                            class="fa fa-edit" aria-hidden="true"></i>
                                                                         Edit</a></li>
                                                                 <li><a class="dropdown-item"
                                                                         onclick="deleteResume({{ $user['resume_id'] ?? '' }})"

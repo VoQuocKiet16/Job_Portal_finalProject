@@ -20,7 +20,7 @@
 
                     <div id="message">
                         @include('front.message')
-                    </div> <!-- Thêm phần này để hiển thị thông báo động -->
+                    </div> <!-- Add this to display dynamic notifications -->
                     <div class="card shadow border-0">
                         <div class="job_details_header">
                             <div class="single_jobs white-bg d-flex justify-content-between">
@@ -31,12 +31,13 @@
                                         </a>
                                         <div class="links_locat d-flex align-items-center">
                                             <div class="location">
-                                                <p><i class="fa fa-map-marker"></i> {{ $job->location->name }}</p>
+                                                <p><i class="fas fa-map-marker-alt"></i> {{ $job->location->name }}</p>
                                             </div>
                                             <div class="location">
-                                                <p><i class="fa fa-clock-o"></i> {{ $job->jobType->name }}</p>
+                                                <p><i class="fas fa-clock"></i> {{ $job->jobType->name }}</p>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                                 <div class="jobs_right">
@@ -44,14 +45,16 @@
                                         @if (Auth::check())
                                             <a class="heart_mark {{ $count ? 'green' : '' }}" href="javascript:void(0);"
                                                 onclick="saveJob({{ $job->id }})">
-                                                <i class="fa {{ $count ? 'fa-heart' : 'fa-heart-o' }}"
+                                                <i class="{{ $count ? 'fas fa-heart' : 'far fa-heart' }}"
                                                     aria-hidden="true"></i>
                                             </a>
                                         @else
-                                            <a href="{{ route('account.login') }}"> <i
-                                                    class="fa {{ $count ? 'fa-heart' : 'fa-heart-o' }}"
-                                                    aria-hidden="true"></i></a>
+                                            <a href="{{ route('account.login') }}">
+                                                <i class="{{ $count ? 'fas fa-heart' : 'far fa-heart' }}"
+                                                    aria-hidden="true"></i>
+                                            </a>
                                         @endif
+
                                     </div>
                                 </div>
                             </div>
@@ -291,10 +294,24 @@
 @section('customJs')
     <script type="text/javascript">
         function applyJob(id) {
-            $('#applyJobModal').modal('show'); 
+            @if (Auth::check() && is_null(Auth::user()->email_verified_at))
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "You need to verify your email before apply jobs.",
+                    confirmButtonText: 'Go to verification page'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '{{ route('verification.notice') }}';
+                    }
+                });
+                return;
+            @endif
+
+            $('#applyJobModal').modal('show');
             $('#applyJobForm').on('submit', function(e) {
-                e.preventDefault(); 
-                var formData = new FormData(this); 
+                e.preventDefault();
+                var formData = new FormData(this);
 
                 $.ajax({
                     url: '{{ route('applyJob') }}',
@@ -307,7 +324,7 @@
 
                             $('#applyJobModal').modal('hide');
 
-  
+
                             $('#message').html(
                                 '<div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert" style="padding: 15px; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">' +
                                 '<i class="bi bi-check-circle-fill me-2" style="font-size: 24px;"></i>' +
@@ -339,6 +356,19 @@
         }
 
         function saveJob(id) {
+            @if (Auth::check() && is_null(Auth::user()->email_verified_at))
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "You need to verify your email before saving jobs.",
+                    confirmButtonText: 'Go to verification page'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '{{ route('verification.notice') }}';
+                    }
+                });
+                return;
+            @endif
             $.ajax({
                 url: '{{ route('saveJob') }}',
                 type: 'post',
@@ -356,10 +386,10 @@
             $('input[name="cvOption"]').on('change', function() {
                 if ($(this).val() == 'upload') {
                     $('#cvUploadSection').show();
-                    $('#resumeSelectSection').hide(); 
+                    $('#resumeSelectSection').hide();
                 } else {
-                    $('#cvUploadSection').hide(); 
-                    $('#resumeSelectSection').show(); 
+                    $('#cvUploadSection').hide();
+                    $('#resumeSelectSection').show();
                 }
             });
         });

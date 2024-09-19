@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\EmailVerificationMail;
 use App\Mail\ResetPasswordEmail;
 use App\Mail\VerifyAccountEmail;
 use App\Models\Category;
@@ -32,6 +33,48 @@ class AccountController extends Controller
         return view('front.account.registration');
     }
 
+    // public function processRegistration(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'name' => 'required',
+    //         'email' => 'required|email|unique:users,email',
+    //         'password' => 'required|min:8|same:confirm_password',
+    //         'confirm_password' => 'required',
+    //         'recruiter' => 'required|in:yes,no',
+    //     ]);
+
+    //     if ($validator->passes()) {
+    //         $user = new User();
+    //         $user->name = $request->name;
+    //         $user->email = $request->email;
+    //         $user->password = Hash::make($request->password);
+
+    //         // Set the role based on the recruiter's selection
+    //         if ($request->recruiter == 'yes') {
+    //             $user->role = 'recruiter';
+    //         } else {
+    //             $user->role = 'user';
+    //         }
+
+    //         $user->save();
+
+    //         session()->flash(
+    //             'success',
+    //             'You have registered successfully.'
+    //         );
+
+    //         return response()->json([
+    //             'status' => true,
+    //             'errors' => []
+    //         ]);
+    //     } else {
+    //         return response()->json([
+    //             'status' => false,
+    //             'errors' => $validator->errors()
+    //         ]);
+    //     }
+    // }
+
     public function processRegistration(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -41,27 +84,35 @@ class AccountController extends Controller
             'confirm_password' => 'required',
             'recruiter' => 'required|in:yes,no',
         ]);
-
+    
         if ($validator->passes()) {
             $user = new User();
             $user->name = $request->name;
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
-
-            // Set the role based on the recruiter's selection
+    
             if ($request->recruiter == 'yes') {
                 $user->role = 'recruiter';
             } else {
                 $user->role = 'user';
             }
-
+    
             $user->save();
+    
+            $verificationLink = route('verification.verify', ['id' => $user->id, 'hash' => sha1($user->email)]);
+    
+            $mailData = [
+                'subject' => 'Verify Your Email Address', 
+                'name' => $user->name,
+                'verification_link' => $verificationLink,
+                'verified' => false
+            ];
+    
 
-            session()->flash(
-                'success',
-                'You have registered successfully.'
-            );
-
+            Mail::to($user->email)->send(new EmailVerificationMail($mailData));
+    
+            session()->flash('success', 'Registration successful. Please check your email to verify your account.');
+    
             return response()->json([
                 'status' => true,
                 'errors' => []
@@ -71,6 +122,48 @@ class AccountController extends Controller
                 'status' => false,
                 'errors' => $validator->errors()
             ]);
+        }
+    }
+
+    public function resendVerificationEmail(Request $request)
+    {
+        $user = Auth::user();
+
+        if (!$user || $user->email_verified_at) {
+            return redirect()->route('home')->with('error', 'This email is already verified or user not found.');
+        }
+
+        $verificationLink = route('verification.verify', ['id' => $user->id, 'hash' => sha1($user->email)]);
+
+        $mailData = [
+            'subject' => 'Verify Your Email Address',
+            'name' => $user->name,
+            'verification_link' => $verificationLink,
+            'verified' => false
+        ];
+
+        Mail::to($user->email)->send(new EmailVerificationMail($mailData));
+
+        return back()->with('success', 'Verification email has been resent. Please check your inbox.');
+    }
+
+    
+
+    public function verifyEmail($id, $hash)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return redirect()->route('account.login')->with('error', 'Invalid verification link.');
+        }
+
+        if (sha1($user->email) == $hash) {
+            $user->email_verified_at = now();
+            $user->save();
+
+            return redirect()->route('account.login')->with('success', 'Your email has been verified.');
+        } else {
+            return redirect()->route('account.login')->with('error', 'Invalid verification link.');
         }
     }
 
@@ -100,6 +193,30 @@ class AccountController extends Controller
         }
     }
 
+    // public function authenticate(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'email' => 'required',
+    //         'password' => 'required'
+    //     ]);
+
+    //     if ($validator->passes()) {
+    //         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+    //             if (is_null(Auth::user()->email_verified_at)) {
+    //                 return redirect()->route('account.verifyEmailWarning');
+    //             }
+    //             return redirect()->route('account.profile');
+    //         } else {
+    //             return redirect()->route('account.login')->with('error', 'Email or Password is incorrect');
+    //         }
+    //     } else {
+    //         return redirect()->route('account.login')
+    //             ->withErrors($validator)
+    //             ->withInput($request->only('email'));
+    //     }
+    // }
+
+
     // This method will show profile page
     public function profile()
     {
@@ -117,24 +234,31 @@ class AccountController extends Controller
     // This method will update profile
     public function updateProfile(Request $request)
     {
-
         $id = Auth::user()->id;
-
+    
+        // Validate input fields
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:5|max:20',
             'email' => 'required|email|unique:users,email,' . $id . ',id'
         ]);
-
+    
         if ($validator->passes()) {
             $user = User::find($id);
+    
+            // Reset email_verified_at to null
+            if ($user->email !== $request->email) {
+                $user->email_verified_at = null; // Reset email_verified_at to null
+            }
+    
+            // Update user information
             $user->name = $request->name;
             $user->email = $request->email;
             $user->mobile = $request->mobile;
             $user->designation = $request->designation;
             $user->save();
-
-            session()->flash('success', 'Profile update successfully.');
-
+    
+            session()->flash('success', 'Profile updated successfully.');
+    
             return response()->json([
                 'status' => true,
                 'errors' => []
@@ -146,6 +270,7 @@ class AccountController extends Controller
             ]);
         }
     }
+    
 
     // This method will logout account
     public function logout()

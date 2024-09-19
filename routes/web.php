@@ -16,6 +16,7 @@ use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\RoleChangeRequestController;
 use App\Models\Category;
 use App\Models\JobType;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,15 +39,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/jobs', [JobsController::class, 'index'])->name('jobs');
 Route::get('/jobs/detail/{id}', [JobsController::class, 'detail'])->name('jobDetail');
-Route::post('/apply-job', [JobsController::class, 'applyJob'])->name('applyJob')->middleware('auth');
-Route::post('/save-job', [JobsController::class, 'saveJob'])->name('saveJob')->middleware('auth');
+
+Route::get('/email/verify/{id}/{hash}', [AccountController::class, 'verifyEmail'])->name('verification.verify');
+Route::post('/resend-verification-email', [AccountController::class, 'resendVerificationEmail'])->name('account.resendVerificationEmail');
+Route::get('/email/verify', function() {return view('front.account.verify_email_warning');})->middleware('auth')->name('verification.notice');
+Route::get('/verify-email-warning', function() {return view('front.account.verify_email_warning');})->name('account.verifyEmailWarning');
 
 Route::get('/forgot-password', [AccountController::class, 'forgotPassword'])->name('account.forgotPassword');
 Route::post('/process-forgot-password', [AccountController::class, 'processForgotPassword'])->name('account.processForgotPassword');
 Route::get('/reset-password/{token}',[AccountController::class,'resetPassword'])->name('account.resetPassword');
 Route::post('/process-reset-password',[AccountController::class,'processResetPassword'])->name('account.processResetPassword');
 
-Route::group(['prefix' => 'admin', 'middleware' => ['checkRole:admin']], function(){
+Route::group(['prefix' => 'admin', 'middleware' => ['checkRole:admin', 'verified']], function(){
     Route::get('/dashboard',[DashboardController::class,'indexAdmin'])->name('admin.dashboard');
     Route::get('/statistics', [DashboardController::class, 'statisticsAdmin'])->name('admin.statisticsAdmin');
 
@@ -86,7 +90,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['checkRole:admin']], functio
 
 });
 
-Route::group(['prefix' => 'recruiter', 'middleware' => ['checkRole:recruiter']], function(){
+Route::group(['prefix' => 'recruiter', 'middleware' => ['checkRole:recruiter', 'verified']], function(){
     Route::get('/dashboard',[DashboardController::class,'indexRecruiter'])->name('recruiter.dashboard');
     Route::get('/statistics', [DashboardController::class, 'statisticsRecruiter'])->name('recruiter.statisticsRecruiter');
 
@@ -106,7 +110,9 @@ Route::group(['prefix' => 'recruiter', 'middleware' => ['checkRole:recruiter']],
     Route::get('/resume/{id}', [MyApplicantsController::class, 'viewResumeDetail'])->name('viewResumeDetail');
 });
 
-Route::group(['prefix' => 'account'], function(){
+Route::group(['prefix' => 'account'], function() {
+
+    // Routes require the user to be a guest
     Route::group(['middleware' => 'guest'], function(){
         Route::get('/register',[AccountController::class,'registration'])->name('account.registration');
         Route::post('/process-register',[AccountController::class,'processRegistration'])->name('account.processRegistration');
@@ -114,34 +120,41 @@ Route::group(['prefix' => 'account'], function(){
         Route::post('/authenticate',[AccountController::class,'authenticate'])->name('account.authenticate');
     });
 
-    Route::group(['middleware' => 'auth'], function(){
+    // Routes require the user to be logged in but not have their email verified
+    Route::group(['middleware' => ['auth']], function(){
+        // If the user has not verified their email, go to the warning page
+        Route::get('/verify-email-warning', function() {
+            return view('front.account.verify_email_warning');
+        })->name('account.verifyEmailWarning');
+
+        // Applies to routes that users can access even without email verification
         Route::get('/profile',[AccountController::class,'profile'])->name('account.profile');
         Route::put('/update-profile',[AccountController::class,'updateProfile'])->name('account.updateProfile');
-        Route::get('/logout',[AccountController::class,'logout'])->name('account.logout');   
-        Route::post('/update-profile-pic',[AccountController::class,'updateProfilePic'])->name('account.updateProfilePic'); 
+        Route::get('/logout',[AccountController::class,'logout'])->name('account.logout');
+        Route::post('/update-profile-pic',[AccountController::class,'updateProfilePic'])->name('account.updateProfilePic');
 
-        Route::get('/my-job-applications',[AccountController::class,'myJobApplications'])->name('account.myJobApplications');  
-        Route::post('/remove-job-application',[AccountController::class,'removeAppliedJobs'])->name('account.removeAppliedJobs');
+        // Routes require users to verify their email
+        Route::group(['middleware' => 'verified'], function() {
+            Route::post('/apply-job', [JobsController::class, 'applyJob'])->name('applyJob');
+            Route::post('/save-job', [JobsController::class, 'saveJob'])->name('saveJob');
 
-        Route::get('/saved-jobs',[AccountController::class,'listSavedJobs'])->name('account.savedJobs');  
-        Route::post('/remove-saved-job',[AccountController::class,'removeSavedJob'])->name('account.removeSavedJob');
+            Route::get('/my-job-applications',[AccountController::class,'myJobApplications'])->name('account.myJobApplications');
+            Route::post('/remove-job-application',[AccountController::class,'removeAppliedJobs'])->name('account.removeAppliedJobs');
+            Route::get('/saved-jobs',[AccountController::class,'listSavedJobs'])->name('account.savedJobs');
+            Route::post('/remove-saved-job',[AccountController::class,'removeSavedJob'])->name('account.removeSavedJob');
+            Route::post('/update-password',[AccountController::class,'updatePassword'])->name('account.updatePassword');
 
-        Route::post('/update-password',[AccountController::class,'updatePassword'])->name('account.updatePassword'); 
-        
-        
-        Route::get('/resume', [ResumeController::class, 'index'])->name('account.resume');
-        Route::get('/resume/{id}', [ResumeController::class, 'view'])->name('resume.view');
-        Route::get('/create', [ResumeController::class, 'createResume'])->name('resume.create');
-        Route::post('/save', [ResumeController::class, 'saveResume'])->name('save');
-        Route::get('/resume/{id}/edit', [ResumeController::class, 'editResume'])->name('resume.edit');
-        Route::post('/resume/{id}/update', [ResumeController::class, 'updateResume'])->name('resume.update');
-        Route::delete('/resume',[ResumeController::class,'delete'])->name('resume.delete');
-        Route::get('/resumes', [ResumeController::class, 'showResume'])->name('resumes');
-
-        Route::get('resumes/download-doc/{id}', [ResumeController::class, 'downloadDoc'])->name('resume.downloadDoc');
-        Route::post('/resumes/toggle-status/{id}', [ResumeController::class, 'toggleResumeStatus'])->name('resume.toggleStatus');
-
-  
+            // Resume-related routes
+            Route::get('/resume', [ResumeController::class, 'index'])->name('account.resume');
+            Route::get('/resume/{id}', [ResumeController::class, 'view'])->name('resume.view');
+            Route::get('/create', [ResumeController::class, 'createResume'])->name('resume.create');
+            Route::post('/save', [ResumeController::class, 'saveResume'])->name('save');
+            Route::get('/resume/{id}/edit', [ResumeController::class, 'editResume'])->name('resume.edit');
+            Route::post('/resume/{id}/update', [ResumeController::class, 'updateResume'])->name('resume.update');
+            Route::delete('/resume',[ResumeController::class,'delete'])->name('resume.delete');
+            Route::get('/resumes', [ResumeController::class, 'showResume'])->name('resumes');
+            Route::get('resumes/download-doc/{id}', [ResumeController::class, 'downloadDoc'])->name('resume.downloadDoc');
+            Route::post('/resumes/toggle-status/{id}', [ResumeController::class, 'toggleResumeStatus'])->name('resume.toggleStatus');
+        });
     });
-     
 });

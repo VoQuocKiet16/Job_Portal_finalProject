@@ -19,9 +19,10 @@
             max-width: 600px;
             margin: 20px auto;
             background-color: #ffffff;
-            padding: 20px;
+            padding: 40px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
 
         h1 {
@@ -32,31 +33,25 @@
         p {
             line-height: 1.6;
             color: #555;
+            font-size: 16px;
         }
 
-        a {
+        .btn {
             display: inline-block;
             background-color: #EE7214;
-            color: #ffffff;
-            padding: 10px 20px;
+            color: white;
+            padding: 12px 24px;
             text-decoration: none;
-            border-radius: 4px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-
-        a:hover {
-            background-color: #D96510;
-        }
-
-        .note {
-            color: #D96510;
+            border-radius: 5px;
             font-weight: bold;
             margin-top: 20px;
         }
 
+        .btn:hover {
+            background-color: #D96510;
+        }
+
         .footer {
-            text-align: center;
             margin-top: 30px;
             font-size: 12px;
             color: #888;
@@ -70,11 +65,9 @@
 
         <p>Click the button below to change your password:</p>
         
-        <p>
-            <a href="{{ route('account.resetPassword', ['token' => $token]) }}">Click Here to Reset Password</a>
-        </p>
+        <a href="{{ route('account.resetPassword', ['token' => $token]) }}" class="btn text:white">Click Here to Reset Password</a>
 
-        <p class="note"><strong>Note:</strong> This link will expire in 1 minute. Please use it before it expires.</p>
+        <p style="color: #D96510;"><strong>Note:</strong> This link will expire in 1 minute. Please use it before it expires.</p>
 
         <p>Thanks,<br>QuestCareer</p>
 

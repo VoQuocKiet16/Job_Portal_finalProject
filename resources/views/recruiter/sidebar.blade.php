@@ -2,13 +2,13 @@
     <div class="card-body p-0">
         <ul class="list-group list-group-flush ">
             <li class="nav-link list-group-item d-flex justify-content-between align-items-center p-3">
-                <a class="js-scroll-trigger text-dark text-decoration-none" href="{{ route ('recruiter.statisticsRecruiter')}}">Statistics</a>
+                <i class="fas fa-chart-bar" style="color:black"><a class="js-scroll-trigger text-dark text-decoration-none" style="padding: 10px;" href="{{ route ('recruiter.statisticsRecruiter')}}">Statistics</a></i>
             </li>
             <li class="nav-link list-group-item d-flex justify-content-between align-items-center p-3">                
-                <a class="js-scroll-trigger text-dark text-decoration-none" href="{{ route ('recruiter.myJobs')}}">My Jobs</a>
-            </li>
+                <i class="fas fa-clipboard-list" style="color:black"><a class="js-scroll-trigger text-dark text-decoration-none" style="padding: 10px;" href="{{ route ('recruiter.myJobs')}}">Manage Posted Jobs</a></i>
+            </li>   
             <li class="nav-link list-group-item d-flex justify-content-between align-items-center p-3">                
-                <a class="js-scroll-trigger text-dark text-decoration-none" href="{{ route ('recruiter.applications')}}">My Applications</a>
+                <i class="fas fa-file-signature" style="color:black"><a class="js-scroll-trigger text-dark text-decoration-none" style="padding: 10px;" href="{{ route ('recruiter.applications')}}">Manage Applications</a></i>
             </li>
         </ul>
     </div>
