@@ -50,7 +50,7 @@ Route::post('/process-forgot-password', [AccountController::class, 'processForgo
 Route::get('/reset-password/{token}',[AccountController::class,'resetPassword'])->name('account.resetPassword');
 Route::post('/process-reset-password',[AccountController::class,'processResetPassword'])->name('account.processResetPassword');
 
-Route::group(['prefix' => 'admin', 'middleware' => ['checkRole:admin', 'verified']], function(){
+Route::group(['prefix' => 'admin', 'middleware' => ['checkRole:admin']], function(){
     Route::get('/dashboard',[DashboardController::class,'indexAdmin'])->name('admin.dashboard');
     Route::get('/statistics', [DashboardController::class, 'statisticsAdmin'])->name('admin.statisticsAdmin');
 
@@ -90,13 +90,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['checkRole:admin', 'verified
 
 });
 
-Route::group(['prefix' => 'recruiter', 'middleware' => ['checkRole:recruiter', 'verified']], function(){
+Route::group(['prefix' => 'recruiter', 'middleware' => ['checkRole:recruiter']], function(){
     Route::get('/dashboard',[DashboardController::class,'indexRecruiter'])->name('recruiter.dashboard');
     Route::get('/statistics', [DashboardController::class, 'statisticsRecruiter'])->name('recruiter.statisticsRecruiter');
 
-
-    Route::get('/create-job',[MyJobsController::class,'createJob'])->name('recruiter.createJob');   
-    Route::post('/save-job',[MyJobsController::class,'saveJob'])->name('recruiter.saveJob');
     Route::get('/my-jobs',[MyJobsController::class,'myJobs'])->name('recruiter.myJobs');  
     Route::get('/my-jobs/edit/{jobId}',[MyJobsController::class,'editJob'])->name('recruiter.editJob');  
     Route::post('/update-job/{jobId}',[MyJobsController::class,'updateJob'])->name('recruiter.updateJob');   
@@ -108,6 +105,12 @@ Route::group(['prefix' => 'recruiter', 'middleware' => ['checkRole:recruiter', '
     Route::post('/delete-applications',[MyApplicantsController::class,'removeMyApplicants'])->name('recruiter.removeMyApplicants');
     Route::get('/applications/{id}/detail', [MyApplicantsController::class, 'viewApplicationDetail'])->name('recruiter.applications.detail');
     Route::get('/resume/{id}', [MyApplicantsController::class, 'viewResumeDetail'])->name('viewResumeDetail');
+
+            // Routes require users to verify their email
+    Route::group(['middleware' => 'verified'], function() {
+        Route::get('/create-job',[MyJobsController::class,'createJob'])->name('recruiter.createJob');   
+        Route::post('/save-job',[MyJobsController::class,'saveJob'])->name('recruiter.saveJob');
+    });
 });
 
 Route::group(['prefix' => 'account'], function() {
@@ -132,29 +135,29 @@ Route::group(['prefix' => 'account'], function() {
         Route::put('/update-profile',[AccountController::class,'updateProfile'])->name('account.updateProfile');
         Route::get('/logout',[AccountController::class,'logout'])->name('account.logout');
         Route::post('/update-profile-pic',[AccountController::class,'updateProfilePic'])->name('account.updateProfilePic');
+        Route::post('/save-job', [JobsController::class, 'saveJob'])->name('saveJob');
 
+        Route::get('/my-job-applications',[AccountController::class,'myJobApplications'])->name('account.myJobApplications');
+        Route::post('/remove-job-application',[AccountController::class,'removeAppliedJobs'])->name('account.removeAppliedJobs');
+        Route::get('/saved-jobs',[AccountController::class,'listSavedJobs'])->name('account.savedJobs');
+        Route::post('/remove-saved-job',[AccountController::class,'removeSavedJob'])->name('account.removeSavedJob');
+        Route::post('/update-password',[AccountController::class,'updatePassword'])->name('account.updatePassword');
+      
+        // Resume-related routes
+        Route::get('/resume', [ResumeController::class, 'index'])->name('account.resume');
+        Route::get('/resume/{id}', [ResumeController::class, 'view'])->name('resume.view');
+        Route::get('/create', [ResumeController::class, 'createResume'])->name('resume.create');
+        Route::post('/save', [ResumeController::class, 'saveResume'])->name('save');
+        Route::get('/resume/{id}/edit', [ResumeController::class, 'editResume'])->name('resume.edit');
+        Route::post('/resume/{id}/update', [ResumeController::class, 'updateResume'])->name('resume.update');
+        Route::delete('/resume',[ResumeController::class,'delete'])->name('resume.delete');
+        Route::get('/resumes', [ResumeController::class, 'showResume'])->name('resumes');
+        Route::get('resumes/download-doc/{id}', [ResumeController::class, 'downloadDoc'])->name('resume.downloadDoc');
+        Route::post('/resumes/toggle-status/{id}', [ResumeController::class, 'toggleResumeStatus'])->name('resume.toggleStatus');
+        
         // Routes require users to verify their email
         Route::group(['middleware' => 'verified'], function() {
             Route::post('/apply-job', [JobsController::class, 'applyJob'])->name('applyJob');
-            Route::post('/save-job', [JobsController::class, 'saveJob'])->name('saveJob');
-
-            Route::get('/my-job-applications',[AccountController::class,'myJobApplications'])->name('account.myJobApplications');
-            Route::post('/remove-job-application',[AccountController::class,'removeAppliedJobs'])->name('account.removeAppliedJobs');
-            Route::get('/saved-jobs',[AccountController::class,'listSavedJobs'])->name('account.savedJobs');
-            Route::post('/remove-saved-job',[AccountController::class,'removeSavedJob'])->name('account.removeSavedJob');
-            Route::post('/update-password',[AccountController::class,'updatePassword'])->name('account.updatePassword');
-
-            // Resume-related routes
-            Route::get('/resume', [ResumeController::class, 'index'])->name('account.resume');
-            Route::get('/resume/{id}', [ResumeController::class, 'view'])->name('resume.view');
-            Route::get('/create', [ResumeController::class, 'createResume'])->name('resume.create');
-            Route::post('/save', [ResumeController::class, 'saveResume'])->name('save');
-            Route::get('/resume/{id}/edit', [ResumeController::class, 'editResume'])->name('resume.edit');
-            Route::post('/resume/{id}/update', [ResumeController::class, 'updateResume'])->name('resume.update');
-            Route::delete('/resume',[ResumeController::class,'delete'])->name('resume.delete');
-            Route::get('/resumes', [ResumeController::class, 'showResume'])->name('resumes');
-            Route::get('resumes/download-doc/{id}', [ResumeController::class, 'downloadDoc'])->name('resume.downloadDoc');
-            Route::post('/resumes/toggle-status/{id}', [ResumeController::class, 'toggleResumeStatus'])->name('resume.toggleStatus');
         });
     });
 });

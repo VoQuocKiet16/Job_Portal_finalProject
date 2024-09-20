@@ -356,19 +356,6 @@
         }
 
         function saveJob(id) {
-            @if (Auth::check() && is_null(Auth::user()->email_verified_at))
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "You need to verify your email before saving jobs.",
-                    confirmButtonText: 'Go to verification page'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = '{{ route('verification.notice') }}';
-                    }
-                });
-                return;
-            @endif
             $.ajax({
                 url: '{{ route('saveJob') }}',
                 type: 'post',
