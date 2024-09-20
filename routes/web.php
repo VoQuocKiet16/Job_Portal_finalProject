@@ -35,38 +35,46 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
-
+// Home page and job-related pages
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/jobs', [JobsController::class, 'index'])->name('jobs');
 Route::get('/jobs/detail/{id}', [JobsController::class, 'detail'])->name('jobDetail');
 
+// Email verification for users
 Route::get('/email/verify/{id}/{hash}', [AccountController::class, 'verifyEmail'])->name('verification.verify');
 Route::post('/resend-verification-email', [AccountController::class, 'resendVerificationEmail'])->name('account.resendVerificationEmail');
 Route::get('/email/verify', function() {return view('front.account.verify_email_warning');})->middleware('auth')->name('verification.notice');
 Route::get('/verify-email-warning', function() {return view('front.account.verify_email_warning');})->name('account.verifyEmailWarning');
 
+// Forgot password and reset password
 Route::get('/forgot-password', [AccountController::class, 'forgotPassword'])->name('account.forgotPassword');
 Route::post('/process-forgot-password', [AccountController::class, 'processForgotPassword'])->name('account.processForgotPassword');
 Route::get('/reset-password/{token}',[AccountController::class,'resetPassword'])->name('account.resetPassword');
 Route::post('/process-reset-password',[AccountController::class,'processResetPassword'])->name('account.processResetPassword');
 
+// Admin-related routes
 Route::group(['prefix' => 'admin', 'middleware' => ['checkRole:admin']], function(){
+    // Admin dashboard and statistics pages
     Route::get('/dashboard',[DashboardController::class,'indexAdmin'])->name('admin.dashboard');
     Route::get('/statistics', [DashboardController::class, 'statisticsAdmin'])->name('admin.statisticsAdmin');
 
+    // Manage accounts
     Route::get('/users',[UserController::class,'index'])->name('admin.users');
     Route::get('/users/{id}',[UserController::class,'edit'])->name('admin.users.edit');
     Route::put('/users/{id}',[UserController::class,'update'])->name('admin.users.update');
     Route::delete('/users',[UserController::class,'delete'])->name('admin.users.delete');
 
+    // Manage jobs
     Route::get('/jobs',[JobController::class,'index'])->name('admin.jobs');
     Route::get('/jobs/edit/{id}',[JobController::class,'edit'])->name('admin.jobs.edit');
     Route::put('/jobs/{id}',[JobController::class,'update'])->name('admin.jobs.update');
     Route::delete('/jobs',[JobController::class,'delete'])->name('admin.jobs.delete');
 
+    // Manage job applications
     Route::get('/job-applications',[JobApplicationController::class,'index'])->name('admin.jobApplications');
     Route::delete('/job-applications',[JobApplicationController::class,'delete'])->name('admin.jobApplication.delete');
 
+    // Manage categories
     Route::get('/categories',[CategoryController::class,'index'])->name('admin.categories');
     Route::get('admin/categories/create', [CategoryController::class, 'create'])->name('admin.categories.create');
     Route::post('admin/categories/save', [CategoryController::class, 'saveCategroy'])->name('admin.categories.save');
@@ -74,6 +82,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['checkRole:admin']], functio
     Route::put('/categories/{id}',[CategoryController::class,'update'])->name('admin.categories.update');
     Route::delete('/categories',[CategoryController::class,'delete'])->name('admin.categories.delete');
 
+    // Manage locations
     Route::get('/locations',[LocationController::class,'index'])->name('admin.locations');
     Route::get('admin/locations/create', [LocationController::class, 'create'])->name('admin.locations.create');
     Route::post('admin/locations/save', [LocationController::class, 'saveLocation'])->name('admin.locations.save');
@@ -81,6 +90,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['checkRole:admin']], functio
     Route::put('/locations/{id}',[LocationController::class,'update'])->name('admin.locations.update');
     Route::delete('/locations',[LocationController::class,'delete'])->name('admin.locations.delete');
 
+    // Manage job types
     Route::get('/jobtypes',[JobTypeController::class,'index'])->name('admin.jobtypes');
     Route::get('admin/jobtypes/create', [JobTypeController::class, 'create'])->name('admin.jobtypes.create');
     Route::post('admin/jobtypes/save', [JobTypeController::class, 'saveJobType'])->name('admin.jobtypes.save');
@@ -90,15 +100,19 @@ Route::group(['prefix' => 'admin', 'middleware' => ['checkRole:admin']], functio
 
 });
 
+// Recruiter-related routes
 Route::group(['prefix' => 'recruiter', 'middleware' => ['checkRole:recruiter']], function(){
+    // Recruiter dashboard and statistics pages
     Route::get('/dashboard',[DashboardController::class,'indexRecruiter'])->name('recruiter.dashboard');
     Route::get('/statistics', [DashboardController::class, 'statisticsRecruiter'])->name('recruiter.statisticsRecruiter');
 
+    // Manage job of recruiter
     Route::get('/my-jobs',[MyJobsController::class,'myJobs'])->name('recruiter.myJobs');  
     Route::get('/my-jobs/edit/{jobId}',[MyJobsController::class,'editJob'])->name('recruiter.editJob');  
     Route::post('/update-job/{jobId}',[MyJobsController::class,'updateJob'])->name('recruiter.updateJob');   
     Route::post('/delete-job',[MyJobsController::class,'removeMyJobs'])->name('recruiter.removeMyJobs');
 
+    // Manage applications of recruiter
     Route::get('/applications', [MyApplicantsController::class, 'showApplications'])->name('recruiter.applications');
     Route::post('/applications/approve/{id}', [MyApplicantsController::class, 'approveApplication'])->name('recruiter.applications.approve');
     Route::post('/applications/reject/{id}', [MyApplicantsController::class, 'rejectApplication'])->name('recruiter.applications.reject');
@@ -106,8 +120,9 @@ Route::group(['prefix' => 'recruiter', 'middleware' => ['checkRole:recruiter']],
     Route::get('/applications/{id}/detail', [MyApplicantsController::class, 'viewApplicationDetail'])->name('recruiter.applications.detail');
     Route::get('/resume/{id}', [MyApplicantsController::class, 'viewResumeDetail'])->name('viewResumeDetail');
 
-            // Routes require users to verify their email
+    // Routes require verify their email
     Route::group(['middleware' => 'verified'], function() {
+        // Post Job
         Route::get('/create-job',[MyJobsController::class,'createJob'])->name('recruiter.createJob');   
         Route::post('/save-job',[MyJobsController::class,'saveJob'])->name('recruiter.saveJob');
     });
@@ -155,7 +170,7 @@ Route::group(['prefix' => 'account'], function() {
         Route::get('resumes/download-doc/{id}', [ResumeController::class, 'downloadDoc'])->name('resume.downloadDoc');
         Route::post('/resumes/toggle-status/{id}', [ResumeController::class, 'toggleResumeStatus'])->name('resume.toggleStatus');
         
-        // Routes require users to verify their email
+        // Routes require verify their email
         Route::group(['middleware' => 'verified'], function() {
             Route::post('/apply-job', [JobsController::class, 'applyJob'])->name('applyJob');
         });
